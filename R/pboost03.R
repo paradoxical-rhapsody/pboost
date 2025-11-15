@@ -1,4 +1,4 @@
-#' @name pboost
+#' @name pboost03
 #' @title Profile Boosting Framework
 #' 
 #' @description
@@ -52,23 +52,23 @@ NULL
 
 
 
-#' @rdname pboost
+#' @rdname pboost03
 #' @order 1
-#' @export
-pboost <- function(formula, data, fitFun, scoreFun, stopFun, ..., 
+#' @noRd
+pboost03 <- function(formula, data, fitFun, scoreFun, stopFun, ..., 
                    keep=NULL, maxK=NULL, verbose=FALSE){
 
     formula <- as.Formula(formula)
 
     ## --- `all.vars`: original variables ---
     if (!all(sapply(
-        data[1, all.vars(delete.response(terms(formula(formula, rhs=1L), data=data)))],
+        data[, all.vars(terms(formula, data=data, lhs=0L, rhs=1L))],
         is.numeric
     )))
         stop("'formula' contains non-numeric feature(s).")
     
     ## --- `attr(terms, "term.labels")`: features, such as `log(x)` ---
-    xnames <- attr(terms(formula(formula, rhs=1L), data=data), "term.labels") # features
+    xnames <- attr(terms(formula, data=data, lhs=0L, rhs=1L), "term.labels") # features
     p <- length(xnames)
     p.keep <- length(keep)
 
@@ -91,7 +91,7 @@ pboost <- function(formula, data, fitFun, scoreFun, stopFun, ...,
     #   then add any `keep` variables to the RHS.
     # Extract LHS as text (preserve expressions like log(y), cbind(y1,y2), etc.)
     lhs <- paste(deparse(formula[[2]]), collapse=" ")
-    intercept <- attr(terms(formula(formula, rhs=1L), data=data), "intercept")
+    intercept <- attr(terms(formula, data=data), "intercept")
     rhs <- paste(c(intercept, keep), collapse=" + ")
     fml <- update(formula, as.Formula(paste(c(lhs, "~", rhs), collapse=" ")))
     stopifnot( intercept %in% 0:1 )
@@ -105,13 +105,13 @@ pboost <- function(formula, data, fitFun, scoreFun, stopFun, ...,
 
     while (TRUE) {
 
-        stopifnot( all( attr(terms(formula(fml, rhs=1L), data=data), "term.labels") %in% xnames ) )
+        stopifnot( all( attr(terms(fml, data=data), "term.labels") %in% xnames ) )
+        candidates <- setdiff(xnames, attr(terms(fml, data=data), "term.labels"))
+        fml.cand <- as.formula(paste(c("~ 0", candidates), collapse=" + "))
 
-        x.star <- setdiff(xnames, attr(terms(formula(fml, rhs=1L), data=data), "term.labels")) |>
-            vapply(function(expr) with(data, eval(parse(text=expr))),
-                   FUN.VALUE=numeric(NROW(data))) |>
-            crossprod(scoreFun(object)) |>
-            drop() |> abs() |> which.max() |> names()
+        # profilescore: crossprod( model.matrix(fml.cand, data), scoreFun(object) )
+        x.star <- drop(crossprod( model.matrix(fml.cand, data), scoreFun(object) )) |> 
+                    abs() |> which.max() |> names()
         fml.tmp <- update(fml, as.Formula(paste(c(". ~ .", x.star), collapse=" + ")))
         stopifnot( !identical(fml, fml.tmp) )
 
