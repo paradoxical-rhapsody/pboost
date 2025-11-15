@@ -45,6 +45,7 @@ EBIC <- function(object, p, p.keep, ...){
 
 
 #' @rdname EBIC
+#' @export
 #' @noRd
 EBIC.default <- function(object, p, p.keep=NULL, ...){
     stop("No EBIC method for object of class ", paste(class(object), collapse=", "))
