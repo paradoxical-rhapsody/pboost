@@ -17,8 +17,22 @@ pboost(
 )
 }
 \arguments{
-\item{formula}{An object of class ``\link{formula}'' in the form \code{y ~ x}, where the
-RHS contains all of candidate features, and the feature vectors should be numeric.}
+\item{formula}{An object of class \link{formula} of the form \code{LHS ~ RHS},
+where the right-hand side (RHS) specifies the candidate features
+for the linear predictor \eqn{\eta = \sum_j \beta_j x_j}.
+
+The following restrictions and recommendations apply:
+\itemize{
+\item All variables appearing on the RHS must be numeric in the supplied \code{data}.
+\item For computational efficiency, each term on the RHS must correspond to a
+single column in the resulting model matrix. Supported expressions include
+main effects (\code{x1}), interactions (\code{x1:x2}), and simple transformations
+(\code{log(x1)}, \code{I(x1^2)}, etc.).
+Complex terms that expand into multiple columns—such as \code{poly(x, degree)},
+\code{bs(x)}, or \code{ns(x)}—are \strong{not supported}.
+\item Offset terms should not be included in the formula. Instead, provide them
+via the dedicated \code{offset} argument of \code{fitFun}.
+}}
 
 \item{data}{An data frame containing the variables in the model.}
 
@@ -37,7 +51,8 @@ by \code{fitFun}, such as \link{EBIC} or \link{BIC}.}
 \item{...}{Additional arguments to be passed to \code{fitFun}.}
 
 \item{keep}{Initial set of features that are included in model fitting.
-\strong{If \code{keep} is specified, it should also be fully included in the RHS of \code{formula}.}}
+\strong{If \code{keep} is specified, it should also be fully included in the RHS
+of \code{formula}.}}
 
 \item{maxK}{Maximal number of identified features.
 If \code{maxK} is specified, it will supress \code{stopFun}, saying that the

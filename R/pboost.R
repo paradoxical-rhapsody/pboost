@@ -5,25 +5,40 @@
 #' `pboost` is the generic workhorse function of profile boosting 
 #' framework for parametric regression.
 #' 
-#' @param formula An object of class ``[formula]'' in the form `y ~ x`, where the
-#' RHS contains all of candidate features, and the feature vectors should be numeric. 
+#' @param formula An object of class [formula] of the form `LHS ~ RHS`, 
+#'   where the right-hand side (RHS) specifies the candidate features 
+#'   for the linear predictor \eqn{\eta = \sum_j \beta_j x_j}.
+#'   
+#'   The following restrictions and recommendations apply:
+#'   \itemize{
+#'     \item All variables appearing on the RHS must be numeric in the supplied `data`.
+#'     \item For computational efficiency, each term on the RHS must correspond to a
+#'           single column in the resulting model matrix. Supported expressions include 
+#'           main effects (`x1`), interactions (`x1:x2`), and simple transformations 
+#'           (\code{log(x1)}, \code{I(x1^2)}, etc.). 
+#'           Complex terms that expand into multiple columns—such as \code{poly(x, degree)},
+#'           \code{bs(x)}, or \code{ns(x)}—are **not supported**.
+#'     \item Offset terms should not be included in the formula. Instead, provide them 
+#'           via the dedicated \code{offset} argument of \code{fitFun}.
+#'   }
 #' @param data An data frame containing the variables in the model.
-#' @param fitFun Function to fit the empirical risk function in 
-#' the form `fitFun(formula, data, ...)`.
-#' @param scoreFun Function to compute the derivative of empirical 
-#' risk function in the form `scoreFun(object)`, where `object` is 
-#' returned by `fitFun`.
-#' `scoreFun` should return a vector with the same length of `y` in `data`.
-#' @param stopFun Stopping rule for profile boosting, which has the form 
-#' `stopFun(object)` to evaluate the performance of model `object` returned
-#' by `fitFun`, such as [EBIC] or [BIC].
+#' @param fitFun Function to fit the empirical risk function in
+#'    the form `fitFun(formula, data, ...)`.
+#' @param scoreFun Function to compute the derivative of empirical
+#'    risk function in the form `scoreFun(object)`, where `object` is
+#'    returned by `fitFun`.
+#'    `scoreFun` should return a vector with the same length of `y` in `data`.
+#' @param stopFun Stopping rule for profile boosting, which has the form
+#'    `stopFun(object)` to evaluate the performance of model `object` returned
+#'    by `fitFun`, such as [EBIC] or [BIC].
 #' @param ... Additional arguments to be passed to `fitFun`.
-#' @param maxK Maximal number of identified features. 
-#' If `maxK` is specified, it will supress `stopFun`, saying that the 
-#' profile boosting continues until the procedure identifies `maxK` features.
-#' The pre-specified features in `keep` are counted toward `maxK`.
+#' @param maxK Maximal number of identified features.
+#'    If `maxK` is specified, it will supress `stopFun`, saying that the
+#'    profile boosting continues until the procedure identifies `maxK` features.
+#'    The pre-specified features in `keep` are counted toward `maxK`.
 #' @param keep Initial set of features that are included in model fitting.
-#' **If `keep` is specified, it should also be fully included in the RHS of `formula`.**
+#'    **If `keep` is specified, it should also be fully included in the RHS
+#'    of `formula`.**
 #' @param verbose Print the procedure path?
 #' 
 #' @return Model object fitted on the selected features.
@@ -67,8 +82,9 @@ pboost <- function(formula, data, fitFun, scoreFun, stopFun, ...,
     )))
         stop("'formula' contains non-numeric feature(s).")
     
-    ## --- `attr(terms, "term.labels")`: features, such as `log(x)` ---
-    xnames <- attr(terms(formula(formula, rhs=1L), data=data), "term.labels") # features
+    ## --- `attr(terms, "term.labels")`: features, such as `log(x)`, `x1:x2` ---
+    xnames <- attr(terms(formula(formula, rhs=1L), data=data), "term.labels") |> # features
+        gsub(pattern=":", replacement="*", fixed=TRUE)
     p <- length(xnames)
     p.keep <- length(keep)
 

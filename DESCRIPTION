@@ -23,5 +23,5 @@ BugReports: https://github.com/paradoxical-rhapsody/pboost/issues
 Roxygen: list(load="source", markdown = TRUE)
 RoxygenNote: 7.3.3
 Depends: 
-    R (>= 3.5)
+    R (>= 4.1.0)
 LazyData: true
