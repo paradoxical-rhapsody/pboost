@@ -27,7 +27,7 @@
 #' 
 #' @return An `betareg` model object fitted on the selected features.
 #' 
-#' @examples 
+#' @examples
 #' library(betareg)
 #' set.seed(2025)
 #' n <- 300
@@ -82,7 +82,9 @@ pbetareg <- function(
         phi <- predict(object, type='precision')
         mu <- predict(object, type='response')
         eta <- predict(object, type='link')
-        mu.eta <- object$link$mu$mu.eta
+
+        ## object$link is a list of two elements: one for "mean" or "mu"
+        mu.eta <- object$link[[grep("^m", names(object$link), value=TRUE)]]$mu.eta
         y <- pmin(pmax(object[["y"]], .Machine$double.eps), 1 - .Machine$double.eps)
 
         # weights <- object[["weights"]]
