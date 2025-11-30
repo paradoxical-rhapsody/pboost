@@ -12,6 +12,7 @@
 #' @importFrom stats fitted glm.fit logLik na.fail na.omit residuals BIC
 #' @importFrom stats model.response nobs terms delete.response
 #' @importFrom stats predict
+#' @importFrom stats qlogis
 #' @importFrom survival coxph
 #> [1] "_PACKAGE"
 ## usethis namespace: end

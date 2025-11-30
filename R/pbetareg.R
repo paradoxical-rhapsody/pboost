@@ -85,7 +85,7 @@ pbetareg <- function(
         mu.eta <- object$link$mu$mu.eta
 
         # weights <- object[["weights"]]
-        return( mu.eta(eta) * phi * ( digamma((1-mu)*phi) - digamma(mu*phi) + log(y/(1-y)) ) )
+        return( mu.eta(eta) * phi * ( digamma((1-mu)*phi) - digamma(mu*phi) + qlogis(y) ) )
     }
 
 
