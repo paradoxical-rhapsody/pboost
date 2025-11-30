@@ -83,6 +83,7 @@ pbetareg <- function(
         mu <- predict(object, type='response')
         eta <- predict(object, type='link')
         mu.eta <- object$link$mu$mu.eta
+        y <- pmin(pmax(object[["y"]], .Machine$double.eps), 1 - .Machine$double.eps)
 
         # weights <- object[["weights"]]
         return( mu.eta(eta) * phi * ( digamma((1-mu)*phi) - digamma(mu*phi) + qlogis(y) ) )
