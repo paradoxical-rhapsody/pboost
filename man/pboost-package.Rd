@@ -5,7 +5,7 @@
 \alias{pboost-package}
 \title{pboost: Profile Boosting Framework for Parametric Models}
 \description{
-A profile boosting feature selection framework for parametric models, including linear model, generalized linear models, quantile regression, Cox proportional hazards model, beta regression.
+A profile boosting framework for feature selection in parametric models. It offers a unified interface `pboost()` and several wrapped models, including linear model, generalized linear models, quantile regression, Cox proportional hazards model, beta regression.
 }
 \seealso{
 Useful links:

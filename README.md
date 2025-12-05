@@ -8,18 +8,16 @@ The goal of pboost is to ...
 
 ## Installation
 
-You can install the development version of pboost like so:
+Install the `pboost` package from CRAN:
 
 ``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
+install.packages("pboost")
 ```
 
-## Example
+## Vignettes
 
-This is a basic example which shows you how to solve a common problem:
+See the vignettes:
 
 ``` r
-library(pboost)
-## basic example code
+vignette('pboost', 'pboost')
 ```
-
