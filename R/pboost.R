@@ -33,7 +33,7 @@
 #'    by `fitFun`, such as [EBIC] or [BIC].
 #' @param ... Additional arguments to be passed to `fitFun`.
 #' @param maxK Maximal number of identified features.
-#'    If `maxK` is specified, it will supress `stopFun`, saying that the
+#'    If `maxK` is specified, it will suppress `stopFun`, saying that the
 #'    profile boosting continues until the procedure identifies `maxK` features.
 #'    The pre-specified features in `keep` are counted toward `maxK`.
 #' @param keep Initial set of features that are included in model fitting.

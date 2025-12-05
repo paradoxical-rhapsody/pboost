@@ -55,7 +55,7 @@ by \code{fitFun}, such as \link{EBIC} or \link{BIC}.}
 of \code{formula}.}}
 
 \item{maxK}{Maximal number of identified features.
-If \code{maxK} is specified, it will supress \code{stopFun}, saying that the
+If \code{maxK} is specified, it will suppress \code{stopFun}, saying that the
 profile boosting continues until the procedure identifies \code{maxK} features.
 The pre-specified features in \code{keep} are counted toward \code{maxK}.}
 
