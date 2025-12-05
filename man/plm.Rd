@@ -70,7 +70,7 @@ An \code{lm} model object fitted on the selected features.
 }
 \details{
 \code{plm} is an implementation to the sequential lasso method
-proposed by Luo and Chen(2014, <\doi{10.1080/01621459.2013.877275}>).
+proposed by Luo and Chen(2014, \if{html}{\out{<\doi{10.1080/01621459.2013.877275}>}}).
 }
 \examples{
 set.seed(2025)
