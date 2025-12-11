@@ -57,12 +57,11 @@ NULL
 
 #' @rdname prq
 #' @order 1
-#' @export 
+#' @export
 prq <- function(
-    formula, tau = 0.5, data, subset, weights, na.action, 
-    method = "br", model = TRUE, contrasts = NULL, 
-    ...,
-    stopFun=EBIC, keep=NULL, maxK=NULL, verbose=FALSE){
+    formula, tau = 0.5, data, subset, weights, na.action,
+    method = "br", model = TRUE, contrasts = NULL, ...,
+    stopFun = EBIC, keep = NULL, maxK = NULL, verbose = FALSE) {
 
     cl <- match.call(expand.dots = TRUE)
 
@@ -89,7 +88,7 @@ prq <- function(
 
 #' @rdname EBIC
 #' @export
-EBIC.rq <- function(object, p, p.keep, ...){
+EBIC.rq <- function(object, p, p.keep, ...) {
     stopifnot( inherits(object, c("rq", "rqs")) )
 
     if (missing(p))
@@ -109,6 +108,7 @@ EBIC.rq <- function(object, p, p.keep, ...){
     )
 
     stopifnot( is.finite(ebic.penalty) )
+
     # `BIC` for class `rq` is equivalent to `AIC` with negative `k`
     # return( -2 * as.numeric(obj.loglik) + dof * log(n0) + ebic.penalty )
     return( AIC(object, k=-1) + ebic.penalty )

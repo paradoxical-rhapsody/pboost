@@ -50,10 +50,6 @@
 #' ## use `BIC` as the stopping rule, which yields too many spurious features
 #' print( pcoxph(Surv(time, status) ~ ., DF, stopFun=BIC, verbose=TRUE) )
 #' 
-#' ## The function `pboost` provide a generic template for profile boosting
-#' scoreFun <- pboost:::scoreCoxph
-#' print( pboost(Surv(time, status) ~ ., DF, coxph, scoreFun, EBIC, verbose=TRUE) )
-#' 
 NULL
 #> NULL
 
@@ -66,9 +62,8 @@ pcoxph <- function(
     formula, data, weights, subset, na.action, init, control,
     ties = c("efron", "breslow", "exact"), singular.ok = TRUE,
     robust, model = FALSE, x = FALSE, y = TRUE, tt, method = ties,
-    id, cluster, istate, statedata, nocenter = c(-1, 0, 1),
-    ...,
-    stopFun=EBIC, keep=NULL, maxK=NULL, verbose=FALSE) {
+    id, cluster, istate, statedata, nocenter = c(-1, 0, 1), ...,
+    stopFun = EBIC, keep = NULL, maxK = NULL, verbose = FALSE) {
     
     cl <- match.call(expand.dots = TRUE)
 
@@ -173,7 +168,7 @@ scoreCoxph <- function(object) {
 
 #' @rdname EBIC
 #' @export
-EBIC.coxph <- function(object, p, p.keep, ...){
+EBIC.coxph <- function(object, p, p.keep, ...) {
     stopifnot( inherits(object, "coxph") )
 
     if (missing(p))

@@ -60,9 +60,8 @@ pbetareg <- function(
     link = c("logit", "probit", "cloglog", "cauchit", "log",
         "loglog"), link.phi = NULL, type = c("ML", "BC", "BR"),
     dist = NULL, nu = NULL, control = betareg.control(...), model = TRUE,
-    y = TRUE, x = FALSE,
-    ...,
-    stopFun=EBIC, keep=NULL, maxK=NULL, verbose=FALSE){
+    y = TRUE, x = FALSE, ...,
+    stopFun = EBIC, keep = NULL, maxK = NULL, verbose = FALSE) {
 
     cl <- match.call(expand.dots = TRUE)
 
@@ -101,7 +100,7 @@ pbetareg <- function(
 
 #' @rdname EBIC
 #' @export
-EBIC.betareg <- function(object, p, p.keep, ...){
+EBIC.betareg <- function(object, p, p.keep, ...) {
     stopifnot( inherits(object, "betareg") )
 
     if (missing(p))

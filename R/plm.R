@@ -63,9 +63,8 @@ NULL
 plm <- function(
     formula, data, subset, weights, na.action,
     method = "qr", model = TRUE, x = FALSE, y = FALSE, qr = TRUE,
-    singular.ok = TRUE, contrasts = NULL, offset,
-    ...,
-    stopFun=EBIC, keep=NULL, maxK=NULL, verbose=FALSE){
+    singular.ok = TRUE, contrasts = NULL, offset, ...,
+    stopFun = EBIC, keep = NULL, maxK = NULL, verbose = FALSE) {
 
     cl <- match.call(expand.dots = TRUE)
 
@@ -88,7 +87,7 @@ plm <- function(
 
 #' @rdname EBIC
 #' @export
-EBIC.lm <- function(object, p, p.keep, ...){
+EBIC.lm <- function(object, p, p.keep, ...) {
     stopifnot( inherits(object, "lm") )
 
     if (missing(p))

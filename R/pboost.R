@@ -70,8 +70,8 @@ NULL
 #' @rdname pboost
 #' @order 1
 #' @export
-pboost <- function(formula, data, fitFun, scoreFun, stopFun, ..., 
-                   keep=NULL, maxK=NULL, verbose=FALSE){
+pboost <- function(formula, data, fitFun, scoreFun, stopFun, ...,
+                   keep = NULL, maxK = NULL, verbose = FALSE) {
 
     formula <- as.Formula(formula)
 

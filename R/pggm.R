@@ -6,7 +6,7 @@
 #' @param S Covariance matrix.
 #' @param nObs Number of observations.
 #' @param maxK Maximum number of identified edges.
-#' @param digits Integer indicating the number of decimal 
+#' @param digits Integer indicating the number of decimal
 #'  places or significant digits to be used.
 #' @param verbose Print the procedure path?
 #' 
@@ -34,8 +34,8 @@ NULL
 
 #' @rdname pggm
 #' @export
-pggm <- function(S, nObs, maxK=floor(min(nObs-1, NROW(S)-1, 50)), 
-                digits=8, verbose=FALSE) {
+pggm <- function(S, nObs, maxK = floor(min(nObs-1, NROW(S)-1, 50)),
+                digits = 8, verbose = FALSE) {
     stopifnot( isSymmetric(S) )
     stopifnot( nObs > 0 )
     stopifnot( maxK > 0 )
@@ -174,7 +174,7 @@ rmle4ggmS4.dense <- function(S, nonzeroIdx, tol=1e-4, maxIter=100, verbose=FALSE
 
 #' @rdname pggm
 #' @description `rmle4ggmS4`: Restricted MLE for GGM
-#' @noRd 
+#' @noRd
 rmle4ggmS4  <- function(S, nonzeroIdx, tol=1e-4, maxIter=100) {
     stopifnot( isSymmetric(S) )
     stopifnot( all(nonzeroIdx > 0) )

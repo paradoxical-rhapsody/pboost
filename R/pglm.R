@@ -68,9 +68,8 @@ pglm <- function(
     formula, family = gaussian, data, weights, subset,
     na.action, start = NULL, etastart, mustart, offset,
     control = list(...), model = TRUE, method = "glm.fit",
-    x = FALSE, y = TRUE, singular.ok = TRUE, contrasts = NULL,
-    ...,
-    stopFun=EBIC, keep=NULL, maxK=NULL, verbose=FALSE){
+    x = FALSE, y = TRUE, singular.ok = TRUE, contrasts = NULL, ...,
+    stopFun = EBIC, keep = NULL, maxK = NULL, verbose = FALSE) {
 
     cl <- match.call(expand.dots = TRUE)
 
@@ -109,7 +108,7 @@ pglm <- function(
 
 #' @rdname EBIC
 #' @export
-EBIC.glm <- function(object, p, p.keep, ...){
+EBIC.glm <- function(object, p, p.keep, ...) {
     stopifnot( inherits(object, "glm") )
 
     if (missing(p))

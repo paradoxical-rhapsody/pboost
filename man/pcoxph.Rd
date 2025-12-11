@@ -107,8 +107,4 @@ print( pcoxph(Surv(time, status) ~ ., DF, verbose=TRUE) )
 ## use `BIC` as the stopping rule, which yields too many spurious features
 print( pcoxph(Surv(time, status) ~ ., DF, stopFun=BIC, verbose=TRUE) )
 
-## The function `pboost` provide a generic template for profile boosting
-scoreFun <- pboost:::scoreCoxph
-print( pboost(Surv(time, status) ~ ., DF, coxph, scoreFun, EBIC, verbose=TRUE) )
-
 }

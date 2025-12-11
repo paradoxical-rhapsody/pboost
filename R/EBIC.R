@@ -38,7 +38,7 @@ NULL
 #' @rdname EBIC
 #' @order 1
 #' @export
-EBIC <- function(object, p, p.keep, ...){
+EBIC <- function(object, p, p.keep, ...) {
     UseMethod("EBIC")
 }
 
@@ -47,6 +47,6 @@ EBIC <- function(object, p, p.keep, ...){
 #' @rdname EBIC
 #' @export
 #' @noRd
-EBIC.default <- function(object, p, p.keep=NULL, ...){
+EBIC.default <- function(object, p, p.keep = NULL, ...) {
     stop("No EBIC method for object of class ", paste(class(object), collapse=", "))
 }

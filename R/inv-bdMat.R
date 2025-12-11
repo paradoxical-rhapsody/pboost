@@ -1,5 +1,5 @@
 #' @title Generalized Inverse
-#' @description Generalized inverse of a matrix with form `Diag(dense, diag)`.
+#' @description Generalized inverse of a matrix with form `DiagBlock(dense, diag)`.
 #' @param x Matrix
 #' @param nonzeroIdx Index of nonzero entries.
 #' @noRd
