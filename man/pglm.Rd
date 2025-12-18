@@ -81,28 +81,25 @@ An \code{glm} model object fitted on the selected features.
 \link{pglm} has the similar usage to the built-in function \link{glm}.
 }
 \examples{
+\donttest{
 set.seed(2025)
 n <- 300
 p <- 200
 x <- matrix(rnorm(n*p), n)
 
-## The first three columns of `x` are signal features on `y`
 eta <- drop( x[, 1:3] \%*\% runif(3, 1.0, 1.5) )
 y <- rbinom(n, 1, 1/(1+exp(-eta)))
 DF <- data.frame(y, x)
 
-## The function `pglm` has similar usage to the built-in `glm`
-print( pglm(y ~ ., family="binomial", data=DF, verbose=TRUE) )
+pglm(y ~ ., "binomial", DF, verbose=TRUE)
+pglm(y ~ ., "binomial", DF, stopFun=BIC, verbose=TRUE)
 
-## use `BIC` as the stopping rule, which yields too many spurious features
-print( pglm(y ~ ., "binomial", data=DF, stopFun=BIC, verbose=TRUE) )
-
-## The function `pboost` provide a generic template for profile boosting
 scoreLogistic <- function(object) {
    eta.hat <- object[["linear.predictors"]]
    return(object[["y"]] - 1/(1+exp(-eta.hat)))
 }
-print( pboost(y ~ ., DF, glm, scoreLogistic, EBIC, family="binomial", verbose=TRUE) )
+pboost(y ~ ., DF, glm, scoreLogistic, EBIC, family="binomial", verbose=TRUE)
+}
 
 }
 \references{

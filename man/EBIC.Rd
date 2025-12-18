@@ -44,12 +44,12 @@ to access the attributes \code{nobs} and \code{df}, such as \link{lm}, \link{glm
 \details{
 The built-in \link{BIC} has the definition
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{BIC(obj) == -2*logLik(obj) + attr(logLik(obj), "df") * log(nobs(logLik(obj))).
+\if{html}{\out{<div class="sourceCode">}}\preformatted{BIC(obj) = -2*logLik(obj) + attr(logLik(obj), "df") * log(nobs(logLik(obj))).
 }\if{html}{\out{</div>}}
 
 The extended BIC (EBIC) is defined as
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{EBIC(obj) == BIC(obj) + 2 * r * log(choose(p - |keep|, df - |keep|)).
+\if{html}{\out{<div class="sourceCode">}}\preformatted{EBIC(obj) = BIC(obj) + 2 * r * log(choose(p - |keep|, df - |keep|)).
 }\if{html}{\out{</div>}}
 }
 \references{

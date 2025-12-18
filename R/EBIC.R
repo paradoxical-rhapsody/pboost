@@ -16,15 +16,15 @@
 #' @details 
 #' The built-in [BIC] has the definition
 #' ```
-#' BIC(obj) == -2*logLik(obj) + attr(logLik(obj), "df") * log(nobs(logLik(obj))).
+#' BIC(obj) = -2*logLik(obj) + attr(logLik(obj), "df") * log(nobs(logLik(obj))).
 #' ```
 #' 
 #' The extended BIC (EBIC) is defined as
 #' ```
-#' EBIC(obj) == BIC(obj) + 2 * r * log(choose(p - |keep|, df - |keep|)).
+#' EBIC(obj) = BIC(obj) + 2 * r * log(choose(p - |keep|, df - |keep|)).
 #' ```
 #' 
-#' @references 
+#' @references
 #' * Jiahua Chen and Zehua Chen (2008). Extended Bayesian information criteria for model selection with large model spaces. Biometrika, 95(3):759–771. \doi{10.1093/biomet/asn034}
 #' 
 #' * Jiahua Chen and Zehua Chen (2012). Extended BIC for small-n-large-p sparse GLM. Statistical Sinica, 22(2):555–574. \doi{10.5705/ss.2010.216}

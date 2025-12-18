@@ -90,6 +90,7 @@ An \code{coxph} model object fitted on the selected features.
 Profile boosting for Cox model.
 }
 \examples{
+\donttest{
 library(survival)
 set.seed(2025)
 n <- 300
@@ -101,10 +102,7 @@ DF <- data.frame(
     matrix(rnorm(n*p), n)
 )
 
-## The function `pcoxph` has similar usage to the built-in `pcoxph`
-print( pcoxph(Surv(time, status) ~ ., DF, verbose=TRUE) )
-
-## use `BIC` as the stopping rule, which yields too many spurious features
-print( pcoxph(Surv(time, status) ~ ., DF, stopFun=BIC, verbose=TRUE) )
+pcoxph(Surv(time, status) ~ ., DF, verbose=TRUE)
+}
 
 }

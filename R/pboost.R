@@ -44,6 +44,7 @@
 #' @return Model object fitted on the selected features.
 #' 
 #' @examples
+#' \donttest{
 #' set.seed(2025)
 #' n <- 200
 #' p <- 300
@@ -59,8 +60,9 @@
 #' 
 #' ( result <- pboost(y~., DF, glm, scoreLogistic, EBIC, family="binomial") )
 #' 
-#' ## extract the selected features
+#' ## Extract the selected features
 #' attr(terms(formula(result), data=DF), "term.labels")
+#' }
 #' 
 NULL
 

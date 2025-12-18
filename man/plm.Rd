@@ -70,9 +70,10 @@ An \code{lm} model object fitted on the selected features.
 }
 \details{
 \code{plm} is an implementation to the sequential lasso method
-proposed by Luo and Chen(2014, <\doi{10.1080/01621459.2013.877275}>).
+proposed by Luo and Chen(2014, \if{html}{\out{<\doi{10.1080/01621459.2013.877275}>}}).
 }
 \examples{
+\donttest{
 set.seed(2025)
 n <- 300
 p <- 200
@@ -83,14 +84,10 @@ eta <- drop( x[, 1:3] \%*\% runif(3, 1.0, 1.5) )
 y <- eta + rnorm(n, sd=sd(eta))
 DF <- data.frame(y, x)
 
-## The function `plm` has similar usage to the built-in `lm`
-print( plm(y ~ ., data=DF, verbose=TRUE) )
-
-## use `BIC` as the stopping rule, which yields too many spurious features
-print( plm(y ~ ., data=DF, stopFun=BIC, verbose=TRUE) )
-
-## The function `pboost` provide a generic template for profile boosting
-print( pboost(y ~ ., DF, lm, residuals, EBIC, verbose=TRUE) )
+plm(y ~ ., DF, verbose=TRUE)
+plm(y ~ ., DF, stopFun=BIC, verbose=TRUE)
+pboost(y ~ ., DF, lm, residuals, EBIC, verbose=TRUE)
+}
 
 }
 \references{

@@ -13,6 +13,7 @@
 #' @return Index set of identified features.
 #' 
 #' @examples
+#' \donttest{
 #' library(MASS)
 #' library(Matrix)
 #' 
@@ -26,6 +27,7 @@
 #' X <- mvrnorm(n, rep(0, p), Sigma, empirical=TRUE)
 #' S <- cov(X)
 #' system.time( egg <- pggm(S, n) )
+#' }
 #' 
 NULL
 #> NULL

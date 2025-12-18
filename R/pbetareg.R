@@ -28,6 +28,7 @@
 #' @return An `betareg` model object fitted on the selected features.
 #' 
 #' @examples
+#' \donttest{
 #' library(betareg)
 #' set.seed(2025)
 #' n <- 300
@@ -41,12 +42,8 @@
 #' y <- rbeta(n, shape1, shape2)
 #' DF <- data.frame(y, x)
 #' 
-#' ## The function `pbetareg` has similar usage to the built-in `glm`
-#' # print( pbetareg(formula=y ~ ., data=DF, verbose=TRUE) )
-#' 
-#' ## use `BIC` as the stopping rule, which yields too many spurious features
-#' # print( pbetareg(formula=y ~ ., data=DF, stopFun=BIC, verbose=TRUE) )
-#' 
+#' pbetareg(y ~ ., DF, verbose=TRUE)
+#' }
 #' 
 NULL
 #> NULL

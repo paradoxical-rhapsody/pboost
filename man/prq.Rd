@@ -57,32 +57,27 @@ Index set of identified features.
 \link{prq} has the similar usage to the function \link[quantreg:rq]{quantreg::rq}.
 }
 \examples{
+\donttest{
 library(quantreg)
 set.seed(2025)
 n <- 300
 p <- 200
 x <- matrix(rnorm(n*p), n)
 
-## The first three columns of `x` are signal features on `y`
 eta <- drop( x[, 1:3] \%*\% runif(3, 1.0, 1.5) )
-
-## error terms are independent with different variances
 y <- eta + (1.0 + x[, 3]) * rnorm(n)
 DF <- data.frame(y, x)
 
 tau <- 0.5
+prq(y ~ ., tau, DF, verbose=TRUE)
 
-# default: use `EBIC` as stopping rule
-print( prq(y ~ ., tau, DF, verbose=TRUE) )
-
-# `BIC` for class `rq` is equivalent to `AIC` with negative `k`
 BIC <- function(obj) AIC(obj, k=-1)
-print( prq(y ~ ., tau, DF, stopFun=BIC, verbose=TRUE) )
+prq(y ~ ., tau, DF, stopFun=BIC, verbose=TRUE)
 
-# The function `pboost` provide a generic template for profile boosting
 scorerq <- function(object) {
  return(ifelse(object[["y"]] < fitted(object), tau - 1, tau))
 }
-print( pboost(y ~ ., DF, rq, scorerq, EBIC, tau=tau, verbose=TRUE) )
+pboost(y ~ ., DF, rq, scorerq, EBIC, tau=tau, verbose=TRUE)
+}
 
 }

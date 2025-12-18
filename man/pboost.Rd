@@ -69,6 +69,7 @@ Model object fitted on the selected features.
 framework for parametric regression.
 }
 \examples{
+\donttest{
 set.seed(2025)
 n <- 200
 p <- 300
@@ -84,7 +85,8 @@ scoreLogistic <- function(object) {
 
 ( result <- pboost(y~., DF, glm, scoreLogistic, EBIC, family="binomial") )
 
-## extract the selected features
+## Extract the selected features
 attr(terms(formula(result), data=DF), "term.labels")
+}
 
 }
