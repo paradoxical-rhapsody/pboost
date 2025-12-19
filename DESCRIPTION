@@ -8,7 +8,6 @@ Description:
     A profile boosting framework for feature selection in parametric models.
     It offers a unified interface pboost() and several wrapped models, including linear model, generalized linear models, quantile regression, Cox proportional hazards model, beta regression.
     An S3 interface EBIC() is provided as the stopping rule for the profile boosting by default.
-    See the vignettes for a detailed introduction.
 Imports:
     stats,
     Matrix,
@@ -24,5 +23,3 @@ BugReports: https://github.com/paradoxical-rhapsody/pboost/issues
 Roxygen: list(load="source", markdown = TRUE)
 RoxygenNote: 7.3.3
 Depends: R (>= 4.1.0)
-Suggests: R.rsp
-VignetteBuilder: R.rsp

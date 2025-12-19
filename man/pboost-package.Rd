@@ -5,7 +5,7 @@
 \alias{pboost-package}
 \title{pboost: Profile Boosting Framework for Parametric Models}
 \description{
-A profile boosting framework for feature selection in parametric models. It offers a unified interface pboost() and several wrapped models, including linear model, generalized linear models, quantile regression, Cox proportional hazards model, beta regression. An S3 interface EBIC() is provided as the stopping rule for the profile boosting by default. See the vignettes for a detailed introduction.
+A profile boosting framework for feature selection in parametric models. It offers a unified interface pboost() and several wrapped models, including linear model, generalized linear models, quantile regression, Cox proportional hazards model, beta regression. An S3 interface EBIC() is provided as the stopping rule for the profile boosting by default.
 }
 \seealso{
 Useful links:
