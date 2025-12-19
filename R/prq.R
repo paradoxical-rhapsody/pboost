@@ -19,7 +19,7 @@
 #' @param maxK Parameters passed to [pboost].
 #' @param verbose Parameters passed to [pboost].
 #' 
-#' @return Index set of identified features.
+#' @return An `rq` model object fitted on the selected features.
 #' 
 #' @examples
 #' \donttest{
@@ -57,8 +57,10 @@ prq <- function(
     formula, tau = 0.5, data, subset, weights, na.action,
     method = "br", model = TRUE, contrasts = NULL, ...,
     stopFun = EBIC, keep = NULL, maxK = NULL, verbose = FALSE) {
+    stopifnot( !missing(formula) )
+    stopifnot( !missing(data) )
 
-    cl <- match.call(expand.dots = TRUE)
+    cl <- match.call()
 
     rq_template <- cl
     rq_template$stopFun <- NULL
@@ -66,18 +68,24 @@ prq <- function(
     rq_template$maxK <- NULL
     rq_template$verbose <- NULL
     rq_template[[1L]] <- quote(rq)
-    fitFun <- function(formula, data){
+
+    required_paras <- c("tau", "data", "subset", "weights", "na.action")
+    for (ipara in required_paras)
+        if (!is.null(cl[[ipara]]))
+            rq_template[[ipara]] <- eval(cl[[ipara]], envir = parent.frame())
+
+    fitFun <- function(formula, data) {
         call <- rq_template
         call$formula <- formula
-        egg <- eval(call, parent.frame())
-        return(egg)
+        call$data <- data
+        return( eval(call, parent.frame()) )
     }
 
     scoreFun <- function(object) 
         return(ifelse(object[["y"]] < fitted(object), tau - 1, tau))
 
     return(pboost(formula, data, fitFun, scoreFun, stopFun,
-                  keep=keep, maxK=maxK, verbose=verbose))
+                  keep = keep, maxK = maxK, verbose = verbose))
 }
 
 

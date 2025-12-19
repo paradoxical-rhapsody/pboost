@@ -4,7 +4,7 @@
 
 * wrap the lengthy examples in `\donttest{}`.
 
-* localize the `parent.frame()` in wrapped models.
+* eval argument `data` at first in wrapped models.
 
 
 

@@ -79,7 +79,6 @@ n <- 300
 p <- 200
 x <- matrix(rnorm(n*p), n)
 
-## The first three columns of `x` are signal features on `y`
 eta <- drop( x[, 1:3] \%*\% runif(3, 1.0, 1.5) )
 y <- eta + rnorm(n, sd=sd(eta))
 DF <- data.frame(y, x)

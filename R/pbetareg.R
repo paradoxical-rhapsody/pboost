@@ -28,7 +28,7 @@
 #' @return An `betareg` model object fitted on the selected features.
 #' 
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' library(betareg)
 #' set.seed(2025)
 #' n <- 300
@@ -59,8 +59,10 @@ pbetareg <- function(
     dist = NULL, nu = NULL, control = betareg.control(...), model = TRUE,
     y = TRUE, x = FALSE, ...,
     stopFun = EBIC, keep = NULL, maxK = NULL, verbose = FALSE) {
+    stopifnot( !missing(formula) )
+    stopifnot( !missing(data) )
 
-    cl <- match.call(expand.dots = TRUE)
+    cl <- match.call()
 
     betareg_template <- cl
     betareg_template$stopFun <- NULL
@@ -68,9 +70,16 @@ pbetareg <- function(
     betareg_template$maxK <- NULL
     betareg_template$verbose <- NULL
     betareg_template[[1L]] <- quote(betareg)
-    fitFun <- function(formula, data){
+
+    required_paras <- c("data", "subset", "na.action", "weights", "offset")
+    for (ipara in required_paras)
+        if (!is.null(cl[[ipara]]))
+            betareg_template[[ipara]] <- eval(cl[[ipara]], envir = parent.frame())
+
+    fitFun <- function(formula, data) {
         call <- betareg_template
         call$formula <- formula
+        call$data <- data
         return( eval(call, parent.frame()) )
     }
 
@@ -89,7 +98,7 @@ pbetareg <- function(
 
 
     return(pboost(formula, data, fitFun, scoreFun, stopFun,
-                  keep=keep, maxK=maxK, verbose=verbose))
+                  keep = keep, maxK = maxK, verbose = verbose))
 }
 
 

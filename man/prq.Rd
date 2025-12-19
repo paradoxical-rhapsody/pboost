@@ -51,7 +51,7 @@ prq(
 \item{verbose}{Parameters passed to \link{pboost}.}
 }
 \value{
-Index set of identified features.
+An \code{rq} model object fitted on the selected features.
 }
 \description{
 \link{prq} has the similar usage to the function \link[quantreg:rq]{quantreg::rq}.

@@ -62,8 +62,10 @@ pcoxph <- function(
     robust, model = FALSE, x = FALSE, y = TRUE, tt, method = ties,
     id, cluster, istate, statedata, nocenter = c(-1, 0, 1), ...,
     stopFun = EBIC, keep = NULL, maxK = NULL, verbose = FALSE) {
-    
-    cl <- match.call(expand.dots = TRUE)
+    stopifnot( !missing(formula) )
+    stopifnot( !missing(data) )
+
+    cl <- match.call()
 
     coxph_template <- cl
     coxph_template$stopFun <- NULL
@@ -71,15 +73,22 @@ pcoxph <- function(
     coxph_template$maxK <- NULL
     coxph_template$verbose <- NULL
     coxph_template[[1L]] <- quote(coxph)
-    fitFun <- function(formula, data){
+
+    required_paras <- c("data", "weights", "subset", "na.action")
+    for (ipara in required_paras)
+        if (!is.null(cl[[ipara]]))
+            coxph_template[[ipara]] <- eval(cl[[ipara]], envir = parent.frame())
+
+    fitFun <- function(formula, data) {
         call <- coxph_template
         call$formula <- formula
+        call$data <- data
         return( eval(call, parent.frame()) )
     }
 
 
     return(pboost(formula, data, fitFun, scoreCoxph, stopFun,
-                  keep=keep, maxK=maxK, verbose=verbose))
+                  keep = keep, maxK = maxK, verbose = verbose))
 }
 
 

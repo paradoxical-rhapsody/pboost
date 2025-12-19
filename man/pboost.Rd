@@ -85,7 +85,6 @@ scoreLogistic <- function(object) {
 
 ( result <- pboost(y~., DF, glm, scoreLogistic, EBIC, family="binomial") )
 
-## Extract the selected features
 attr(terms(formula(result), data=DF), "term.labels")
 }
 

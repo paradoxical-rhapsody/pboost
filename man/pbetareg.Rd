@@ -75,7 +75,7 @@ An \code{betareg} model object fitted on the selected features.
 \link{pbetareg} has the similar usage to the function \link[betareg:betareg]{betareg::betareg}.
 }
 \examples{
-\donttest{
+\dontrun{
 library(betareg)
 set.seed(2025)
 n <- 300

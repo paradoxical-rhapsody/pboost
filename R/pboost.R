@@ -15,7 +15,7 @@
 #'     \item For computational efficiency, each term on the RHS must correspond to a
 #'           single column in the resulting model matrix. Supported expressions include 
 #'           main effects (`x1`), interactions (`x1:x2`), and simple transformations 
-#'           (\code{log(x1)}, \code{I(x1^2)}, etc.). 
+#'           (\code{log(x1)}, \code{I(x1^2)}, etc.).
 #'           Complex terms that expand into multiple columns—such as \code{poly(x, degree)},
 #'           \code{bs(x)}, or \code{ns(x)}—are **not supported**.
 #'     \item Offset terms should not be included in the formula. Instead, provide them 
@@ -60,7 +60,6 @@
 #' 
 #' ( result <- pboost(y~., DF, glm, scoreLogistic, EBIC, family="binomial") )
 #' 
-#' ## Extract the selected features
 #' attr(terms(formula(result), data=DF), "term.labels")
 #' }
 #' 
@@ -150,5 +149,7 @@ pboost <- function(formula, data, fitFun, scoreFun, stopFun, ...,
     }
 
     # return(fml)
-    return(fitFun(formula=fml, data=data, ...))
+    egg <- fitFun(formula=fml, data=data, ...)
+    egg$call$data <- match.call()$data
+    return(egg)
 }

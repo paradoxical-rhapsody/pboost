@@ -28,7 +28,7 @@
 #' @details `plm` is an implementation to the sequential lasso method
 #' proposed by Luo and Chen(2014, <\doi{10.1080/01621459.2013.877275}>).
 #' 
-#' @references 
+#' @references
 #' * Zengchao Xu, Shan Luo and Zehua Chen (2022). Partial profile score feature selection in high-dimensional generalized linear interaction models. Statistics and Its Interface. \doi{10.4310/21-SII706}
 #' 
 #' * Shan Luo and Zehua Chen (2014). A Sequential Lasso Method for Feature Selection with Ultra-High Dimensional Feature Space. Journal of the American Statistical Association, 109(507):223–232.
@@ -40,7 +40,6 @@
 #' p <- 200
 #' x <- matrix(rnorm(n*p), n)
 #' 
-#' ## The first three columns of `x` are signal features on `y`
 #' eta <- drop( x[, 1:3] %*% runif(3, 1.0, 1.5) )
 #' y <- eta + rnorm(n, sd=sd(eta))
 #' DF <- data.frame(y, x)
@@ -62,8 +61,10 @@ plm <- function(
     method = "qr", model = TRUE, x = FALSE, y = FALSE, qr = TRUE,
     singular.ok = TRUE, contrasts = NULL, offset, ...,
     stopFun = EBIC, keep = NULL, maxK = NULL, verbose = FALSE) {
+    stopifnot( !missing(formula) )
+    stopifnot( !missing(data) )
 
-    cl <- match.call(expand.dots = TRUE)
+    cl <- match.call()
 
     lm_template <- cl
     lm_template$stopFun <- NULL
@@ -71,14 +72,21 @@ plm <- function(
     lm_template$maxK <- NULL
     lm_template$verbose <- NULL
     lm_template[[1L]] <- quote(lm)
-    fitFun <- function(formula, data){
+
+    required_paras <- c("data", "subset", "weights", "na.action", "offset")
+    for (ipara in required_paras)
+        if (!is.null(cl[[ipara]]))
+            lm_template[[ipara]] <- eval(cl[[ipara]], envir = parent.frame())
+
+    fitFun <- function(formula, data) {
         call <- lm_template
         call$formula <- formula
+        call$data <- data
         return( eval(call, parent.frame()) )
     }
 
     return(pboost(formula, data, fitFun, residuals, stopFun,
-                  keep=keep, maxK=maxK, verbose=verbose))
+                  keep = keep, maxK = maxK, verbose = verbose))
 }
 
 

@@ -58,7 +58,7 @@ pggm <- function(S, nObs, maxK = floor(min(nObs-1, NROW(S)-1, 50)),
 
     showiter <- function(verbose, k, idx, level)
         if (verbose) 
-            message(sprintf("Step %i: add (%i, %i) with level=%.3f)", 
+            message(sprintf("Step %i: add (%i, %i) with level=%.3f)",
                             k, idx[1], idx[2], level))
 
     nonzeroIdx <- matrix(NA, 0, 2)
@@ -88,8 +88,8 @@ pggm <- function(S, nObs, maxK = floor(min(nObs-1, NROW(S)-1, 50)),
 
     dimnames(nonzeroIdx) <- NULL
     return(list(
-        Omega=round(Omega, digits), 
-        nonzeroIdx=nonzeroIdx, 
+        Omega=round(Omega, digits),
+        nonzeroIdx=nonzeroIdx,
         ebic=c(na.omit(ebicVec))
     ))
 }

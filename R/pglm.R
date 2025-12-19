@@ -67,8 +67,10 @@ pglm <- function(
     control = list(...), model = TRUE, method = "glm.fit",
     x = FALSE, y = TRUE, singular.ok = TRUE, contrasts = NULL, ...,
     stopFun = EBIC, keep = NULL, maxK = NULL, verbose = FALSE) {
+    stopifnot( !missing(formula) )
+    stopifnot( !missing(data) )
 
-    cl <- match.call(expand.dots = TRUE)
+    cl <- match.call()
 
     glm_template <- cl
     glm_template$stopFun <- NULL
@@ -76,10 +78,17 @@ pglm <- function(
     glm_template$maxK <- NULL
     glm_template$verbose <- NULL
     glm_template[[1L]] <- quote(glm)
-    fitFun <- function(formula, data){
+
+    required_paras <- c("data", "weights", "subset", "na.action",
+                        "etastart", "mustart", "offset")
+    for (ipara in required_paras)
+        if (!is.null(cl[[ipara]]))
+            glm_template[[ipara]] <- eval(cl[[ipara]], envir = parent.frame())
+
+    fitFun <- function(formula, data) {
         call <- glm_template
         call$formula <- formula
-        # call$data <- data
+        call$data <- data
         return( eval(call, parent.frame()) )
     }
 
@@ -93,12 +102,12 @@ pglm <- function(
         # weights <- object[["prior.weights"]]
         # return( weights*D0/S0 * (y-fitted(obj)) )
         # return( weights * D0 / S0 * residuals(object, type="response") )
-        return( D0 / S0 * residuals(object, type="response") )
+        return( D0 / S0 * residuals(object, type = "response") )
     }
 
 
     return(pboost(formula, data, fitFun, scoreFun, stopFun,
-                  keep=keep, maxK=maxK, verbose=verbose))
+                  keep = keep, maxK = maxK, verbose = verbose))
 }
 
 
