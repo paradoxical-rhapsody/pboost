@@ -54,10 +54,9 @@ prq(
 An \code{rq} model object fitted on the selected features.
 }
 \description{
-\link{prq} has the similar usage to the function \link[quantreg:rq]{quantreg::rq}.
+\link{prq} inherits the usage of the function \link[quantreg:rq]{quantreg::rq}.
 }
 \examples{
-\donttest{
 library(quantreg)
 set.seed(2025)
 n <- 300
@@ -78,6 +77,5 @@ scorerq <- function(object) {
  return(ifelse(object[["y"]] < fitted(object), tau - 1, tau))
 }
 pboost(y ~ ., DF, rq, scorerq, EBIC, tau=tau, verbose=TRUE)
-}
 
 }

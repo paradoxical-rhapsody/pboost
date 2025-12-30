@@ -2,7 +2,7 @@
 #' @title Profile Boosting for Quantile Regression
 #' 
 #' @description
-#' [prq] has the similar usage to the function [quantreg::rq].
+#' [prq] inherits the usage of the function [quantreg::rq].
 #' 
 #' @param formula See [pboost].
 #' @param data See [pboost].
@@ -22,7 +22,6 @@
 #' @return An `rq` model object fitted on the selected features.
 #' 
 #' @examples
-#' \donttest{
 #' library(quantreg)
 #' set.seed(2025)
 #' n <- 300
@@ -43,7 +42,6 @@
 #'  return(ifelse(object[["y"]] < fitted(object), tau - 1, tau))
 #' }
 #' pboost(y ~ ., DF, rq, scorerq, EBIC, tau=tau, verbose=TRUE)
-#' }
 #' 
 NULL
 #> NULL

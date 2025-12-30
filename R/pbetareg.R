@@ -2,7 +2,7 @@
 #' @title Profile Boosting for Beta Regression
 #' 
 #' @description
-#' [pbetareg] has the similar usage to the function [betareg::betareg].
+#' [pbetareg] inherits the usage of [betareg::betareg].
 #' 
 #' @param formula See [pboost].
 #' @param data See [pboost].
@@ -28,7 +28,7 @@
 #' @return An `betareg` model object fitted on the selected features.
 #' 
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(betareg)
 #' set.seed(2025)
 #' n <- 300
@@ -95,7 +95,6 @@ pbetareg <- function(
         # weights <- object[["weights"]]
         return( mu.eta(eta) * phi * ( digamma((1-mu)*phi) - digamma(mu*phi) + qlogis(y) ) )
     }
-
 
     return(pboost(formula, data, fitFun, scoreFun, stopFun,
                   keep = keep, maxK = maxK, verbose = verbose))

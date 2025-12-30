@@ -13,7 +13,6 @@
 #' @return Index set of identified features.
 #' 
 #' @examples
-#' \donttest{
 #' library(MASS)
 #' library(Matrix)
 #' 
@@ -27,7 +26,6 @@
 #' X <- mvrnorm(n, rep(0, p), Sigma, empirical=TRUE)
 #' S <- cov(X)
 #' system.time( egg <- pggm(S, n) )
-#' }
 #' 
 NULL
 #> NULL
@@ -45,24 +43,24 @@ pggm <- function(S, nObs, maxK = floor(min(nObs-1, NROW(S)-1, 50)),
     S <- Matrix(S)
 
     p0 <- NROW(S)
-    rEBIC <- max( 0.0, 1.0 - log(nObs)/(2.0*log(p0)))
+    rEBIC <- max( 0.0, 1.0 - log(nObs) / (2.0 * log(p0)))
 
     grad <- function(Omega, nonzeroIdx) {
         egg <- S - inv.bdMat(Omega, nonzeroIdx)
-        return(2*egg - Diagonal(x=diag(egg)))
+        return(2*egg - Diagonal(x = diag(egg)))
     }
     ebic <- function(Omega, dof) {
-        bic <- c(sum(S*Omega) - determinant(Omega)$modulus + dof*log(nObs)/nObs)
-        return( bic + 2*rEBIC*lchoose(p0*(p0-1), dof)/nObs )
+        bic <- c(sum(S*Omega) - determinant(Omega)$modulus + dof * log(nObs) / nObs)
+        return( bic + 2 * rEBIC * lchoose(p0 * (p0 - 1), dof) / nObs )
     }
 
     showiter <- function(verbose, k, idx, level)
-        if (verbose) 
+        if (verbose)
             message(sprintf("Step %i: add (%i, %i) with level=%.3f)",
                             k, idx[1], idx[2], level))
 
     nonzeroIdx <- matrix(NA, 0, 2)
-    Omega <- Diagonal(x=1.0/diag(S))
+    Omega <- Diagonal(x = 1.0 / diag(S))
     ebicVal <- ebic(Omega, NROW(nonzeroIdx))
     ebicVec <- c(ebicVal, rep(NA_real_, maxK))
     k <- 1
@@ -88,9 +86,9 @@ pggm <- function(S, nObs, maxK = floor(min(nObs-1, NROW(S)-1, 50)),
 
     dimnames(nonzeroIdx) <- NULL
     return(list(
-        Omega=round(Omega, digits),
-        nonzeroIdx=nonzeroIdx,
-        ebic=c(na.omit(ebicVec))
+        Omega = round(Omega, digits),
+        nonzeroIdx = nonzeroIdx,
+        ebic = c(na.omit(ebicVec))
     ))
 }
 
@@ -102,7 +100,7 @@ pggm <- function(S, nObs, maxK = floor(min(nObs-1, NROW(S)-1, 50)),
 #' @rdname pggm
 #' @description `rmle4ggmS4.dense`: Restricted MLE for GGM.
 #' @noRd
-rmle4ggmS4.dense <- function(S, nonzeroIdx, tol=1e-4, maxIter=100, verbose=FALSE) {
+rmle4ggmS4.dense <- function(S, nonzeroIdx, tol = 1e-4, maxIter = 100, verbose = FALSE) {
     stopifnot( isSymmetric(S) )
     stopifnot( all(nonzeroIdx > 0) )
     stopifnot( all(nonzeroIdx <= NROW(S)) )
@@ -116,13 +114,13 @@ rmle4ggmS4.dense <- function(S, nonzeroIdx, tol=1e-4, maxIter=100, verbose=FALSE
     loss <- function(Omega) c(sum(S * Omega) - determinant(Omega)$modulus)
     grad <- function(Omega, nonzeroIdx) {
         egg <- active.mat * (S - inv.bdMat(Omega, nonzeroIdx))
-        return(2*egg - Diagonal(x=diag(egg)))
+        return(2*egg - Diagonal(x = diag(egg)))
     }
 
     showiter <- function(verbose)
         if (verbose) message(sprintf("iter %i: obj=%.4f", k, obj))
 
-    Omega0 <- Diagonal(x=1.0/diag(S))
+    Omega0 <- Diagonal(x = 1.0/diag(S))
     Omega <- W <- Omega0
     obj <- loss(Omega0)
 
@@ -169,7 +167,7 @@ rmle4ggmS4.dense <- function(S, nonzeroIdx, tol=1e-4, maxIter=100, verbose=FALSE
         alpha <- (1.0 + sqrt(1.0 + 4*alpha0^2)) / 2.0
     }
 
-    list(Omega=round(Omega, 8), iter=c(na.omit(iter)), isConvertent=isConvergent)
+    list(Omega = round(Omega, 8), iter = c(na.omit(iter)), isConvertent = isConvergent)
 }
 
 
@@ -177,7 +175,7 @@ rmle4ggmS4.dense <- function(S, nonzeroIdx, tol=1e-4, maxIter=100, verbose=FALSE
 #' @rdname pggm
 #' @description `rmle4ggmS4`: Restricted MLE for GGM
 #' @noRd
-rmle4ggmS4  <- function(S, nonzeroIdx, tol=1e-4, maxIter=100) {
+rmle4ggmS4  <- function(S, nonzeroIdx, tol = 1e-4, maxIter = 100) {
     stopifnot( isSymmetric(S) )
     stopifnot( all(nonzeroIdx > 0) )
     stopifnot( all(nonzeroIdx <= NROW(S)) )
@@ -185,13 +183,13 @@ rmle4ggmS4  <- function(S, nonzeroIdx, tol=1e-4, maxIter=100) {
 
     idx <- sort(unique(c(nonzeroIdx)))
 
-    indicator.mat <- Matrix(FALSE, NROW(S), NCOL(S), doDiag=FALSE)
+    indicator.mat <- Matrix(FALSE, NROW(S), NCOL(S), doDiag = FALSE)
     indicator.mat[nonzeroIdx] <- TRUE
-    nonzeroIdx.sub <- which(indicator.mat[idx, idx, drop=FALSE], TRUE)
-    obj <- rmle4ggmS4.dense(S[idx, idx, drop=FALSE], nonzeroIdx.sub, tol, maxIter)
+    nonzeroIdx.sub <- which(indicator.mat[idx, idx, drop = FALSE], TRUE)
+    obj <- rmle4ggmS4.dense(S[idx, idx, drop = FALSE], nonzeroIdx.sub, tol, maxIter)
 
-    Omega <- Diagonal(x=1.0/diag(S))
+    Omega <- Diagonal(x = 1.0/diag(S))
     Omega[idx, idx] <- obj$Omega
 
-    list(Omega=Omega, iter=obj$iter, isConvergent=obj$isConvergent)
+    list(Omega = Omega, iter = obj$iter, isConvergent = obj$isConvergent)
 }

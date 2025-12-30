@@ -66,14 +66,13 @@ plm(
 An \code{lm} model object fitted on the selected features.
 }
 \description{
-\link{plm} has the similar usage to the built-in function \link{lm}.
+\link{plm} inherits the usage of the built-in function \link{lm}.
 }
 \details{
-\code{plm} is an implementation to the sequential lasso method
-proposed by Luo and Chen(2014, \if{html}{\out{<\doi{10.1080/01621459.2013.877275}>}}).
+\code{plm} is an equivalent implementation to the sequential lasso method
+proposed by Luo and Chen(2014, \doi{10.1080/01621459.2013.877275}).
 }
 \examples{
-\donttest{
 set.seed(2025)
 n <- 300
 p <- 200
@@ -86,12 +85,15 @@ DF <- data.frame(y, x)
 plm(y ~ ., DF, verbose=TRUE)
 plm(y ~ ., DF, stopFun=BIC, verbose=TRUE)
 pboost(y ~ ., DF, lm, residuals, EBIC, verbose=TRUE)
-}
 
 }
 \references{
 \itemize{
-\item Zengchao Xu, Shan Luo and Zehua Chen (2022). Partial profile score feature selection in high-dimensional generalized linear interaction models. Statistics and Its Interface. \doi{10.4310/21-SII706}
-\item Shan Luo and Zehua Chen (2014). A Sequential Lasso Method for Feature Selection with Ultra-High Dimensional Feature Space. Journal of the American Statistical Association, 109(507):223–232.
+\item Zengchao Xu, Shan Luo and Zehua Chen (2022). Partial profile score feature
+selection in high-dimensional generalized linear interaction models.
+Statistics and Its Interface. \doi{10.4310/21-SII706}
+\item Shan Luo and Zehua Chen (2014). A Sequential Lasso Method for Feature Selection
+with Ultra-High Dimensional Feature Space. Journal of the American Statistical
+Association, 109(507):223–232. \doi{10.1080/01621459.2013.877275}
 }
 }

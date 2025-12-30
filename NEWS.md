@@ -1,3 +1,8 @@
+# pboost 0.2.1
+
+* polish the documentation.
+
+
 # pboost 0.2.0
 
 * remove commented codes in examples.

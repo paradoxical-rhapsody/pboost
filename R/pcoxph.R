@@ -33,7 +33,6 @@
 #' @return An `coxph` model object fitted on the selected features.
 #' 
 #' @examples
-#' \donttest{
 #' library(survival)
 #' set.seed(2025)
 #' n <- 300
@@ -46,7 +45,6 @@
 #' )
 #' 
 #' pcoxph(Surv(time, status) ~ ., DF, verbose=TRUE)
-#' }
 #' 
 NULL
 #> NULL
@@ -86,7 +84,6 @@ pcoxph <- function(
         return( eval(call, parent.frame()) )
     }
 
-
     return(pboost(formula, data, fitFun, scoreCoxph, stopFun,
                   keep = keep, maxK = maxK, verbose = verbose))
 }
@@ -111,7 +108,7 @@ scoreCoxph <- function(object) {
         stop('Cannot recognize y')
     }
 
-    if (!(length(time) == length(status) && length(status) == length(eta))) 
+    if (!(length(time) == length(status) && length(status) == length(eta)))
         stop('length mismatch')
     n <- length(time)
     o <- order(time, decreasing = TRUE)

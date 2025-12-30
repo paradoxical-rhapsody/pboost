@@ -2,7 +2,7 @@
 #' @title Profile Boosting for Linear Models.
 #' 
 #' @description
-#' [plm] has the similar usage to the built-in function [lm].
+#' [plm] inherits the usage of the built-in function [lm].
 #' 
 #' @param formula See [pboost].
 #' @param data See [pboost].
@@ -25,16 +25,19 @@
 #' 
 #' @return An `lm` model object fitted on the selected features.
 #' 
-#' @details `plm` is an implementation to the sequential lasso method
-#' proposed by Luo and Chen(2014, <\doi{10.1080/01621459.2013.877275}>).
+#' @details `plm` is an equivalent implementation to the sequential lasso method
+#' proposed by Luo and Chen(2014, \doi{10.1080/01621459.2013.877275}).
 #' 
 #' @references
-#' * Zengchao Xu, Shan Luo and Zehua Chen (2022). Partial profile score feature selection in high-dimensional generalized linear interaction models. Statistics and Its Interface. \doi{10.4310/21-SII706}
+#' * Zengchao Xu, Shan Luo and Zehua Chen (2022). Partial profile score feature
+#' selection in high-dimensional generalized linear interaction models.
+#' Statistics and Its Interface. \doi{10.4310/21-SII706}
 #' 
-#' * Shan Luo and Zehua Chen (2014). A Sequential Lasso Method for Feature Selection with Ultra-High Dimensional Feature Space. Journal of the American Statistical Association, 109(507):223–232.
+#' * Shan Luo and Zehua Chen (2014). A Sequential Lasso Method for Feature Selection
+#' with Ultra-High Dimensional Feature Space. Journal of the American Statistical
+#' Association, 109(507):223–232. \doi{10.1080/01621459.2013.877275}
 #' 
 #' @examples
-#' \donttest{
 #' set.seed(2025)
 #' n <- 300
 #' p <- 200
@@ -47,7 +50,6 @@
 #' plm(y ~ ., DF, verbose=TRUE)
 #' plm(y ~ ., DF, stopFun=BIC, verbose=TRUE)
 #' pboost(y ~ ., DF, lm, residuals, EBIC, verbose=TRUE)
-#' }
 #' 
 NULL
 #> NULL

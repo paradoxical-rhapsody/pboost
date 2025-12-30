@@ -72,10 +72,10 @@ pbetareg(
 An \code{betareg} model object fitted on the selected features.
 }
 \description{
-\link{pbetareg} has the similar usage to the function \link[betareg:betareg]{betareg::betareg}.
+\link{pbetareg} inherits the usage of \link[betareg:betareg]{betareg::betareg}.
 }
 \examples{
-\dontrun{
+\donttest{
 library(betareg)
 set.seed(2025)
 n <- 300

@@ -42,20 +42,18 @@ It can be called by the fitted model that has standard \link{logLik} method
 to access the attributes \code{nobs} and \code{df}, such as \link{lm}, \link{glm}.
 }
 \details{
-The built-in \link{BIC} has the definition
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{BIC(obj) = -2*logLik(obj) + attr(logLik(obj), "df") * log(nobs(logLik(obj))).
-}\if{html}{\out{</div>}}
-
 The extended BIC (EBIC) is defined as
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{EBIC(obj) = BIC(obj) + 2 * r * log(choose(p - |keep|, df - |keep|)).
+\if{html}{\out{<div class="sourceCode">}}\preformatted{EBIC(obj) = BIC(obj) + 2 * r * log(choose(p - |p.keep|, df - |p.keep|)).
 }\if{html}{\out{</div>}}
 }
 \references{
 \itemize{
-\item Jiahua Chen and Zehua Chen (2008). Extended Bayesian information criteria for model selection with large model spaces. Biometrika, 95(3):759–771. \doi{10.1093/biomet/asn034}
-\item Jiahua Chen and Zehua Chen (2012). Extended BIC for small-n-large-p sparse GLM. Statistical Sinica, 22(2):555–574. \doi{10.5705/ss.2010.216}
+\item Jiahua Chen and Zehua Chen (2008). Extended Bayesian information criteria for
+model selection with large model spaces. Biometrika, 95(3):759–771.
+\doi{10.1093/biomet/asn034}
+\item Jiahua Chen and Zehua Chen (2012). Extended BIC for small-n-large-p sparse GLM.
+Statistical Sinica, 22(2):555–574. \doi{10.5705/ss.2010.216}
 }
 }
 \seealso{

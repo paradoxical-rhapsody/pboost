@@ -2,24 +2,24 @@
 #' @title Profile Boosting Framework
 #' 
 #' @description
-#' `pboost` is the generic workhorse function of profile boosting 
+#' `pboost` is the generic workhorse function of profile boosting
 #' framework for parametric regression.
 #' 
-#' @param formula An object of class [formula] of the form `LHS ~ RHS`, 
-#'   where the right-hand side (RHS) specifies the candidate features 
+#' @param formula An object of class [formula] of the form `LHS ~ RHS`,
+#'   where the right-hand side (RHS) specifies the candidate features
 #'   for the linear predictor \eqn{\eta = \sum_j \beta_j x_j}.
-#'   
+#' 
 #'   The following restrictions and recommendations apply:
 #'   \itemize{
-#'     \item All variables appearing on the RHS must be numeric in the supplied `data`.
+#'     \item All variables appearing on the RHS must be numeric in the supplied `data`
 #'     \item For computational efficiency, each term on the RHS must correspond to a
-#'           single column in the resulting model matrix. Supported expressions include 
-#'           main effects (`x1`), interactions (`x1:x2`), and simple transformations 
-#'           (\code{log(x1)}, \code{I(x1^2)}, etc.).
-#'           Complex terms that expand into multiple columns—such as \code{poly(x, degree)},
-#'           \code{bs(x)}, or \code{ns(x)}—are **not supported**.
-#'     \item Offset terms should not be included in the formula. Instead, provide them 
-#'           via the dedicated \code{offset} argument of \code{fitFun}.
+#'        single column in the resulting model matrix. Supported expressions include
+#'        main effects (`x1`), interactions (`x1:x2`), and simple transformations 
+#'        (\code{log(x1)}, \code{I(x1^2)}, etc.).
+#'        Complex terms that expand into multiple columns—such as \code{poly(x, degree)},
+#'        \code{bs(x)}, or \code{ns(x)}—are **not supported**.
+#'     \item Offset terms should not be included in the formula. Instead, provide them
+#'        via the dedicated \code{offset} argument of \code{fitFun}.
 #'   }
 #' @param data An data frame containing the variables in the model.
 #' @param fitFun Function to fit the empirical risk function in
@@ -44,7 +44,6 @@
 #' @return Model object fitted on the selected features.
 #' 
 #' @examples
-#' \donttest{
 #' set.seed(2025)
 #' n <- 200
 #' p <- 300
@@ -61,7 +60,6 @@
 #' ( result <- pboost(y~., DF, glm, scoreLogistic, EBIC, family="binomial") )
 #' 
 #' attr(terms(formula(result), data=DF), "term.labels")
-#' }
 #' 
 NULL
 

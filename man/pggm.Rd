@@ -31,7 +31,6 @@ Index set of identified features.
 Profile boosting for Gaussian graphical model.
 }
 \examples{
-\donttest{
 library(MASS)
 library(Matrix)
 
@@ -45,6 +44,5 @@ Sigma <- chol2inv(chol(Omega))
 X <- mvrnorm(n, rep(0, p), Sigma, empirical=TRUE)
 S <- cov(X)
 system.time( egg <- pggm(S, n) )
-}
 
 }

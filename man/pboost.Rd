@@ -23,7 +23,7 @@ for the linear predictor \eqn{\eta = \sum_j \beta_j x_j}.
 
 The following restrictions and recommendations apply:
 \itemize{
-\item All variables appearing on the RHS must be numeric in the supplied \code{data}.
+\item All variables appearing on the RHS must be numeric in the supplied \code{data}
 \item For computational efficiency, each term on the RHS must correspond to a
 single column in the resulting model matrix. Supported expressions include
 main effects (\code{x1}), interactions (\code{x1:x2}), and simple transformations
@@ -69,7 +69,6 @@ Model object fitted on the selected features.
 framework for parametric regression.
 }
 \examples{
-\donttest{
 set.seed(2025)
 n <- 200
 p <- 300
@@ -86,6 +85,5 @@ scoreLogistic <- function(object) {
 ( result <- pboost(y~., DF, glm, scoreLogistic, EBIC, family="binomial") )
 
 attr(terms(formula(result), data=DF), "term.labels")
-}
 
 }

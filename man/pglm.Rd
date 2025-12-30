@@ -78,10 +78,9 @@ pglm(
 An \code{glm} model object fitted on the selected features.
 }
 \description{
-\link{pglm} has the similar usage to the built-in function \link{glm}.
+\link{pglm} inherits the usage of the built-in function \link{glm}.
 }
 \examples{
-\donttest{
 set.seed(2025)
 n <- 300
 p <- 200
@@ -99,9 +98,10 @@ scoreLogistic <- function(object) {
    return(object[["y"]] - 1/(1+exp(-eta.hat)))
 }
 pboost(y ~ ., DF, glm, scoreLogistic, EBIC, family="binomial", verbose=TRUE)
-}
 
 }
 \references{
-Zengchao Xu, Shan Luo and Zehua Chen (2022). Partial profile score feature selection in high-dimensional generalized linear interaction models. Statistics and Its Interface. \doi{10.4310/21-SII706}
+Zengchao Xu, Shan Luo and Zehua Chen (2022). Partial profile score feature selection
+in high-dimensional generalized linear interaction models. Statistics and Its Interface.
+\doi{10.4310/21-SII706}
 }

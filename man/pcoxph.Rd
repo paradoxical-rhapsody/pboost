@@ -90,7 +90,6 @@ An \code{coxph} model object fitted on the selected features.
 Profile boosting for Cox model.
 }
 \examples{
-\donttest{
 library(survival)
 set.seed(2025)
 n <- 300
@@ -103,6 +102,5 @@ DF <- data.frame(
 )
 
 pcoxph(Surv(time, status) ~ ., DF, verbose=TRUE)
-}
 
 }
