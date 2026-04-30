@@ -1,3 +1,8 @@
+# pboost 0.3.1
+
+* add `flm()`, `fglm()`.
+
+
 # pboost 0.3.0
 
 * add forward regression selection framework (`frs.R`).
