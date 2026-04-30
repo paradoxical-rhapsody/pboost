@@ -37,54 +37,54 @@ pcoxph(
 
 \item{data}{See \link{pboost}.}
 
-\item{weights}{Parameters passed to \link[survival:coxph]{survival::coxph}.}
+\item{weights}{Parameter passed to \link[survival:coxph]{survival::coxph}.}
 
-\item{subset}{Parameters passed to \link[survival:coxph]{survival::coxph}.}
+\item{subset}{Parameter passed to \link[survival:coxph]{survival::coxph}.}
 
-\item{na.action}{Parameters passed to \link[survival:coxph]{survival::coxph}.}
+\item{na.action}{Parameter passed to \link[survival:coxph]{survival::coxph}.}
 
-\item{init}{Parameters passed to \link[survival:coxph]{survival::coxph}.}
+\item{init}{Parameter passed to \link[survival:coxph]{survival::coxph}.}
 
-\item{control}{Parameters passed to \link[survival:coxph]{survival::coxph}.}
+\item{control}{Parameter passed to \link[survival:coxph]{survival::coxph}.}
 
-\item{ties}{Parameters passed to \link[survival:coxph]{survival::coxph}.}
+\item{ties}{Parameter passed to \link[survival:coxph]{survival::coxph}.}
 
-\item{singular.ok}{Parameters passed to \link[survival:coxph]{survival::coxph}.}
+\item{singular.ok}{Parameter passed to \link[survival:coxph]{survival::coxph}.}
 
-\item{robust}{Parameters passed to \link[survival:coxph]{survival::coxph}.}
+\item{robust}{Parameter passed to \link[survival:coxph]{survival::coxph}.}
 
-\item{model}{Parameters passed to \link[survival:coxph]{survival::coxph}.}
+\item{model}{Parameter passed to \link[survival:coxph]{survival::coxph}.}
 
-\item{x}{Parameters passed to \link[survival:coxph]{survival::coxph}.}
+\item{x}{Parameter passed to \link[survival:coxph]{survival::coxph}.}
 
-\item{y}{Parameters passed to \link[survival:coxph]{survival::coxph}.}
+\item{y}{Parameter passed to \link[survival:coxph]{survival::coxph}.}
 
-\item{tt}{Parameters passed to \link[survival:coxph]{survival::coxph}.}
+\item{tt}{Parameter passed to \link[survival:coxph]{survival::coxph}.}
 
-\item{method}{Parameters passed to \link[survival:coxph]{survival::coxph}.}
+\item{method}{Parameter passed to \link[survival:coxph]{survival::coxph}.}
 
-\item{id}{Parameters passed to \link[survival:coxph]{survival::coxph}.}
+\item{id}{Parameter passed to \link[survival:coxph]{survival::coxph}.}
 
-\item{cluster}{Parameters passed to \link[survival:coxph]{survival::coxph}.}
+\item{cluster}{Parameter passed to \link[survival:coxph]{survival::coxph}.}
 
-\item{istate}{Parameters passed to \link[survival:coxph]{survival::coxph}.}
+\item{istate}{Parameter passed to \link[survival:coxph]{survival::coxph}.}
 
-\item{statedata}{Parameters passed to \link[survival:coxph]{survival::coxph}.}
+\item{statedata}{Parameter passed to \link[survival:coxph]{survival::coxph}.}
 
-\item{nocenter}{Parameters passed to \link[survival:coxph]{survival::coxph}.}
+\item{nocenter}{Parameter passed to \link[survival:coxph]{survival::coxph}.}
 
 \item{...}{Parameters passed to \link[survival:coxph]{survival::coxph}.}
 
-\item{stopFun}{Parameters passed to \link{pboost}.}
+\item{stopFun}{Parameter passed to \link{pboost}.}
 
-\item{keep}{Parameters passed to \link{pboost}.}
+\item{keep}{Parameter passed to \link{pboost}.}
 
-\item{maxK}{Parameters passed to \link{pboost}.}
+\item{maxK}{Parameter passed to \link{pboost}.}
 
-\item{verbose}{Parameters passed to \link{pboost}.}
+\item{verbose}{Parameter passed to \link{pboost}.}
 }
 \value{
-An \code{coxph} model object fitted on the selected features.
+A \code{coxph} model object fitted on the selected features.
 }
 \description{
 Profile boosting for Cox model.

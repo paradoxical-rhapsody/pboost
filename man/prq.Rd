@@ -24,34 +24,34 @@ prq(
 \arguments{
 \item{formula}{See \link{pboost}.}
 
-\item{tau}{Parameters passed to \link[quantreg:rq]{quantreg::rq}.}
+\item{tau}{Parameter passed to \link[quantreg:rq]{quantreg::rq}.}
 
 \item{data}{See \link{pboost}.}
 
-\item{subset}{Parameters passed to \link[quantreg:rq]{quantreg::rq}.}
+\item{subset}{Parameter passed to \link[quantreg:rq]{quantreg::rq}.}
 
-\item{weights}{Parameters passed to \link[quantreg:rq]{quantreg::rq}.}
+\item{weights}{Parameter passed to \link[quantreg:rq]{quantreg::rq}.}
 
-\item{na.action}{Parameters passed to \link[quantreg:rq]{quantreg::rq}.}
+\item{na.action}{Parameter passed to \link[quantreg:rq]{quantreg::rq}.}
 
-\item{method}{Parameters passed to \link[quantreg:rq]{quantreg::rq}.}
+\item{method}{Parameter passed to \link[quantreg:rq]{quantreg::rq}.}
 
-\item{model}{Parameters passed to \link[quantreg:rq]{quantreg::rq}.}
+\item{model}{Parameter passed to \link[quantreg:rq]{quantreg::rq}.}
 
-\item{contrasts}{Parameters passed to \link[quantreg:rq]{quantreg::rq}.}
+\item{contrasts}{Parameter passed to \link[quantreg:rq]{quantreg::rq}.}
 
 \item{...}{Parameters passed to \link[quantreg:rq]{quantreg::rq}.}
 
-\item{stopFun}{Parameters passed to \link{pboost}.}
+\item{stopFun}{Parameter passed to \link{pboost}.}
 
-\item{keep}{Parameters passed to \link{pboost}.}
+\item{keep}{Parameter passed to \link{pboost}.}
 
-\item{maxK}{Parameters passed to \link{pboost}.}
+\item{maxK}{Parameter passed to \link{pboost}.}
 
-\item{verbose}{Parameters passed to \link{pboost}.}
+\item{verbose}{Parameter passed to \link{pboost}.}
 }
 \value{
-An \code{rq} model object fitted on the selected features.
+A \code{rq} model object fitted on the selected features.
 }
 \description{
 \link{prq} inherits the usage of the function \link[quantreg:rq]{quantreg::rq}.

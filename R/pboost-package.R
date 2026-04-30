@@ -9,8 +9,20 @@
 #' @importFrom MASS ginv
 #' @importFrom quantreg rq
 #' @importFrom stats AIC as.formula gaussian model.frame model.matrix
+#' @importFrom stats coef
+#' @importFrom stats contrasts
+#' @importFrom stats delete.response
 #' @importFrom stats fitted glm.fit logLik na.fail na.omit residuals BIC
-#' @importFrom stats model.response nobs terms delete.response
+#' @importFrom stats formula
+#' @importFrom stats glm
+#' @importFrom stats glm.fit
+#' @importFrom stats lm
+#' @importFrom stats lm.fit
+#' @importFrom stats model.matrix
+#' @importFrom stats model.response
+#' @importFrom stats nobs
+#' @importFrom stats terms
+#' @importFrom stats delete.response
 #' @importFrom stats predict
 #' @importFrom stats qlogis
 #' @importFrom survival coxph

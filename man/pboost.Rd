@@ -65,7 +65,7 @@ The pre-specified features in \code{keep} are counted toward \code{maxK}.}
 Model object fitted on the selected features.
 }
 \description{
-\code{pboost} is the generic workhorse function of profile boosting
+\code{pboost()} is the generic workhorse function of profile boosting
 framework for parametric regression.
 }
 \examples{
@@ -86,4 +86,7 @@ scoreLogistic <- function(object) {
 
 attr(terms(formula(result), data=DF), "term.labels")
 
+}
+\seealso{
+\link{pbetareg}, \link{pcoxph}, \link{pglm}, \link{lm}, \link{prq}.
 }

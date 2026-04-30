@@ -2,7 +2,7 @@
 #' @title Profile Boosting Framework
 #' 
 #' @description
-#' `pboost` is the generic workhorse function of profile boosting
+#' `pboost()` is the generic workhorse function of profile boosting
 #' framework for parametric regression.
 #' 
 #' @param formula An object of class [formula] of the form `LHS ~ RHS`,
@@ -42,6 +42,8 @@
 #' @param verbose Print the procedure path?
 #' 
 #' @return Model object fitted on the selected features.
+#' 
+#' @seealso [pboost::pbetareg], [pboost::pcoxph], [pboost::pglm], [pboost::lm], [prq].
 #' 
 #' @examples
 #' set.seed(2025)

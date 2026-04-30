@@ -30,40 +30,40 @@ plm(
 
 \item{data}{See \link{pboost}.}
 
-\item{subset}{Parameters passed to \link{lm}.}
+\item{subset}{Parameter passed to \link{lm}.}
 
-\item{weights}{Parameters passed to \link{lm}.}
+\item{weights}{Parameter passed to \link{lm}.}
 
-\item{na.action}{Parameters passed to \link{lm}.}
+\item{na.action}{Parameter passed to \link{lm}.}
 
-\item{method}{Parameters passed to \link{lm}.}
+\item{method}{Parameter passed to \link{lm}.}
 
-\item{model}{Parameters passed to \link{lm}.}
+\item{model}{Parameter passed to \link{lm}.}
 
-\item{x}{Parameters passed to \link{lm}.}
+\item{x}{Parameter passed to \link{lm}.}
 
-\item{y}{Parameters passed to \link{lm}.}
+\item{y}{Parameter passed to \link{lm}.}
 
-\item{qr}{Parameters passed to \link{lm}.}
+\item{qr}{Parameter passed to \link{lm}.}
 
-\item{singular.ok}{Parameters passed to \link{lm}.}
+\item{singular.ok}{Parameter passed to \link{lm}.}
 
-\item{contrasts}{Parameters passed to \link{lm}.}
+\item{contrasts}{Parameter passed to \link{lm}.}
 
-\item{offset}{Parameters passed to \link{lm}.}
+\item{offset}{Parameter passed to \link{lm}.}
 
 \item{...}{Parameters passed to \link{lm}.}
 
-\item{stopFun}{Parameters passed to \link{pboost}.}
+\item{stopFun}{Parameter passed to \link{pboost}.}
 
-\item{keep}{Parameters passed to \link{pboost}.}
+\item{keep}{Parameter passed to \link{pboost}.}
 
-\item{maxK}{Parameters passed to \link{pboost}.}
+\item{maxK}{Parameter passed to \link{pboost}.}
 
-\item{verbose}{Parameters passed to \link{pboost}.}
+\item{verbose}{Parameter passed to \link{pboost}.}
 }
 \value{
-An \code{lm} model object fitted on the selected features.
+A \code{lm} model object fitted on the selected features.
 }
 \description{
 \link{plm} inherits the usage of the built-in function \link{lm}.

@@ -6,20 +6,20 @@
 #' 
 #' @param formula See [pboost].
 #' @param data See [pboost].
-#' @param tau Parameters passed to [quantreg::rq].
-#' @param subset Parameters passed to [quantreg::rq].
-#' @param weights Parameters passed to [quantreg::rq].
-#' @param na.action Parameters passed to [quantreg::rq].
-#' @param method Parameters passed to [quantreg::rq].
-#' @param model Parameters passed to [quantreg::rq].
-#' @param contrasts Parameters passed to [quantreg::rq].
+#' @param tau Parameter passed to [quantreg::rq].
+#' @param subset Parameter passed to [quantreg::rq].
+#' @param weights Parameter passed to [quantreg::rq].
+#' @param na.action Parameter passed to [quantreg::rq].
+#' @param method Parameter passed to [quantreg::rq].
+#' @param model Parameter passed to [quantreg::rq].
+#' @param contrasts Parameter passed to [quantreg::rq].
 #' @param ... Parameters passed to [quantreg::rq].
-#' @param stopFun Parameters passed to [pboost].
-#' @param keep Parameters passed to [pboost].
-#' @param maxK Parameters passed to [pboost].
-#' @param verbose Parameters passed to [pboost].
+#' @param stopFun Parameter passed to [pboost].
+#' @param keep Parameter passed to [pboost].
+#' @param maxK Parameter passed to [pboost].
+#' @param verbose Parameter passed to [pboost].
 #' 
-#' @return An `rq` model object fitted on the selected features.
+#' @return A `rq` model object fitted on the selected features.
 #' 
 #' @examples
 #' library(quantreg)

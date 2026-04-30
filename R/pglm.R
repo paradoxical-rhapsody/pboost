@@ -6,28 +6,28 @@
 #' 
 #' @param formula See [pboost].
 #' @param data See [pboost].
-#' @param family Parameters passed to [glm].
-#' @param weights Parameters passed to [glm].
-#' @param subset Parameters passed to [glm].
-#' @param na.action Parameters passed to [glm].
-#' @param start Parameters passed to [glm].
-#' @param etastart Parameters passed to [glm].
-#' @param mustart Parameters passed to [glm].
-#' @param offset Parameters passed to [glm].
-#' @param control Parameters passed to [glm].
-#' @param model Parameters passed to [glm].
-#' @param method Parameters passed to [glm].
-#' @param x Parameters passed to [glm].
-#' @param y Parameters passed to [glm].
-#' @param singular.ok Parameters passed to [glm].
-#' @param contrasts Parameters passed to [glm].
+#' @param family Parameter passed to [glm].
+#' @param weights Parameter passed to [glm].
+#' @param subset Parameter passed to [glm].
+#' @param na.action Parameter passed to [glm].
+#' @param start Parameter passed to [glm].
+#' @param etastart Parameter passed to [glm].
+#' @param mustart Parameter passed to [glm].
+#' @param offset Parameter passed to [glm].
+#' @param control Parameter passed to [glm].
+#' @param model Parameter passed to [glm].
+#' @param method Parameter passed to [glm].
+#' @param x Parameter passed to [glm].
+#' @param y Parameter passed to [glm].
+#' @param singular.ok Parameter passed to [glm].
+#' @param contrasts Parameter passed to [glm].
 #' @param ... Parameters passed to [glm].
-#' @param stopFun Parameters passed to [pboost].
-#' @param keep Parameters passed to [pboost].
-#' @param maxK Parameters passed to [pboost].
-#' @param verbose Parameters passed to [pboost].
+#' @param stopFun Parameter passed to [pboost].
+#' @param keep Parameter passed to [pboost].
+#' @param maxK Parameter passed to [pboost].
+#' @param verbose Parameter passed to [pboost].
 #' 
-#' @return An `glm` model object fitted on the selected features.
+#' @return A `glm` model object fitted on the selected features.
 #' 
 #' @references
 #' Zengchao Xu, Shan Luo and Zehua Chen (2022). Partial profile score feature selection

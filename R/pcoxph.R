@@ -5,32 +5,32 @@
 #' 
 #' @param formula See [pboost].
 #' @param data See [pboost].
-#' @param weights Parameters passed to [survival::coxph].
-#' @param subset Parameters passed to [survival::coxph].
-#' @param na.action Parameters passed to [survival::coxph].
-#' @param init Parameters passed to [survival::coxph].
-#' @param control Parameters passed to [survival::coxph].
-#' @param ties Parameters passed to [survival::coxph].
-#' @param singular.ok Parameters passed to [survival::coxph].
-#' @param robust Parameters passed to [survival::coxph].
-#' @param model Parameters passed to [survival::coxph].
-#' @param x Parameters passed to [survival::coxph].
-#' @param y Parameters passed to [survival::coxph].
-#' @param tt Parameters passed to [survival::coxph].
-#' @param method Parameters passed to [survival::coxph].
-#' @param id Parameters passed to [survival::coxph].
-#' @param cluster Parameters passed to [survival::coxph].
-#' @param istate Parameters passed to [survival::coxph].
-#' @param statedata Parameters passed to [survival::coxph].
-#' @param nocenter Parameters passed to [survival::coxph].
+#' @param weights Parameter passed to [survival::coxph].
+#' @param subset Parameter passed to [survival::coxph].
+#' @param na.action Parameter passed to [survival::coxph].
+#' @param init Parameter passed to [survival::coxph].
+#' @param control Parameter passed to [survival::coxph].
+#' @param ties Parameter passed to [survival::coxph].
+#' @param singular.ok Parameter passed to [survival::coxph].
+#' @param robust Parameter passed to [survival::coxph].
+#' @param model Parameter passed to [survival::coxph].
+#' @param x Parameter passed to [survival::coxph].
+#' @param y Parameter passed to [survival::coxph].
+#' @param tt Parameter passed to [survival::coxph].
+#' @param method Parameter passed to [survival::coxph].
+#' @param id Parameter passed to [survival::coxph].
+#' @param cluster Parameter passed to [survival::coxph].
+#' @param istate Parameter passed to [survival::coxph].
+#' @param statedata Parameter passed to [survival::coxph].
+#' @param nocenter Parameter passed to [survival::coxph].
 #' @param ... Parameters passed to [survival::coxph].
-#' @param stopFun Parameters passed to [pboost].
-#' @param keep Parameters passed to [pboost].
-#' @param maxK Parameters passed to [pboost].
-#' @param verbose Parameters passed to [pboost].
+#' @param stopFun Parameter passed to [pboost].
+#' @param keep Parameter passed to [pboost].
+#' @param maxK Parameter passed to [pboost].
+#' @param verbose Parameter passed to [pboost].
 #' 
 #' 
-#' @return An `coxph` model object fitted on the selected features.
+#' @return A `coxph` model object fitted on the selected features.
 #' 
 #' @examples
 #' library(survival)

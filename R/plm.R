@@ -6,24 +6,24 @@
 #' 
 #' @param formula See [pboost].
 #' @param data See [pboost].
-#' @param subset Parameters passed to [lm].
-#' @param weights Parameters passed to [lm].
-#' @param na.action Parameters passed to [lm].
-#' @param method Parameters passed to [lm].
-#' @param model Parameters passed to [lm].
-#' @param x Parameters passed to [lm].
-#' @param y Parameters passed to [lm].
-#' @param qr Parameters passed to [lm].
-#' @param singular.ok Parameters passed to [lm].
-#' @param contrasts Parameters passed to [lm].
-#' @param offset Parameters passed to [lm].
+#' @param subset Parameter passed to [lm].
+#' @param weights Parameter passed to [lm].
+#' @param na.action Parameter passed to [lm].
+#' @param method Parameter passed to [lm].
+#' @param model Parameter passed to [lm].
+#' @param x Parameter passed to [lm].
+#' @param y Parameter passed to [lm].
+#' @param qr Parameter passed to [lm].
+#' @param singular.ok Parameter passed to [lm].
+#' @param contrasts Parameter passed to [lm].
+#' @param offset Parameter passed to [lm].
 #' @param ... Parameters passed to [lm].
-#' @param stopFun Parameters passed to [pboost].
-#' @param keep Parameters passed to [pboost].
-#' @param maxK Parameters passed to [pboost].
-#' @param verbose Parameters passed to [pboost].
+#' @param stopFun Parameter passed to [pboost].
+#' @param keep Parameter passed to [pboost].
+#' @param maxK Parameter passed to [pboost].
+#' @param verbose Parameter passed to [pboost].
 #' 
-#' @return An `lm` model object fitted on the selected features.
+#' @return A `lm` model object fitted on the selected features.
 #' 
 #' @details `plm` is an equivalent implementation to the sequential lasso method
 #' proposed by Luo and Chen(2014, \doi{10.1080/01621459.2013.877275}).

@@ -32,50 +32,50 @@ pglm(
 \arguments{
 \item{formula}{See \link{pboost}.}
 
-\item{family}{Parameters passed to \link{glm}.}
+\item{family}{Parameter passed to \link{glm}.}
 
 \item{data}{See \link{pboost}.}
 
-\item{weights}{Parameters passed to \link{glm}.}
+\item{weights}{Parameter passed to \link{glm}.}
 
-\item{subset}{Parameters passed to \link{glm}.}
+\item{subset}{Parameter passed to \link{glm}.}
 
-\item{na.action}{Parameters passed to \link{glm}.}
+\item{na.action}{Parameter passed to \link{glm}.}
 
-\item{start}{Parameters passed to \link{glm}.}
+\item{start}{Parameter passed to \link{glm}.}
 
-\item{etastart}{Parameters passed to \link{glm}.}
+\item{etastart}{Parameter passed to \link{glm}.}
 
-\item{mustart}{Parameters passed to \link{glm}.}
+\item{mustart}{Parameter passed to \link{glm}.}
 
-\item{offset}{Parameters passed to \link{glm}.}
+\item{offset}{Parameter passed to \link{glm}.}
 
-\item{control}{Parameters passed to \link{glm}.}
+\item{control}{Parameter passed to \link{glm}.}
 
-\item{model}{Parameters passed to \link{glm}.}
+\item{model}{Parameter passed to \link{glm}.}
 
-\item{method}{Parameters passed to \link{glm}.}
+\item{method}{Parameter passed to \link{glm}.}
 
-\item{x}{Parameters passed to \link{glm}.}
+\item{x}{Parameter passed to \link{glm}.}
 
-\item{y}{Parameters passed to \link{glm}.}
+\item{y}{Parameter passed to \link{glm}.}
 
-\item{singular.ok}{Parameters passed to \link{glm}.}
+\item{singular.ok}{Parameter passed to \link{glm}.}
 
-\item{contrasts}{Parameters passed to \link{glm}.}
+\item{contrasts}{Parameter passed to \link{glm}.}
 
 \item{...}{Parameters passed to \link{glm}.}
 
-\item{stopFun}{Parameters passed to \link{pboost}.}
+\item{stopFun}{Parameter passed to \link{pboost}.}
 
-\item{keep}{Parameters passed to \link{pboost}.}
+\item{keep}{Parameter passed to \link{pboost}.}
 
-\item{maxK}{Parameters passed to \link{pboost}.}
+\item{maxK}{Parameter passed to \link{pboost}.}
 
-\item{verbose}{Parameters passed to \link{pboost}.}
+\item{verbose}{Parameter passed to \link{pboost}.}
 }
 \value{
-An \code{glm} model object fitted on the selected features.
+A \code{glm} model object fitted on the selected features.
 }
 \description{
 \link{pglm} inherits the usage of the built-in function \link{glm}.
