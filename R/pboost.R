@@ -5,63 +5,46 @@
 #' `pboost()` is the generic workhorse function of profile boosting
 #' framework for parametric regression.
 #' 
-#' @param formula An object of class [formula] of the form `LHS ~ RHS`,
-#'   where the right-hand side (RHS) specifies the candidate features
-#'   for the linear predictor \eqn{\eta = \sum_j \beta_j x_j}.
-#' 
-#'   The following restrictions and recommendations apply:
-#'   \itemize{
-#'     \item All variables appearing on the RHS must be numeric in the supplied `data`
-#'     \item For computational efficiency, each term on the RHS must correspond to a
-#'        single column in the resulting model matrix. Supported expressions include
-#'        main effects (`x1`), interactions (`x1:x2`), and simple transformations 
-#'        (\code{log(x1)}, \code{I(x1^2)}, etc.).
-#'        Complex terms that expand into multiple columns—such as \code{poly(x, degree)},
-#'        \code{bs(x)}, or \code{ns(x)}—are **not supported**.
-#'     \item Offset terms should not be included in the formula. Instead, provide them
-#'        via the dedicated \code{offset} argument of \code{fitFun}.
-#'   }
-#' @param data An data frame containing the variables in the model.
+#' @param yvec Response vector.
+#' @param xmat Numeric feature matrix.
 #' @param fitFun Function to fit the empirical risk function in
 #'    the form `fitFun(formula, data, ...)`.
-#' @param scoreFun Function to compute the derivative of empirical
-#'    risk function in the form `scoreFun(object)`, where `object` is
-#'    returned by `fitFun`.
-#'    `scoreFun` should return a vector with the same length of `y` in `data`.
+#' @param scoreFun Function to compute the derivative, denoted by \eqn{\frac{\partial \ell(y, \eta)}{\partial \eta}}, of empirical risk function in the form `scoreFun(object)`, where `object` is returned by `fitFun`.
+#' `scoreFun()` should return a vector with the same length of `y` in `data`.
 #' @param stopFun Stopping rule for profile boosting, which has the form
 #'    `stopFun(object)` to evaluate the performance of model `object` returned
 #'    by `fitFun`, such as [EBIC] or [BIC].
 #' @param ... Additional arguments to be passed to `fitFun`.
+#' @param use.formula Whether to use formula interface for model fitting. Default to `TRUE`.
+#' When `use.formula=TRUE`, the the model fitting function has the form `fitFun(formula, data, ...)`; otherwise, `fitFun(x, y, ...)`.
+#' @param use.intercept Include intercept in the model fitting? Valid only when `use.formula=TRUE`.
 #' @param maxK Maximal number of identified features.
 #'    If `maxK` is specified, it will suppress `stopFun`, saying that the
 #'    profile boosting continues until the procedure identifies `maxK` features.
 #'    The pre-specified features in `keep` are counted toward `maxK`.
-#' @param keep Initial set of features that are included in model fitting.
-#'    **If `keep` is specified, it should also be fully included in the RHS
-#'    of `formula`.**
+#' @param keep Vector of indices or feature names initial features to include.
 #' @param verbose Print the procedure path?
 #' 
 #' @return Model object fitted on the selected features.
 #' 
-#' @seealso [pboost::pbetareg], [pboost::pcoxph], [pboost::pglm], [pboost::lm], [prq].
+#' @seealso [pboost::pbetareg], [pboost::pcoxph], [pboost::pglm], [pboost::lm], [pboost::prq].
 #' 
 #' @examples
-#' set.seed(2025)
+#' set.seed(2026)
 #' n <- 200
 #' p <- 300
 #' x <- matrix(rnorm(n*p), n)
 #' eta <- drop(x[, 1:3] %*% runif(3, 1.0, 1.5))
 #' y <- rbinom(n, 1, 1/(1+exp(-eta)))
-#' DF <- data.frame(y, x)
 #' 
 #' scoreLogistic <- function(object) {
 #'     eta.hat <- object[["linear.predictors"]]
 #'     return(object[["y"]] - 1/(1+exp(-eta.hat)))
 #' }
 #' 
-#' ( result <- pboost(y~., DF, glm, scoreLogistic, EBIC, family="binomial") )
+#' ( result <- pboost(y, x, glm, scoreLogistic, family="binomial") )
 #' 
-#' attr(terms(formula(result), data=DF), "term.labels")
+#' all.vars(formula(result)[[3]])
 #' 
 NULL
 
@@ -71,85 +54,120 @@ NULL
 #' @rdname pboost
 #' @order 1
 #' @export
-pboost <- function(formula, data, fitFun, scoreFun, stopFun, ...,
-                   keep = NULL, maxK = NULL, verbose = FALSE) {
+pboost <- function(yvec, xmat, fitFun, scoreFun, stopFun = "EBIC", ...,
+                    use.formula = TRUE,
+                    use.intercept = TRUE,
+                    keep = NULL, maxK = NULL, verbose = FALSE) {
+    stopifnot( NROW(yvec) == NROW(xmat) )
+    stopifnot( is.matrix(xmat), is.numeric(xmat) )
 
-    formula <- as.Formula(formula)
+    n <- NROW(xmat)
+    p <- NCOL(xmat)
 
-    ## --- `all.vars`: original variables ---
-    if (!all(sapply(
-        data[1, all.vars(delete.response(terms(formula(formula, rhs=1L), data=data)))],
-        is.numeric
-    )))
-        stop("'formula' contains non-numeric feature(s).")
-    
-    ## --- `attr(terms, "term.labels")`: features, such as `log(x)`, `x1:x2` ---
-    xnames <- attr(terms(formula(formula, rhs=1L), data=data), "term.labels") |> # features
-        gsub(pattern=":", replacement="*", fixed=TRUE)
-    p <- length(xnames)
-    p.keep <- length(keep)
-
-
-    if (!is.null(keep))
-        stopifnot( all(keep %in% xnames) )
-
-    if (!is.null(maxK))
-        maxK <- min( maxK, length(xnames), NROW(data)-1, NCOL(data)-1 )
-
-    showiter <- function(verbose, x.star, level=obj.level) {
-        if (verbose) 
-            if (missing(x.star))
-                message(sprintf("Initial model with level=%.3f", level))
-            else 
-                message(sprintf("Adding %s: stopping level=%.3f", x.star, level))
+    xnames <- colnames(xmat)
+    if (is.null(xnames)) {
+        xnames <- paste0("x", seq_len(p))
+        colnames(xmat) <- xnames
     }
+    stopifnot( length(xnames) == p )
 
-    # Initialzation: preserve the original formula's LHS and its intercept setting
-    #   then add any `keep` variables to the RHS.
-    # Extract LHS as text (preserve expressions like log(y), cbind(y1,y2), etc.)
-    lhs <- paste(deparse(formula[[2]]), collapse=" ")
-    intercept <- attr(terms(formula(formula, rhs=1L), data=data), "intercept")
-    rhs <- paste(c(intercept, keep), collapse=" + ")
-    fml <- update(formula, as.Formula(paste(c(lhs, "~", rhs), collapse=" ")))
-    stopifnot( intercept %in% 0:1 )
-    stopifnot( !is.null(fml) )
-    if (!is.null(keep))
-        stopifnot( setequal(attr(terms(fml, data=data), "term.labels"), keep) )
+    if ( is.character(stopFun) && use.formula && stopFun == "EBIC")
+        stopFun <- function(object){
+            ebic.r <- max( 0.0, 1.0 - log(n) / (2.0 * log(p)) )
+            stopifnot( ebic.r >= 0 )
 
-    object <- fitFun(formula=fml, data=data, ...)
-    obj.level <- stopFun(object)
-    showiter(verbose, level=obj.level)
+            dof <- length(all.vars(formula(object)[[3]]))
+            ebic.penalty <- 2.0 * ebic.r * lchoose(p - length(keep), dof - length(keep))
+            stopifnot( is.finite(ebic.penalty) )
 
-    while (TRUE) {
-
-        stopifnot( all( attr(terms(formula(fml, rhs=1L), data=data), "term.labels") %in% xnames ) )
-
-        x.star <- setdiff(xnames, attr(terms(formula(fml, rhs=1L), data=data), "term.labels")) |>
-            vapply(function(expr) with(data, eval(parse(text=expr))),
-                   FUN.VALUE=numeric(NROW(data))) |>
-            crossprod(scoreFun(object)) |>
-            drop() |> abs() |> which.max() |> names()
-        fml.tmp <- update(fml, as.Formula(paste(c(". ~ .", x.star), collapse=" + ")))
-        stopifnot( !identical(fml, fml.tmp) )
-
-        object <- fitFun(formula=fml.tmp, data=data, ...)
-        # if (!object$converged) break
-        obj.level.tmp <- stopFun(object)
-        showiter(verbose, x.star, obj.level.tmp)
-
-        dof <- length(attr(terms(fml.tmp, data=data), "term.labels"))
-        if (is.null(maxK)) {
-            if (obj.level.tmp > obj.level) break
-        } else {
-            if (dof > maxK) break
+            # return(-2*logLik(object) + dof * log(n) + ebic.penalty)
+            return(BIC(object) + ebic.penalty)
         }
 
-        obj.level <- obj.level.tmp
-        fml <- fml.tmp
+    stopifnot( is.character(keep) || is.numeric(keep) || is.null(keep) )
+    if (!is.null(keep)) {
+        if (is.character(keep)) {
+            stopifnot( all(keep %in% xnames) )
+        } else {
+            stopifnot( all(keep %in% seq_len(p)) )
+            keep <- xnames[keep]
+        }
+    }
+    stopifnot( is.character(keep) || is.null(keep) )
+
+    if (!is.null(maxK))
+        maxK <- min( maxK, p, n-1 )
+
+    showiter <- function(verbose, x.star, level) {
+        if (verbose)
+            if (missing(x.star))
+                message(sprintf("Initial model: level=%.3f", level))
+            else 
+                message(sprintf("Adding %s: level=%.3f", x.star, level))
     }
 
-    # return(fml)
-    egg <- fitFun(formula=fml, data=data, ...)
-    egg$call$data <- match.call()$data
+    lhs <- deparse(substitute(yvec))
+    rhs <- paste(c(as.integer(use.intercept), keep), collapse=" + ")
+    fml <- as.formula(paste(c(lhs, rhs), collapse=" ~ "))
+    if (use.formula) {
+        egg <- fitFun(
+            formula = fml,
+            data = data.frame(yvec, xmat[, all.vars(fml[[3]]), drop=FALSE]),
+            ...
+        )
+    } else {
+        egg <- fitFun(x = xmat[, all.vars(fml[[3]]), drop=FALSE], y = yvec, ...)
+    }
+    level <- stopFun(egg)
+    showiter(verbose, level=level)
+
+    if ( !is.null(maxK) && !is.null(keep) && (length(keep) >= maxK) ) {
+        warning("'length(keep)' is not less than 'maxK', thus fitting on 'keep'.")
+        return(egg)
+    }
+
+    while (TRUE) {
+        candidates <- setdiff(xnames, all.vars(fml[[3]]))
+        if (length(candidates) == 0)
+            break
+
+        x.star <- crossprod(xmat[, candidates, drop=FALSE], scoreFun(egg)) |>
+            drop() |> abs() |> which.max() |> names()
+        stopifnot( length(x.star) == 1 )
+        stopifnot( !(x.star %in% all.vars(fml[[3]])) )
+
+        tmp.fml <- update(fml, sprintf(". ~ . + %s", x.star))
+        if (use.formula) {
+            tmp.egg <- fitFun(
+                formula = tmp.fml,
+                data = data.frame(yvec, xmat[, all.vars(tmp.fml[[3]]), drop=FALSE]),
+                ...
+            )
+        } else {
+            tmp.egg <- fitFun(x = xmat[, all.vars(tmp.fml[[3]]), drop=FALSE], y = yvec, ...)
+        }
+        tmp.level <- stopFun(tmp.egg)
+        showiter(verbose, x.star, tmp.level)
+
+        if (is.null(maxK) && (tmp.level >= level) )
+            break
+
+        level <- tmp.level
+        fml <- tmp.fml
+
+        if ( !is.null(maxK) && (length(all.vars(fml[[3]])) >= maxK) )
+            break
+    }
+
+    if (use.formula) {
+        egg <- fitFun(
+            formula = fml,
+            data = data.frame(yvec, xmat[, all.vars(fml[[3]]), drop=FALSE]),
+            ...
+        )
+    } else {
+        egg <- fitFun(x = xmat[, all.vars(fml[[3]]), drop=FALSE], y = yvec, ...)
+    }
+    class(egg) <- c("frs", class(egg))
     return(egg)
 }

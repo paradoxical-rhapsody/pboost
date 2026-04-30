@@ -5,44 +5,29 @@
 \title{Profile Boosting Framework}
 \usage{
 pboost(
-  formula,
-  data,
+  yvec,
+  xmat,
   fitFun,
   scoreFun,
-  stopFun,
+  stopFun = "EBIC",
   ...,
+  use.formula = TRUE,
+  use.intercept = TRUE,
   keep = NULL,
   maxK = NULL,
   verbose = FALSE
 )
 }
 \arguments{
-\item{formula}{An object of class \link{formula} of the form \code{LHS ~ RHS},
-where the right-hand side (RHS) specifies the candidate features
-for the linear predictor \eqn{\eta = \sum_j \beta_j x_j}.
+\item{yvec}{Response vector.}
 
-The following restrictions and recommendations apply:
-\itemize{
-\item All variables appearing on the RHS must be numeric in the supplied \code{data}
-\item For computational efficiency, each term on the RHS must correspond to a
-single column in the resulting model matrix. Supported expressions include
-main effects (\code{x1}), interactions (\code{x1:x2}), and simple transformations
-(\code{log(x1)}, \code{I(x1^2)}, etc.).
-Complex terms that expand into multiple columns—such as \code{poly(x, degree)},
-\code{bs(x)}, or \code{ns(x)}—are \strong{not supported}.
-\item Offset terms should not be included in the formula. Instead, provide them
-via the dedicated \code{offset} argument of \code{fitFun}.
-}}
-
-\item{data}{An data frame containing the variables in the model.}
+\item{xmat}{Numeric feature matrix.}
 
 \item{fitFun}{Function to fit the empirical risk function in
 the form \code{fitFun(formula, data, ...)}.}
 
-\item{scoreFun}{Function to compute the derivative of empirical
-risk function in the form \code{scoreFun(object)}, where \code{object} is
-returned by \code{fitFun}.
-\code{scoreFun} should return a vector with the same length of \code{y} in \code{data}.}
+\item{scoreFun}{Function to compute the derivative, denoted by \eqn{\frac{\partial \ell(y, \eta)}{\partial \eta}}, of empirical risk function in the form \code{scoreFun(object)}, where \code{object} is returned by \code{fitFun}.
+\code{scoreFun()} should return a vector with the same length of \code{y} in \code{data}.}
 
 \item{stopFun}{Stopping rule for profile boosting, which has the form
 \code{stopFun(object)} to evaluate the performance of model \code{object} returned
@@ -50,9 +35,12 @@ by \code{fitFun}, such as \link{EBIC} or \link{BIC}.}
 
 \item{...}{Additional arguments to be passed to \code{fitFun}.}
 
-\item{keep}{Initial set of features that are included in model fitting.
-\strong{If \code{keep} is specified, it should also be fully included in the RHS
-of \code{formula}.}}
+\item{use.formula}{Whether to use formula interface for model fitting. Default to \code{TRUE}.
+When \code{use.formula=TRUE}, the the model fitting function has the form \code{fitFun(formula, data, ...)}; otherwise, \code{fitFun(x, y, ...)}.}
+
+\item{use.intercept}{Include intercept in the model fitting? Valid only when \code{use.formula=TRUE}.}
+
+\item{keep}{Vector of indices or feature names initial features to include.}
 
 \item{maxK}{Maximal number of identified features.
 If \code{maxK} is specified, it will suppress \code{stopFun}, saying that the
@@ -69,22 +57,21 @@ Model object fitted on the selected features.
 framework for parametric regression.
 }
 \examples{
-set.seed(2025)
+set.seed(2026)
 n <- 200
 p <- 300
 x <- matrix(rnorm(n*p), n)
 eta <- drop(x[, 1:3] \%*\% runif(3, 1.0, 1.5))
 y <- rbinom(n, 1, 1/(1+exp(-eta)))
-DF <- data.frame(y, x)
 
 scoreLogistic <- function(object) {
     eta.hat <- object[["linear.predictors"]]
     return(object[["y"]] - 1/(1+exp(-eta.hat)))
 }
 
-( result <- pboost(y~., DF, glm, scoreLogistic, EBIC, family="binomial") )
+( result <- pboost(y, x, glm, scoreLogistic, family="binomial") )
 
-attr(terms(formula(result), data=DF), "term.labels")
+all.vars(formula(result)[[3]])
 
 }
 \seealso{

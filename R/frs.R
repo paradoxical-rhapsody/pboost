@@ -3,19 +3,18 @@
 #' 
 #' @description `frs()` is a generic workhorse function of forward regression selection for parametric regression.
 #' 
-#' @param yvec Response vector. See [pboost].
-#' @param xmat Numeric feature matrix. See [pboost].
+#' @param yvec See [pboost].
+#' @param xmat See [pboost].
 #' @param fitFun See [pboost].
 #' @param ... See [pboost].
-#' @param use.formula Whether to use formula interface for model fitting. Default to `TRUE`.
-#' When `use.formula=TRUE`, the the model fitting function has the form `fitFun(formula, data, ...)`; otherwise, `fitFun(x, y, ...)`.
-#' @param use.intercept Include intercept in the model fitting? Valid only when `use.formula=TRUE`.
+#' @param use.formula See [pboost].
+#' @param use.intercept See [pboost].
 #' @param selectFun A function to evaluate the importance of an unselected feature when it is added to current model.
 #' The default is `logLik`, meaning that the feature with the largest post-added log-likelihood is identified as the next one to be added to the model.
 #' Note that `selectFun` is only used for selecting features, and it does not affect the stopping rule of forward regression selection, which is determined by `stopFun`.
 #' @param stopFun See [pboost].
 #' @param maxK See [pboost].
-#' @param keep Vector of indices or feature names initial features to include.
+#' @param keep See [pboost].
 #' @param verbose See [pboost].
 #' 
 #' @return Model object fitted on the selected features.
@@ -24,8 +23,8 @@
 #' 
 #' @examples
 #' set.seed(2026)
-#' n <- 300
-#' p <- 100
+#' n <- 200
+#' p <- 50
 #' x <- matrix(rnorm(n*p), n)
 #' eta <- drop( x[, 1:3] %*% runif(3, 1.0, 1.5) )
 #' 

@@ -19,18 +19,17 @@ frs(
 )
 }
 \arguments{
-\item{yvec}{Response vector. See \link{pboost}.}
+\item{yvec}{See \link{pboost}.}
 
-\item{xmat}{Numeric feature matrix. See \link{pboost}.}
+\item{xmat}{See \link{pboost}.}
 
 \item{fitFun}{See \link{pboost}.}
 
 \item{...}{See \link{pboost}.}
 
-\item{use.formula}{Whether to use formula interface for model fitting. Default to \code{TRUE}.
-When \code{use.formula=TRUE}, the the model fitting function has the form \code{fitFun(formula, data, ...)}; otherwise, \code{fitFun(x, y, ...)}.}
+\item{use.formula}{See \link{pboost}.}
 
-\item{use.intercept}{Include intercept in the model fitting? Valid only when \code{use.formula=TRUE}.}
+\item{use.intercept}{See \link{pboost}.}
 
 \item{selectFun}{A function to evaluate the importance of an unselected feature when it is added to current model.
 The default is \code{logLik}, meaning that the feature with the largest post-added log-likelihood is identified as the next one to be added to the model.
@@ -38,7 +37,7 @@ Note that \code{selectFun} is only used for selecting features, and it does not 
 
 \item{stopFun}{See \link{pboost}.}
 
-\item{keep}{Vector of indices or feature names initial features to include.}
+\item{keep}{See \link{pboost}.}
 
 \item{maxK}{See \link{pboost}.}
 
@@ -52,8 +51,8 @@ Model object fitted on the selected features.
 }
 \examples{
 set.seed(2026)
-n <- 300
-p <- 100
+n <- 200
+p <- 50
 x <- matrix(rnorm(n*p), n)
 eta <- drop( x[, 1:3] \%*\% runif(3, 1.0, 1.5) )
 

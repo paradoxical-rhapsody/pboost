@@ -1,3 +1,8 @@
+# pboost 0.3.2
+
+* reformulate `pboost()`.
+
+
 # pboost 0.3.1
 
 * add `flm()`, `fglm()`.
