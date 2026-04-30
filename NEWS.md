@@ -1,6 +1,13 @@
+# pboost 0.3.0
+
+* add forward regression selection framework (`frs.R`).
+
+
 # pboost 0.2.2
 
 * update documentation.
+
+
 
 # pboost 0.2.1
 
