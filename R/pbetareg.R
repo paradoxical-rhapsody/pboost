@@ -86,7 +86,6 @@ pbetareg <- function(formula, data, subset, na.action, weights, offset,
 
     mc <- match.call(expand.dots = TRUE)
     provided_args <- as.list(mc)[-1]
-    provided_args <- provided_args[!(names(provided_args) %in% c("stopFun", "keep", "maxK", "verbose"))]
     provided_args$formula <- NULL
     provided_args$data <- NULL
 
@@ -95,10 +94,6 @@ pbetareg <- function(formula, data, subset, na.action, weights, offset,
         xmat = xmat,
         fitFun = betareg,
         scoreFun = scoreFun,
-        stopFun = stopFun,
-        keep = keep,
-        maxK = maxK,
-        verbose = verbose,
         use.intercept = use.intercept
     )
     args <- c(args, provided_args)

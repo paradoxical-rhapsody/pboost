@@ -1,3 +1,9 @@
+# pboost 0.3.6
+
+* simplify unnecessary `provided_args`
+
+
+
 # pboost 0.3.5
 
 * add `frq()`

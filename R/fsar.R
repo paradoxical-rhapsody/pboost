@@ -52,5 +52,4 @@ fsar <- function(x, y, w,
             verbose = verbose
         )
     )
-
 }

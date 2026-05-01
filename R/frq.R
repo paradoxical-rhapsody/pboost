@@ -73,7 +73,7 @@ frq <- function(formula, tau = 0.5, data, subset, weights, na.action,
 
     mc <- match.call(expand.dots = TRUE)
     provided_args <- as.list(mc)[-1]
-    provided_args <- provided_args[!(names(provided_args) %in% c("stopFun", "keep", "maxK", "verbose"))]
+    provided_args <- provided_args[!(names(provided_args) %in% c("stopFun"))]
     provided_args$formula <- NULL
     provided_args$data <- NULL
 
@@ -81,11 +81,7 @@ frq <- function(formula, tau = 0.5, data, subset, weights, na.action,
         yvec = yvec,
         xmat = xmat,
         fitFun = rq,
-        selectFun = selectFun,
         stopFun = stopFun,
-        keep = keep,
-        maxK = maxK,
-        verbose = verbose,
         use.intercept = use.intercept
     )
     args <- c(args, provided_args)
