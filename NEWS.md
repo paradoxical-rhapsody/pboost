@@ -1,3 +1,9 @@
+# pboost 0.3.4
+
+* add `fbetareg()`
+* fix bug in`frs()`
+
+
 # pboost 0.3.3
 
 Reformulate according the new interface `pboost()`:

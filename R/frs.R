@@ -97,7 +97,7 @@ frs <- function(yvec, xmat, fitFun, ...,
                 message(sprintf("Adding %s: level=%.3f", x.star, level))
     }
 
-    lhs <- deparse(substitute(yvec))
+    lhs <- "yvec"
     rhs <- paste(c(as.integer(use.intercept), keep), collapse=" + ")
     fml <- as.formula(paste(c(lhs, rhs), collapse=" ~ "))
     if (use.formula) {

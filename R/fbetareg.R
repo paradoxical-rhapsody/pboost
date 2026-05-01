@@ -1,9 +1,9 @@
-#' @name pbetareg
-#' @title Profile Boosting for Beta Regression
+#' @name fbetareg
+#' @title Forward Regression Selection for Beta Regression Models
 #' 
 #' @description
-#' [pbetareg] inherits the usage of [betareg::betareg].
-#' 
+#' `fbetareg()` inherits the usage of the function [betareg::betareg], and performs forward regression selection for beta regression models.
+#'
 #' @param formula Parameter passed to [betareg::betareg].
 #' @param data Parameter passed to [betareg::betareg].
 #' @param subset Parameter passed to [betareg::betareg].
@@ -21,14 +21,15 @@
 #' @param x Parameter passed to [betareg::betareg].
 #' @param ... Parameters passed to [betareg::betareg].
 #' 
-#' @param stopFun Parameter passed to [pboost::pboost].
-#' @param keep Parameter passed to [pboost::pboost].
-#' @param maxK Parameter passed to [pboost::pboost].
-#' @param verbose Parameter passed to [pboost::pboost].
+#' @param selectFun Parameter passed to [pboost::frs].
+#' @param stopFun Parameter passed to [pboost::frs].
+#' @param keep Parameter passed to [pboost::frs].
+#' @param maxK Parameter passed to [pboost::frs].
+#' @param verbose Parameter passed to [pboost::frs].
 #' 
 #' @return A `betareg` model object fitted on the selected features.
 #' 
-#' @examples
+#' @examples 
 #' \dontrun{
 #' set.seed(2026)
 #' n <- 300
@@ -42,22 +43,16 @@
 #' y <- rbeta(n, shape1, shape2)
 #' DF <- data.frame(y, x)
 #' 
-#' pbetareg(y ~ ., DF, verbose=TRUE)
+#' fbetareg(y ~ ., DF, verbose=TRUE)
 #' }
 #' 
-NULL
-#> NULL
-
-
-#' @rdname pbetareg
-#' @order 1
-#' @export
-pbetareg <- function(formula, data, subset, na.action, weights, offset,
+#' @export 
+fbetareg <- function(formula, data, subset, na.action, weights, offset,
                     link = c("logit", "probit", "cloglog", "cauchit", "log","loglog"),
                     link.phi = NULL, type = c("ML", "BC", "BR"),
                     dist = NULL, nu = NULL, control = betareg.control(...),
                     model = TRUE, y = TRUE, x = FALSE, ...,
-                    stopFun = "EBIC",
+                    selectFun = logLik, stopFun = "EBIC",
                     keep = NULL, maxK = NULL, verbose = FALSE) {
 
     mf_args <- list(formula = formula, data = data)
@@ -71,19 +66,6 @@ pbetareg <- function(formula, data, subset, na.action, weights, offset,
     attr(terms, "intercept") <- 0L
     xmat <- model.matrix(terms, mf)
 
-    scoreFun <- function(object) {
-        phi <- predict(object, type='precision')
-        mu <- predict(object, type='response')
-        eta <- predict(object, type='link')
-
-        ## object$link is a list of two elements: one for "mean" or "mu"
-        mu.eta <- object$link[[grep("^m", names(object$link), value=TRUE)]]$mu.eta
-        y <- pmin(pmax(object[["y"]], .Machine$double.eps), 1 - .Machine$double.eps)
-
-        # weights <- object[["weights"]]
-        return( mu.eta(eta) * phi * ( digamma((1-mu)*phi) - digamma(mu*phi) + qlogis(y) ) )
-    }
-
     mc <- match.call(expand.dots = TRUE)
     provided_args <- as.list(mc)[-1]
     provided_args <- provided_args[!(names(provided_args) %in% c("stopFun", "keep", "maxK", "verbose"))]
@@ -94,7 +76,6 @@ pbetareg <- function(formula, data, subset, na.action, weights, offset,
         yvec = yvec,
         xmat = xmat,
         fitFun = betareg,
-        scoreFun = scoreFun,
         stopFun = stopFun,
         keep = keep,
         maxK = maxK,
@@ -103,5 +84,7 @@ pbetareg <- function(formula, data, subset, na.action, weights, offset,
     )
     args <- c(args, provided_args)
 
-    return(do.call(pboost, args))
+    return(do.call(frs, args))
+
+
 }
