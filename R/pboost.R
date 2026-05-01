@@ -27,7 +27,7 @@
 #' 
 #' @return Model object fitted on the selected features.
 #' 
-#' @seealso [pboost::pbetareg], [pboost::pcoxph], [pboost::pglm], [pboost::lm], [pboost::prq].
+#' @seealso [pboost::pbetareg], [pboost::pglm], [pboost::lm], [pboost::prq], [pboost::psar].
 #' 
 #' @examples
 #' set.seed(2026)
@@ -106,18 +106,22 @@ pboost <- function(yvec, xmat, fitFun, scoreFun, stopFun = "EBIC", ...,
                 message(sprintf("Adding %s: level=%.3f", x.star, level))
     }
 
-    lhs <- deparse(substitute(yvec))
+    fit_formula <- function(fml) {
+        if (use.formula) {
+            return(fitFun(
+                formula = fml,
+                data = data.frame(yvec, xmat[, all.vars(fml[[3]]), drop=FALSE]),
+                ...
+            ))
+        } else {
+            return(fitFun(x = xmat[, all.vars(fml[[3]]), drop=FALSE], y = yvec, ...))
+        }
+    }
+
+    lhs <- "yvec"
     rhs <- paste(c(as.integer(use.intercept), keep), collapse=" + ")
     fml <- as.formula(paste(c(lhs, rhs), collapse=" ~ "))
-    if (use.formula) {
-        egg <- fitFun(
-            formula = fml,
-            data = data.frame(yvec, xmat[, all.vars(fml[[3]]), drop=FALSE]),
-            ...
-        )
-    } else {
-        egg <- fitFun(x = xmat[, all.vars(fml[[3]]), drop=FALSE], y = yvec, ...)
-    }
+    egg <- fit_formula(fml)
     level <- stopFun(egg)
     showiter(verbose, level=level)
 
@@ -137,15 +141,7 @@ pboost <- function(yvec, xmat, fitFun, scoreFun, stopFun = "EBIC", ...,
         stopifnot( !(x.star %in% all.vars(fml[[3]])) )
 
         tmp.fml <- update(fml, sprintf(". ~ . + %s", x.star))
-        if (use.formula) {
-            tmp.egg <- fitFun(
-                formula = tmp.fml,
-                data = data.frame(yvec, xmat[, all.vars(tmp.fml[[3]]), drop=FALSE]),
-                ...
-            )
-        } else {
-            tmp.egg <- fitFun(x = xmat[, all.vars(tmp.fml[[3]]), drop=FALSE], y = yvec, ...)
-        }
+        tmp.egg <- fit_formula(tmp.fml)
         tmp.level <- stopFun(tmp.egg)
         showiter(verbose, x.star, tmp.level)
 
@@ -159,15 +155,7 @@ pboost <- function(yvec, xmat, fitFun, scoreFun, stopFun = "EBIC", ...,
             break
     }
 
-    if (use.formula) {
-        egg <- fitFun(
-            formula = fml,
-            data = data.frame(yvec, xmat[, all.vars(fml[[3]]), drop=FALSE]),
-            ...
-        )
-    } else {
-        egg <- fitFun(x = xmat[, all.vars(fml[[3]]), drop=FALSE], y = yvec, ...)
-    }
+    egg <- fit_formula(fml)
     class(egg) <- c("frs", class(egg))
     return(egg)
 }

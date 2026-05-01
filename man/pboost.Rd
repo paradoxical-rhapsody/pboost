@@ -75,5 +75,5 @@ all.vars(formula(result)[[3]])
 
 }
 \seealso{
-\link{pbetareg}, \link{pcoxph}, \link{pglm}, \link{lm}, \link{prq}.
+\link{pbetareg}, \link{pglm}, \link{lm}, \link{prq}, \link{psar}.
 }

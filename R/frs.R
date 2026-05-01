@@ -19,7 +19,7 @@
 #' 
 #' @return Model object fitted on the selected features.
 #' 
-#' @seealso [pboost::fbetareg], [pboost::fglm], [pboost::flm], [pboost::frq].
+#' @seealso [pboost::fbetareg], [pboost::fglm], [pboost::flm], [pboost::frq], [pboost::fsar].
 #' 
 #' @examples
 #' set.seed(2026)

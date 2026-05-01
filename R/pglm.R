@@ -4,8 +4,8 @@
 #' @description
 #' [pglm] inherits the usage of the built-in function [glm].
 #' 
-#' @param formula See [pboost].
-#' @param data See [pboost].
+#' @param formula Parameter passed to [glm].
+#' @param data Parameter passed to [glm].
 #' @param family Parameter passed to [glm].
 #' @param weights Parameter passed to [glm].
 #' @param subset Parameter passed to [glm].
@@ -22,10 +22,12 @@
 #' @param singular.ok Parameter passed to [glm].
 #' @param contrasts Parameter passed to [glm].
 #' @param ... Parameters passed to [glm].
-#' @param stopFun Parameter passed to [pboost].
-#' @param keep Parameter passed to [pboost].
-#' @param maxK Parameter passed to [pboost].
-#' @param verbose Parameter passed to [pboost].
+#' @param intercept Parameter passed to [glm.fit].
+#' 
+#' @param stopFun Parameter passed to [pboost::pboost].
+#' @param keep Parameter passed to [pboost::pboost].
+#' @param maxK Parameter passed to [pboost::pboost].
+#' @param verbose Parameter passed to [pboost::pboost].
 #' 
 #' @return A `glm` model object fitted on the selected features.
 #' 
@@ -35,7 +37,7 @@
 #' \doi{10.4310/21-SII706}
 #' 
 #' @examples
-#' set.seed(2025)
+#' set.seed(2026)
 #' n <- 300
 #' p <- 200
 #' x <- matrix(rnorm(n*p), n)
@@ -51,7 +53,7 @@
 #'    eta.hat <- object[["linear.predictors"]]
 #'    return(object[["y"]] - 1/(1+exp(-eta.hat)))
 #' }
-#' pboost(y ~ ., DF, glm, scoreLogistic, EBIC, family="binomial", verbose=TRUE)
+#' pboost(y, x, glm, scoreLogistic, family="binomial", verbose=TRUE)
 #' 
 NULL
 #> NULL
@@ -61,36 +63,23 @@ NULL
 #' @rdname pglm
 #' @order 1
 #' @export
-pglm <- function(
-    formula, family = gaussian, data, weights, subset,
-    na.action, start = NULL, etastart, mustart, offset,
-    control = list(...), model = TRUE, method = "glm.fit",
-    x = FALSE, y = TRUE, singular.ok = TRUE, contrasts = NULL, ...,
-    stopFun = EBIC, keep = NULL, maxK = NULL, verbose = FALSE) {
-    stopifnot( !missing(formula) )
-    stopifnot( !missing(data) )
+pglm <- function(formula, family = gaussian, data, weights, subset,
+                na.action, start = NULL, etastart, mustart, offset,
+                control = list(...), model = TRUE, method = "glm.fit",
+                x = FALSE, y = TRUE, singular.ok = TRUE, contrasts = NULL, ...,
+                stopFun = "EBIC",
+                keep = NULL, maxK = NULL, verbose = FALSE) {
 
-    cl <- match.call()
+    mf_args <- list(formula = formula, data = data)
+    mf <- do.call(model.frame, mf_args)
 
-    glm_template <- cl
-    glm_template$stopFun <- NULL
-    glm_template$keep <- NULL
-    glm_template$maxK <- NULL
-    glm_template$verbose <- NULL
-    glm_template[[1L]] <- quote(glm)
+    yvec <- model.response(mf)
 
-    required_paras <- c("data", "weights", "subset", "na.action",
-                        "etastart", "mustart", "offset")
-    for (ipara in required_paras)
-        if (!is.null(cl[[ipara]]))
-            glm_template[[ipara]] <- eval(cl[[ipara]], envir = parent.frame())
+    terms <- terms(formula, data = mf)
+    use.intercept <- attr(terms, "intercept") == 1L
 
-    fitFun <- function(formula, data) {
-        call <- glm_template
-        call$formula <- formula
-        call$data <- data
-        return( eval(call, parent.frame()) )
-    }
+    attr(terms, "intercept") <- 0L
+    xmat <- model.matrix(terms, mf)
 
     scoreFun <- function(object) {
         # score <- D0/S0*(y-fitted(obj))
@@ -105,32 +94,94 @@ pglm <- function(
         return( D0 / S0 * residuals(object, type = "response") )
     }
 
-
-    return(pboost(formula, data, fitFun, scoreFun, stopFun,
-                  keep = keep, maxK = maxK, verbose = verbose))
+    return(
+        pboost(yvec = yvec, xmat = xmat,
+            fitFun = glm,
+            scoreFun = scoreFun,
+            stopFun = stopFun,
+            family = family,
+            weights = if (!missing(weights)) weights else NULL,
+            subset = if (!missing(subset)) subset else NULL,
+            na.action = if (!missing(na.action)) na.action else NULL,
+            start = start,
+            etastart = if (!missing(etastart)) etastart else NULL,
+            mustart = if (!missing(mustart)) mustart else NULL,
+            offset = if (!missing(offset)) offset else NULL,
+            control = control,
+            model = model,
+            method = method,
+            x = x,
+            y = y,
+            singular.ok = singular.ok,
+            contrasts = contrasts,
+            ...,
+            use.intercept = use.intercept,
+            keep = keep,
+            maxK = maxK,
+            verbose = verbose
+        )
+    )
 }
 
 
 
-#' @rdname EBIC
+#' @rdname pglm
+#' @order 2
 #' @export
-EBIC.glm <- function(object, p, p.keep, ...) {
-    stopifnot( inherits(object, "glm") )
+pglm.fit <- function(x, y, weights = rep.int(1, NROW(y)), start = NULL, etastart = NULL,
+                      mustart = NULL, offset = rep.int(0, NROW(y)), family = gaussian(),
+                      control = list(), intercept = TRUE, singular.ok = TRUE,
+                      stopFun = "EBIC",
+                      keep = NULL, maxK = NULL, verbose = FALSE) {
 
-    if (missing(p))
-        p <- get("p", envir=parent.frame())
-    if (missing(p.keep))
-        p.keep <- get("p.keep", envir=parent.frame())
+    n <- NROW(x)
+    p <- NCOL(x)
 
-    dof <- attr(logLik(object), "df")
-    ebic.r <- max( 0.0, 1.0 - log(nobs(object)) / (2.0*log(p)) )
-    ebic.penalty <- ifelse(
-        ebic.r <= 0.0,
-        0.0,
-        2.0 * ebic.r * lchoose(p - p.keep, dof - p.keep)
+    if (is.character(selectFun) && selectFun == "logLik")
+        selectFun <- function(object) {
+            class(object) <- "glm"
+            return(logLik(object))
+        }
+    
+    scoreFun <- function(object) {
+        class(object) <- "glm"
+        D0 <- object$family$mu.eta(object$linear.predictors)
+        S0 <- object$family$variance(object$fitted.values)
+        return( D0 / S0 * residuals(object, type = "response") )
+    }
+
+    if (is.character(stopFun) && stopFun == "EBIC")
+        stopFun <- function(object) {
+            class(object) <- "glm"
+
+            ebic.r <- max( 0.0, 1.0 - log(n) / (2.0 * log(p)) )
+            stopifnot( ebic.r >= 0 )
+
+            dof <- length(coef(object))
+            ebic.penalty <- 2.0 * ebic.r * lchoose(p - length(keep), dof - length(keep))
+            stopifnot( is.finite(ebic.penalty) )
+
+            return(BIC(object) + ebic.penalty)
+        }
+
+    return(
+        pboost(yvec = y, xmat = x,
+            fitFun = glm.fit,
+            scoreFun = scoreFun,
+            stopFun = stopFun,
+            weights = weights,
+            start = start,
+            etastart = etastart,
+            mustart = mustart,
+            offset = offset,
+            family = family,
+            control = control,
+            intercept = intercept,
+            singular.ok = singular.ok,
+            use.formula = FALSE,
+            keep = keep,
+            maxK = maxK,
+            verbose = verbose
+        )
     )
-
-    # stopifnot( !is.nan(ebic.penalty) )
-    stopifnot( is.finite(ebic.penalty) )
-    return(BIC(object) + ebic.penalty)
 }

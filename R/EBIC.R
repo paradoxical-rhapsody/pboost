@@ -27,8 +27,6 @@
 #' * Jiahua Chen and Zehua Chen (2012). Extended BIC for small-n-large-p sparse GLM.
 #' Statistical Sinica, 22(2):555–574. \doi{10.5705/ss.2010.216}
 #' 
-#' @seealso [plm], [pglm], [pcoxph], [prq], [pbetareg].
-#' 
 NULL
 #> NULL
 

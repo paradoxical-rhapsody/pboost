@@ -2,6 +2,7 @@
 % Please edit documentation in R/pglm.R
 \name{pglm}
 \alias{pglm}
+\alias{pglm.fit}
 \title{Profile Boosting for Generalized Linear Models.}
 \usage{
 pglm(
@@ -23,18 +24,36 @@ pglm(
   singular.ok = TRUE,
   contrasts = NULL,
   ...,
-  stopFun = EBIC,
+  stopFun = "EBIC",
+  keep = NULL,
+  maxK = NULL,
+  verbose = FALSE
+)
+
+pglm.fit(
+  x,
+  y,
+  weights = rep.int(1, NROW(y)),
+  start = NULL,
+  etastart = NULL,
+  mustart = NULL,
+  offset = rep.int(0, NROW(y)),
+  family = gaussian(),
+  control = list(),
+  intercept = TRUE,
+  singular.ok = TRUE,
+  stopFun = "EBIC",
   keep = NULL,
   maxK = NULL,
   verbose = FALSE
 )
 }
 \arguments{
-\item{formula}{See \link{pboost}.}
+\item{formula}{Parameter passed to \link{glm}.}
 
 \item{family}{Parameter passed to \link{glm}.}
 
-\item{data}{See \link{pboost}.}
+\item{data}{Parameter passed to \link{glm}.}
 
 \item{weights}{Parameter passed to \link{glm}.}
 
@@ -73,6 +92,8 @@ pglm(
 \item{maxK}{Parameter passed to \link{pboost}.}
 
 \item{verbose}{Parameter passed to \link{pboost}.}
+
+\item{intercept}{Parameter passed to \link{glm.fit}.}
 }
 \value{
 A \code{glm} model object fitted on the selected features.
@@ -81,7 +102,7 @@ A \code{glm} model object fitted on the selected features.
 \link{pglm} inherits the usage of the built-in function \link{glm}.
 }
 \examples{
-set.seed(2025)
+set.seed(2026)
 n <- 300
 p <- 200
 x <- matrix(rnorm(n*p), n)
@@ -97,7 +118,7 @@ scoreLogistic <- function(object) {
    eta.hat <- object[["linear.predictors"]]
    return(object[["y"]] - 1/(1+exp(-eta.hat)))
 }
-pboost(y ~ ., DF, glm, scoreLogistic, EBIC, family="binomial", verbose=TRUE)
+pboost(y, x, glm, scoreLogistic, family="binomial", verbose=TRUE)
 
 }
 \references{

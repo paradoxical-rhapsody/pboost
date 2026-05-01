@@ -4,8 +4,8 @@
 #' @description
 #' [plm] inherits the usage of the built-in function [lm].
 #' 
-#' @param formula See [pboost].
-#' @param data See [pboost].
+#' @param formula Parameter passed to [lm].
+#' @param data Parameter passed to [lm].
 #' @param subset Parameter passed to [lm].
 #' @param weights Parameter passed to [lm].
 #' @param na.action Parameter passed to [lm].
@@ -16,12 +16,14 @@
 #' @param qr Parameter passed to [lm].
 #' @param singular.ok Parameter passed to [lm].
 #' @param contrasts Parameter passed to [lm].
-#' @param offset Parameter passed to [lm].
-#' @param ... Parameters passed to [lm].
-#' @param stopFun Parameter passed to [pboost].
-#' @param keep Parameter passed to [pboost].
-#' @param maxK Parameter passed to [pboost].
-#' @param verbose Parameter passed to [pboost].
+#' @param offset Parameter passed to [lm] or [lm.fit].
+#' @param ... Parameters passed to [lm] or [lm.fit].
+#' @param tol Parameter passed to [lm.fit].
+#' 
+#' @param stopFun Parameter passed to [pboost::pboost].
+#' @param keep Parameter passed to [pboost::pboost].
+#' @param maxK Parameter passed to [pboost::pboost].
+#' @param verbose Parameter passed to [pboost::pboost].
 #' 
 #' @return A `lm` model object fitted on the selected features.
 #' 
@@ -38,18 +40,18 @@
 #' Association, 109(507):223–232. \doi{10.1080/01621459.2013.877275}
 #' 
 #' @examples
-#' set.seed(2025)
+#' set.seed(2026)
 #' n <- 300
 #' p <- 200
 #' x <- matrix(rnorm(n*p), n)
 #' 
 #' eta <- drop( x[, 1:3] %*% runif(3, 1.0, 1.5) )
-#' y <- eta + rnorm(n, sd=sd(eta))
+#' y <- rnorm(n, eta, sd=sd(eta))
 #' DF <- data.frame(y, x)
 #' 
 #' plm(y ~ ., DF, verbose=TRUE)
 #' plm(y ~ ., DF, stopFun=BIC, verbose=TRUE)
-#' pboost(y ~ ., DF, lm, residuals, EBIC, verbose=TRUE)
+#' pboost(y, x, lm, residuals, verbose=TRUE)
 #' 
 NULL
 #> NULL
@@ -58,58 +60,88 @@ NULL
 #' @rdname plm
 #' @order 1
 #' @export
-plm <- function(
-    formula, data, subset, weights, na.action,
-    method = "qr", model = TRUE, x = FALSE, y = FALSE, qr = TRUE,
-    singular.ok = TRUE, contrasts = NULL, offset, ...,
-    stopFun = EBIC, keep = NULL, maxK = NULL, verbose = FALSE) {
-    stopifnot( !missing(formula) )
-    stopifnot( !missing(data) )
+plm <- function(formula, data, subset, weights, na.action,
+                method = "qr", model = TRUE, x = FALSE, y = FALSE, qr = TRUE,
+                singular.ok = TRUE, contrasts = NULL, offset, ...,
+                stopFun = "EBIC",
+                keep = NULL, maxK = NULL, verbose = FALSE) {
 
-    cl <- match.call()
+    mf_args <- list(formula = formula, data = data)
+    mf <- do.call(model.frame, mf_args)
 
-    lm_template <- cl
-    lm_template$stopFun <- NULL
-    lm_template$keep <- NULL
-    lm_template$maxK <- NULL
-    lm_template$verbose <- NULL
-    lm_template[[1L]] <- quote(lm)
+    yvec <- model.response(mf)
 
-    required_paras <- c("data", "subset", "weights", "na.action", "offset")
-    for (ipara in required_paras)
-        if (!is.null(cl[[ipara]]))
-            lm_template[[ipara]] <- eval(cl[[ipara]], envir = parent.frame())
+    terms <- terms(formula, data = mf)
+    use.intercept <- attr(terms, "intercept") == 1L
 
-    fitFun <- function(formula, data) {
-        call <- lm_template
-        call$formula <- formula
-        call$data <- data
-        return( eval(call, parent.frame()) )
-    }
+    attr(terms, "intercept") <- 0L
+    xmat <- model.matrix(terms, mf)
 
-    return(pboost(formula, data, fitFun, residuals, stopFun,
-                  keep = keep, maxK = maxK, verbose = verbose))
+    return(
+        pboost(yvec = yvec, xmat = xmat,
+            fitFun = lm,
+            scoreFun = residuals,
+            stopFun = stopFun,
+            subset = if (!missing(subset)) subset else NULL,
+            weights = if (!missing(weights)) weights else NULL,
+            na.action = if (!missing(na.action)) na.action else NULL,
+            method = method,
+            model = model,
+            x = x,
+            y = y,
+            qr = qr,
+            singular.ok = singular.ok,
+            contrasts = contrasts,
+            offset = if (!missing(offset)) offset else NULL,
+            ...,
+            use.intercept = use.intercept,
+            keep = keep,
+            maxK = maxK,
+            verbose = verbose
+        )
+    )
 }
 
 
-#' @rdname EBIC
+#' @rdname plm
+#' @order 2
 #' @export
-EBIC.lm <- function(object, p, p.keep, ...) {
-    stopifnot( inherits(object, "lm") )
+plm.fit <- function(x, y, offset = NULL, method = "qr",
+                    tol = 1e-07, singular.ok = TRUE, ...,
+                    stopFun = "EBIC",
+                    keep = NULL, maxK = NULL, verbose = FALSE) {
 
-    if (missing(p))
-        p <- get("p", envir=parent.frame())
-    if (missing(p.keep))
-        p.keep <- get("p.keep", envir=parent.frame())
+    n <- NROW(x)
+    p <- NCOL(x)
+    
+    if (is.character(stopFun) && stopFun == "EBIC")
+        stopFun <- function(object) {
+            class(object) <- "lm"
 
-    dof <- attr(logLik(object), "df")
-    ebic.r <- max( 0.0, 1.0 - log(nobs(object)) / (2.0*log(p)) )
-    ebic.penalty <- ifelse(
-        ebic.r <= 0.0,
-        0.0,
-        2.0 * ebic.r * lchoose(p - p.keep, dof - p.keep)
+            ebic.r <- max( 0.0, 1.0 - log(n) / (2.0 * log(p)) )
+            stopifnot( ebic.r >= 0 )
+
+            dof <- length(coef(object))
+            ebic.penalty <- 2.0 * ebic.r * lchoose(p - length(keep), dof - length(keep))
+            stopifnot( is.finite(ebic.penalty) )
+
+            return(BIC(object) + ebic.penalty)
+        }
+
+    return(
+        pboost(yvec = y, xmat = x,
+            fitFun = lm.fit,
+            scoreFun = residuals,
+            stopFun = stopFun,
+            offset = if (!missing(offset)) offset else NULL,
+            method = method,
+            singular.ok = singular.ok,
+            contrasts = contrasts,
+            ...,
+            use.formula = FALSE,
+            keep = keep,
+            maxK = maxK,
+            verbose = verbose
+        )
     )
-
-    stopifnot( is.finite(ebic.penalty) )
-    return(BIC(object) + ebic.penalty)
 }

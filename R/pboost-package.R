@@ -21,10 +21,10 @@
 #' @importFrom stats model.matrix
 #' @importFrom stats model.response
 #' @importFrom stats nobs
-#' @importFrom stats terms
-#' @importFrom stats delete.response
+#' @importFrom stats optimize
 #' @importFrom stats predict
 #' @importFrom stats qlogis
+#' @importFrom stats terms
 #' @importFrom survival coxph
 #> [1] "_PACKAGE"
 ## usethis namespace: end

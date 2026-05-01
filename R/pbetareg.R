@@ -4,33 +4,34 @@
 #' @description
 #' [pbetareg] inherits the usage of [betareg::betareg].
 #' 
-#' @param formula See [pboost].
-#' @param data See [pboost].
-#' @param subset Parameters passed to [betareg::betareg].
-#' @param na.action Parameters passed to [betareg::betareg].
-#' @param weights Parameters passed to [betareg::betareg].
-#' @param offset Parameters passed to [betareg::betareg].
-#' @param link Parameters passed to [betareg::betareg].
-#' @param link.phi Parameters passed to [betareg::betareg].
-#' @param type Parameters passed to [betareg::betareg].
-#' @param dist Parameters passed to [betareg::betareg].
-#' @param nu Parameters passed to [betareg::betareg].
-#' @param control Parameters passed to [betareg::betareg].
-#' @param model Parameters passed to [betareg::betareg].
-#' @param y Parameters passed to [betareg::betareg].
-#' @param x Parameters passed to [betareg::betareg].
+#' @param formula Parameter passed to [betareg::betareg].
+#' @param data Parameter passed to [betareg::betareg].
+#' @param subset Parameter passed to [betareg::betareg].
+#' @param na.action Parameter passed to [betareg::betareg].
+#' @param weights Parameter passed to [betareg::betareg].
+#' @param offset Parameter passed to [betareg::betareg].
+#' @param link Parameter passed to [betareg::betareg].
+#' @param link.phi Parameter passed to [betareg::betareg].
+#' @param type Parameter passed to [betareg::betareg].
+#' @param dist Parameter passed to [betareg::betareg].
+#' @param nu Parameter passed to [betareg::betareg].
+#' @param control Parameter passed to [betareg::betareg].
+#' @param model Parameter passed to [betareg::betareg].
+#' @param y Parameter passed to [betareg::betareg].
+#' @param x Parameter passed to [betareg::betareg].
 #' @param ... Parameters passed to [betareg::betareg].
-#' @param stopFun Parameters passed to [pboost].
-#' @param keep Parameters passed to [pboost].
-#' @param maxK Parameters passed to [pboost].
-#' @param verbose Parameters passed to [pboost].
 #' 
-#' @return An `betareg` model object fitted on the selected features.
+#' @param stopFun Parameter passed to [pboost::pboost].
+#' @param keep Parameter passed to [pboost::pboost].
+#' @param maxK Parameter passed to [pboost::pboost].
+#' @param verbose Parameter passed to [pboost::pboost].
+#' 
+#' @return A `betareg` model object fitted on the selected features.
 #' 
 #' @examples
 #' \donttest{
 #' library(betareg)
-#' set.seed(2025)
+#' set.seed(2026)
 #' n <- 300
 #' p <- 100
 #' x <- matrix(runif(n*p), n)
@@ -52,36 +53,24 @@ NULL
 #' @rdname pbetareg
 #' @order 1
 #' @export
-pbetareg <- function(
-    formula, data, subset, na.action, weights, offset,
-    link = c("logit", "probit", "cloglog", "cauchit", "log",
-        "loglog"), link.phi = NULL, type = c("ML", "BC", "BR"),
-    dist = NULL, nu = NULL, control = betareg.control(...), model = TRUE,
-    y = TRUE, x = FALSE, ...,
-    stopFun = EBIC, keep = NULL, maxK = NULL, verbose = FALSE) {
-    stopifnot( !missing(formula) )
-    stopifnot( !missing(data) )
+pbetareg <- function(formula, data, subset, na.action, weights, offset,
+                    link = c("logit", "probit", "cloglog", "cauchit", "log","loglog"),
+                    link.phi = NULL, type = c("ML", "BC", "BR"),
+                    dist = NULL, nu = NULL, control = betareg.control(...),
+                    model = TRUE, y = TRUE, x = FALSE, ...,
+                    stopFun = "EBIC",
+                    keep = NULL, maxK = NULL, verbose = FALSE) {
 
-    cl <- match.call()
+    mf_args <- list(formula = formula, data = data)
+    mf <- do.call(model.frame, mf_args)
 
-    betareg_template <- cl
-    betareg_template$stopFun <- NULL
-    betareg_template$keep <- NULL
-    betareg_template$maxK <- NULL
-    betareg_template$verbose <- NULL
-    betareg_template[[1L]] <- quote(betareg)
+    yvec <- model.response(mf)
 
-    required_paras <- c("data", "subset", "na.action", "weights", "offset")
-    for (ipara in required_paras)
-        if (!is.null(cl[[ipara]]))
-            betareg_template[[ipara]] <- eval(cl[[ipara]], envir = parent.frame())
+    terms <- terms(formula, data = mf)
+    use.intercept <- attr(terms, "intercept") == 1L
 
-    fitFun <- function(formula, data) {
-        call <- betareg_template
-        call$formula <- formula
-        call$data <- data
-        return( eval(call, parent.frame()) )
-    }
+    attr(terms, "intercept") <- 0L
+    xmat <- model.matrix(terms, mf)
 
     scoreFun <- function(object) {
         phi <- predict(object, type='precision')
@@ -96,32 +85,24 @@ pbetareg <- function(
         return( mu.eta(eta) * phi * ( digamma((1-mu)*phi) - digamma(mu*phi) + qlogis(y) ) )
     }
 
-    return(pboost(formula, data, fitFun, scoreFun, stopFun,
-                  keep = keep, maxK = maxK, verbose = verbose))
-}
+    mc <- match.call(expand.dots = TRUE)
+    provided_args <- as.list(mc)[-1]
+    provided_args <- provided_args[!(names(provided_args) %in% c("stopFun", "keep", "maxK", "verbose"))]
+    provided_args$formula <- NULL
+    provided_args$data <- NULL
 
-
-
-
-#' @rdname EBIC
-#' @export
-EBIC.betareg <- function(object, p, p.keep, ...) {
-    stopifnot( inherits(object, "betareg") )
-
-    if (missing(p))
-        p <- get("p", envir=parent.frame())
-    if (missing(p.keep))
-        p.keep <- get("p.keep", envir=parent.frame())
-
-    dof <- attr(logLik(object), "df")
-    ebic.r <- max( 0.0, 1.0 - log(nobs(object)) / (2.0*log(p)) )
-    ebic.penalty <- ifelse(
-        ebic.r <= 0.0,
-        0.0,
-        2.0 * ebic.r * lchoose(p - p.keep, dof - p.keep)
+    args <- list(
+        yvec = yvec,
+        xmat = xmat,
+        fitFun = betareg,
+        scoreFun = scoreFun,
+        stopFun = stopFun,
+        keep = keep,
+        maxK = maxK,
+        verbose = verbose,
+        use.intercept = use.intercept
     )
+    args <- c(args, provided_args)
 
-    # stopifnot( !is.nan(ebic.penalty) )
-    stopifnot( is.finite(ebic.penalty) )
-    return(BIC(object) + ebic.penalty)
+    return(do.call(pboost, args))
 }

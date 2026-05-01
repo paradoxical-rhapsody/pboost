@@ -66,5 +66,5 @@ frs(y, x, glm, family="binomial", verbose=TRUE)
 
 }
 \seealso{
-\link{fbetareg}, \link{fglm}, \link{flm}, \link{frq}.
+\link{fbetareg}, \link{fglm}, \link{flm}, \link{frq}, \link{fsar}.
 }

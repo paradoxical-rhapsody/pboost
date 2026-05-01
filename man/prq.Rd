@@ -2,7 +2,7 @@
 % Please edit documentation in R/prq.R
 \name{prq}
 \alias{prq}
-\title{Profile Boosting for Quantile Regression}
+\title{Profile Boosting for Quantile Regression Models}
 \usage{
 prq(
   formula,
@@ -15,18 +15,18 @@ prq(
   model = TRUE,
   contrasts = NULL,
   ...,
-  stopFun = EBIC,
+  stopFun = "EBIC",
   keep = NULL,
   maxK = NULL,
   verbose = FALSE
 )
 }
 \arguments{
-\item{formula}{See \link{pboost}.}
+\item{formula}{Parameter passed to \link[quantreg:rq]{quantreg::rq}.}
 
 \item{tau}{Parameter passed to \link[quantreg:rq]{quantreg::rq}.}
 
-\item{data}{See \link{pboost}.}
+\item{data}{Parameter passed to \link[quantreg:rq]{quantreg::rq}.}
 
 \item{subset}{Parameter passed to \link[quantreg:rq]{quantreg::rq}.}
 
@@ -58,7 +58,7 @@ A \code{rq} model object fitted on the selected features.
 }
 \examples{
 library(quantreg)
-set.seed(2025)
+set.seed(2026)
 n <- 300
 p <- 200
 x <- matrix(rnorm(n*p), n)
@@ -73,9 +73,9 @@ prq(y ~ ., tau, DF, verbose=TRUE)
 BIC <- function(obj) AIC(obj, k=-1)
 prq(y ~ ., tau, DF, stopFun=BIC, verbose=TRUE)
 
-scorerq <- function(object) {
- return(ifelse(object[["y"]] < fitted(object), tau - 1, tau))
-}
-pboost(y ~ ., DF, rq, scorerq, EBIC, tau=tau, verbose=TRUE)
+scoreFun <- function(object)
+   return(ifelse(object[["y"]] < fitted(object), tau - 1, tau))
+
+pboost(y, x, rq, scoreFun, BIC, tau=tau, verbose=TRUE)
 
 }

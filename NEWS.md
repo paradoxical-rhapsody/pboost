@@ -1,3 +1,15 @@
+# pboost 0.3.3
+
+Reformulate according the new interface `pboost()`:
+* `pbetareg()`
+* `pglm()`
+* `plm()`
+* `prq()`
+
+Newly add:
+* `psar()`, `fsar()`
+
+
 # pboost 0.3.2
 
 * reformulate `pboost()`.

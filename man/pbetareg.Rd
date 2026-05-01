@@ -21,55 +21,55 @@ pbetareg(
   y = TRUE,
   x = FALSE,
   ...,
-  stopFun = EBIC,
+  stopFun = "EBIC",
   keep = NULL,
   maxK = NULL,
   verbose = FALSE
 )
 }
 \arguments{
-\item{formula}{See \link{pboost}.}
+\item{formula}{Parameter passed to \link[betareg:betareg]{betareg::betareg}.}
 
-\item{data}{See \link{pboost}.}
+\item{data}{Parameter passed to \link[betareg:betareg]{betareg::betareg}.}
 
-\item{subset}{Parameters passed to \link[betareg:betareg]{betareg::betareg}.}
+\item{subset}{Parameter passed to \link[betareg:betareg]{betareg::betareg}.}
 
-\item{na.action}{Parameters passed to \link[betareg:betareg]{betareg::betareg}.}
+\item{na.action}{Parameter passed to \link[betareg:betareg]{betareg::betareg}.}
 
-\item{weights}{Parameters passed to \link[betareg:betareg]{betareg::betareg}.}
+\item{weights}{Parameter passed to \link[betareg:betareg]{betareg::betareg}.}
 
-\item{offset}{Parameters passed to \link[betareg:betareg]{betareg::betareg}.}
+\item{offset}{Parameter passed to \link[betareg:betareg]{betareg::betareg}.}
 
-\item{link}{Parameters passed to \link[betareg:betareg]{betareg::betareg}.}
+\item{link}{Parameter passed to \link[betareg:betareg]{betareg::betareg}.}
 
-\item{link.phi}{Parameters passed to \link[betareg:betareg]{betareg::betareg}.}
+\item{link.phi}{Parameter passed to \link[betareg:betareg]{betareg::betareg}.}
 
-\item{type}{Parameters passed to \link[betareg:betareg]{betareg::betareg}.}
+\item{type}{Parameter passed to \link[betareg:betareg]{betareg::betareg}.}
 
-\item{dist}{Parameters passed to \link[betareg:betareg]{betareg::betareg}.}
+\item{dist}{Parameter passed to \link[betareg:betareg]{betareg::betareg}.}
 
-\item{nu}{Parameters passed to \link[betareg:betareg]{betareg::betareg}.}
+\item{nu}{Parameter passed to \link[betareg:betareg]{betareg::betareg}.}
 
-\item{control}{Parameters passed to \link[betareg:betareg]{betareg::betareg}.}
+\item{control}{Parameter passed to \link[betareg:betareg]{betareg::betareg}.}
 
-\item{model}{Parameters passed to \link[betareg:betareg]{betareg::betareg}.}
+\item{model}{Parameter passed to \link[betareg:betareg]{betareg::betareg}.}
 
-\item{y}{Parameters passed to \link[betareg:betareg]{betareg::betareg}.}
+\item{y}{Parameter passed to \link[betareg:betareg]{betareg::betareg}.}
 
-\item{x}{Parameters passed to \link[betareg:betareg]{betareg::betareg}.}
+\item{x}{Parameter passed to \link[betareg:betareg]{betareg::betareg}.}
 
 \item{...}{Parameters passed to \link[betareg:betareg]{betareg::betareg}.}
 
-\item{stopFun}{Parameters passed to \link{pboost}.}
+\item{stopFun}{Parameter passed to \link{pboost}.}
 
-\item{keep}{Parameters passed to \link{pboost}.}
+\item{keep}{Parameter passed to \link{pboost}.}
 
-\item{maxK}{Parameters passed to \link{pboost}.}
+\item{maxK}{Parameter passed to \link{pboost}.}
 
-\item{verbose}{Parameters passed to \link{pboost}.}
+\item{verbose}{Parameter passed to \link{pboost}.}
 }
 \value{
-An \code{betareg} model object fitted on the selected features.
+A \code{betareg} model object fitted on the selected features.
 }
 \description{
 \link{pbetareg} inherits the usage of \link[betareg:betareg]{betareg::betareg}.
@@ -77,7 +77,7 @@ An \code{betareg} model object fitted on the selected features.
 \examples{
 \donttest{
 library(betareg)
-set.seed(2025)
+set.seed(2026)
 n <- 300
 p <- 100
 x <- matrix(runif(n*p), n)

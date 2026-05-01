@@ -1,12 +1,12 @@
 #' @name prq
-#' @title Profile Boosting for Quantile Regression
+#' @title Profile Boosting for Quantile Regression Models
 #' 
 #' @description
 #' [prq] inherits the usage of the function [quantreg::rq].
 #' 
-#' @param formula See [pboost].
-#' @param data See [pboost].
+#' @param formula Parameter passed to [quantreg::rq].
 #' @param tau Parameter passed to [quantreg::rq].
+#' @param data Parameter passed to [quantreg::rq].
 #' @param subset Parameter passed to [quantreg::rq].
 #' @param weights Parameter passed to [quantreg::rq].
 #' @param na.action Parameter passed to [quantreg::rq].
@@ -14,16 +14,17 @@
 #' @param model Parameter passed to [quantreg::rq].
 #' @param contrasts Parameter passed to [quantreg::rq].
 #' @param ... Parameters passed to [quantreg::rq].
-#' @param stopFun Parameter passed to [pboost].
-#' @param keep Parameter passed to [pboost].
-#' @param maxK Parameter passed to [pboost].
-#' @param verbose Parameter passed to [pboost].
+#' 
+#' @param stopFun Parameter passed to [pboost::pboost].
+#' @param keep Parameter passed to [pboost::pboost].
+#' @param maxK Parameter passed to [pboost::pboost].
+#' @param verbose Parameter passed to [pboost::pboost].
 #' 
 #' @return A `rq` model object fitted on the selected features.
 #' 
 #' @examples
 #' library(quantreg)
-#' set.seed(2025)
+#' set.seed(2026)
 #' n <- 300
 #' p <- 200
 #' x <- matrix(rnorm(n*p), n)
@@ -38,10 +39,10 @@
 #' BIC <- function(obj) AIC(obj, k=-1)
 #' prq(y ~ ., tau, DF, stopFun=BIC, verbose=TRUE)
 #' 
-#' scorerq <- function(object) {
-#'  return(ifelse(object[["y"]] < fitted(object), tau - 1, tau))
-#' }
-#' pboost(y ~ ., DF, rq, scorerq, EBIC, tau=tau, verbose=TRUE)
+#' scoreFun <- function(object)
+#'    return(ifelse(object[["y"]] < fitted(object), tau - 1, tau))
+#'
+#' pboost(y, x, rq, scoreFun, BIC, tau=tau, verbose=TRUE)
 #' 
 NULL
 #> NULL
@@ -51,66 +52,59 @@ NULL
 #' @rdname prq
 #' @order 1
 #' @export
-prq <- function(
-    formula, tau = 0.5, data, subset, weights, na.action,
-    method = "br", model = TRUE, contrasts = NULL, ...,
-    stopFun = EBIC, keep = NULL, maxK = NULL, verbose = FALSE) {
-    stopifnot( !missing(formula) )
-    stopifnot( !missing(data) )
+prq <- function(formula, tau = 0.5, data, subset, weights, na.action,
+                method = "br", model = TRUE, contrasts = NULL, ...,
+                stopFun = "EBIC",
+                keep = NULL, maxK = NULL, verbose = FALSE) {
 
-    cl <- match.call()
+    mf_args <- list(formula = formula, data = data)
+    mf <- do.call(model.frame, mf_args)
 
-    rq_template <- cl
-    rq_template$stopFun <- NULL
-    rq_template$keep <- NULL
-    rq_template$maxK <- NULL
-    rq_template$verbose <- NULL
-    rq_template[[1L]] <- quote(rq)
+    yvec <- model.response(mf)
 
-    required_paras <- c("tau", "data", "subset", "weights", "na.action")
-    for (ipara in required_paras)
-        if (!is.null(cl[[ipara]]))
-            rq_template[[ipara]] <- eval(cl[[ipara]], envir = parent.frame())
+    terms <- terms(formula, data = mf)
+    use.intercept <- attr(terms, "intercept") == 1L
 
-    fitFun <- function(formula, data) {
-        call <- rq_template
-        call$formula <- formula
-        call$data <- data
-        return( eval(call, parent.frame()) )
-    }
+    attr(terms, "intercept") <- 0L
+    xmat <- model.matrix(terms, mf)
 
-    scoreFun <- function(object) 
+    scoreFun <- function(object)
         return(ifelse(object[["y"]] < fitted(object), tau - 1, tau))
 
-    return(pboost(formula, data, fitFun, scoreFun, stopFun,
-                  keep = keep, maxK = maxK, verbose = verbose))
-}
+    n <- NROW(xmat)
+    p <- NCOL(xmat)
+    if (is.character(stopFun) && stopFun == "EBIC")
+        stopFun <- function(object) {
+            ebic.r <- max( 0.0, 1.0 - log(n) / (2.0 * log(p)) )
+            stopifnot( ebic.r >= 0 )
 
+            dof <- attr(logLik(object), "df")
+            ebic.penalty <- 2.0 * ebic.r * lchoose(p - length(keep), dof - length(keep))
+            stopifnot( is.finite(ebic.penalty) )
 
-#' @rdname EBIC
-#' @export
-EBIC.rq <- function(object, p, p.keep, ...) {
-    stopifnot( inherits(object, c("rq", "rqs")) )
+            # `BIC` for class `rq` is equivalent to `AIC` with negative `k`
+            # return( -2*as.numeric(obj.loglik) + dof * log(n) + ebic.penalty )
+            return( AIC(object, k=-1) + ebic.penalty )
+        }
 
-    if (missing(p))
-        p <- get("p", envir=parent.frame())
-    if (missing(p.keep))
-        p.keep <- get("p.keep", envir=parent.frame())
+    mc <- match.call(expand.dots = TRUE)
+    provided_args <- as.list(mc)[-1]
+    provided_args <- provided_args[!(names(provided_args) %in% c("stopFun", "keep", "maxK", "verbose"))]
+    provided_args$formula <- NULL
+    provided_args$data <- NULL
 
-    # `logLik(rq or rqs)` has attr `n` rather than `nobs`
-    obj.loglik <- logLik(object)
-    n0 <- attr(obj.loglik, "n")
-    dof <- attr(obj.loglik, "df")
-    ebic.r <- max( 0.0, 1.0 - log(n0) / (2.0*log(p)) )
-    ebic.penalty <- ifelse(
-        ebic.r <= 0.0,
-        0.0,
-        2.0 * ebic.r * lchoose(p - p.keep, dof - p.keep)
+    args <- list(
+        yvec = yvec,
+        xmat = xmat,
+        fitFun = rq,
+        scoreFun = scoreFun,
+        stopFun = stopFun,
+        keep = keep,
+        maxK = maxK,
+        verbose = verbose,
+        use.intercept = use.intercept
     )
+    args <- c(args, provided_args)
 
-    stopifnot( is.finite(ebic.penalty) )
-
-    # `BIC` for class `rq` is equivalent to `AIC` with negative `k`
-    # return( -2 * as.numeric(obj.loglik) + dof * log(n0) + ebic.penalty )
-    return( AIC(object, k=-1) + ebic.penalty )
+    return(do.call(pboost, args))
 }

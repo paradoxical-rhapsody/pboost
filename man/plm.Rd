@@ -2,6 +2,7 @@
 % Please edit documentation in R/plm.R
 \name{plm}
 \alias{plm}
+\alias{plm.fit}
 \title{Profile Boosting for Linear Models.}
 \usage{
 plm(
@@ -19,16 +20,30 @@ plm(
   contrasts = NULL,
   offset,
   ...,
-  stopFun = EBIC,
+  stopFun = "EBIC",
+  keep = NULL,
+  maxK = NULL,
+  verbose = FALSE
+)
+
+plm.fit(
+  x,
+  y,
+  offset = NULL,
+  method = "qr",
+  tol = 1e-07,
+  singular.ok = TRUE,
+  ...,
+  stopFun = "EBIC",
   keep = NULL,
   maxK = NULL,
   verbose = FALSE
 )
 }
 \arguments{
-\item{formula}{See \link{pboost}.}
+\item{formula}{Parameter passed to \link{lm}.}
 
-\item{data}{See \link{pboost}.}
+\item{data}{Parameter passed to \link{lm}.}
 
 \item{subset}{Parameter passed to \link{lm}.}
 
@@ -50,9 +65,9 @@ plm(
 
 \item{contrasts}{Parameter passed to \link{lm}.}
 
-\item{offset}{Parameter passed to \link{lm}.}
+\item{offset}{Parameter passed to \link{lm} or \link{lm.fit}.}
 
-\item{...}{Parameters passed to \link{lm}.}
+\item{...}{Parameters passed to \link{lm} or \link{lm.fit}.}
 
 \item{stopFun}{Parameter passed to \link{pboost}.}
 
@@ -61,6 +76,8 @@ plm(
 \item{maxK}{Parameter passed to \link{pboost}.}
 
 \item{verbose}{Parameter passed to \link{pboost}.}
+
+\item{tol}{Parameter passed to \link{lm.fit}.}
 }
 \value{
 A \code{lm} model object fitted on the selected features.
@@ -73,18 +90,18 @@ A \code{lm} model object fitted on the selected features.
 proposed by Luo and Chen(2014, \doi{10.1080/01621459.2013.877275}).
 }
 \examples{
-set.seed(2025)
+set.seed(2026)
 n <- 300
 p <- 200
 x <- matrix(rnorm(n*p), n)
 
 eta <- drop( x[, 1:3] \%*\% runif(3, 1.0, 1.5) )
-y <- eta + rnorm(n, sd=sd(eta))
+y <- rnorm(n, eta, sd=sd(eta))
 DF <- data.frame(y, x)
 
 plm(y ~ ., DF, verbose=TRUE)
 plm(y ~ ., DF, stopFun=BIC, verbose=TRUE)
-pboost(y ~ ., DF, lm, residuals, EBIC, verbose=TRUE)
+pboost(y, x, lm, residuals, verbose=TRUE)
 
 }
 \references{
