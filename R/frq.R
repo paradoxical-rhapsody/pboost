@@ -1,8 +1,8 @@
-#' @name prq
-#' @title Profile Boosting for Quantile Regression Models
+#' @name frq
+#' @title Forward Regression Selection for Quantile Regression Models
 #' 
 #' @description
-#' [prq] inherits the usage of the function [quantreg::rq].
+#' `frq()` inherits the usage of the function [quantreg::rq], and performs forward regression selection for quantile regression models.
 #' 
 #' @param formula Parameter passed to [quantreg::rq].
 #' @param tau Parameter passed to [quantreg::rq].
@@ -15,12 +15,11 @@
 #' @param contrasts Parameter passed to [quantreg::rq].
 #' @param ... Parameters passed to [quantreg::rq].
 #' 
-#' @param stopFun Parameter passed to [pboost::pboost].
-#' @param keep Parameter passed to [pboost::pboost].
-#' @param maxK Parameter passed to [pboost::pboost].
-#' @param verbose Parameter passed to [pboost::pboost].
-#' 
-#' @return A `rq` model object fitted on the selected features.
+#' @param selectFun Parameter passed to [pboost::frs].
+#' @param stopFun Parameter passed to [pboost::frs].
+#' @param keep Parameter passed to [pboost::frs].
+#' @param maxK Parameter passed to [pboost::frs].
+#' @param verbose Parameter passed to [pboost::frs].
 #' 
 #' @examples
 #' library(quantreg)
@@ -34,27 +33,15 @@
 #' DF <- data.frame(y, x)
 #' 
 #' tau <- 0.5
-#' prq(y ~ ., tau, DF, verbose=TRUE)
+#' frq(y ~ ., tau, DF, verbose=TRUE)
 #' 
 #' BIC <- function(obj) AIC(obj, k=-1)
-#' prq(y ~ ., tau, DF, stopFun=BIC, verbose=TRUE)
+#' frq(y ~ ., tau, DF, stopFun=BIC, verbose=TRUE)
 #' 
-#' scoreFun <- function(object)
-#'    return(ifelse(object[["y"]] < fitted(object), tau - 1, tau))
-#'
-#' pboost(y, x, rq, scoreFun, BIC, tau=tau, verbose=TRUE)
-#' 
-NULL
-#> NULL
-
-
-
-#' @rdname prq
-#' @order 1
-#' @export
-prq <- function(formula, tau = 0.5, data, subset, weights, na.action,
+#' @export 
+frq <- function(formula, tau = 0.5, data, subset, weights, na.action,
                 method = "br", model = TRUE, contrasts = NULL, ...,
-                stopFun = "EBIC",
+                selectFun = logLik, stopFun = "EBIC",
                 keep = NULL, maxK = NULL, verbose = FALSE) {
 
     mf_args <- list(formula = formula, data = data)
@@ -67,9 +54,6 @@ prq <- function(formula, tau = 0.5, data, subset, weights, na.action,
 
     attr(terms, "intercept") <- 0L
     xmat <- model.matrix(terms, mf)
-
-    scoreFun <- function(object)
-        return(ifelse(object[["y"]] < fitted(object), tau - 1, tau))
 
     n <- NROW(xmat)
     p <- NCOL(xmat)
@@ -97,7 +81,7 @@ prq <- function(formula, tau = 0.5, data, subset, weights, na.action,
         yvec = yvec,
         xmat = xmat,
         fitFun = rq,
-        scoreFun = scoreFun,
+        selectFun = selectFun,
         stopFun = stopFun,
         keep = keep,
         maxK = maxK,
@@ -106,5 +90,5 @@ prq <- function(formula, tau = 0.5, data, subset, weights, na.action,
     )
     args <- c(args, provided_args)
 
-    return(do.call(pboost, args))
+    return(do.call(frs, args))
 }

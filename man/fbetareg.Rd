@@ -79,7 +79,6 @@ A \code{betareg} model object fitted on the selected features.
 }
 \examples{
 \dontrun{
-library(betareg)
 set.seed(2026)
 n <- 300
 p <- 20

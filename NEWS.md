@@ -1,3 +1,8 @@
+# pboost 0.3.5
+
+* add `frq()`
+
+
 # pboost 0.3.4
 
 * add `fbetareg()`
