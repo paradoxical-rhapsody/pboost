@@ -78,11 +78,11 @@ frq <- function(formula, tau = 0.5, data, subset, weights, na.action,
     provided_args$data <- NULL
 
     args <- list(
+        fitFun = rq,
         yvec = yvec,
         xmat = xmat,
-        fitFun = rq,
-        stopFun = stopFun,
-        use.intercept = use.intercept
+        use.intercept = use.intercept,
+        stopFun = stopFun
     )
     args <- c(args, provided_args)
 

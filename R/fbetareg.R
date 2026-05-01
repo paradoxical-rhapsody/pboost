@@ -72,14 +72,12 @@ fbetareg <- function(formula, data, subset, na.action, weights, offset,
     provided_args$data <- NULL
 
     args <- list(
+        fitFun = betareg,
         yvec = yvec,
         xmat = xmat,
-        fitFun = betareg,
         use.intercept = use.intercept
     )
     args <- c(args, provided_args)
 
     return(do.call(frs, args))
-
-
 }

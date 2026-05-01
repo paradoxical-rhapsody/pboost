@@ -86,15 +86,16 @@ pbetareg <- function(formula, data, subset, na.action, weights, offset,
 
     mc <- match.call(expand.dots = TRUE)
     provided_args <- as.list(mc)[-1]
+    provided_args <- provided_args[!(names(provided_args) %in% c("scoreFun"))]
     provided_args$formula <- NULL
     provided_args$data <- NULL
 
     args <- list(
+        fitFun = betareg,
         yvec = yvec,
         xmat = xmat,
-        fitFun = betareg,
-        scoreFun = scoreFun,
-        use.intercept = use.intercept
+        use.intercept = use.intercept,
+        scoreFun = scoreFun
     )
     args <- c(args, provided_args)
 
