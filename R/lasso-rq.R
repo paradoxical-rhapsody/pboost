@@ -22,9 +22,10 @@ lasso_rq <- function(x, y, tau, lambda.vec=2.0^seq(-5, 5, by=0.01)) {
 
     ebic <- rep(NA_real_, length(lambda.vec))
     for (i in seq_along(lambda.vec)) {
-        egg <- rq.fit.lasso(x, y, tau=tau, lambda=lambda.vec[i])
+        egg <- rq.fit.lasso(cbind(intercept=1, x), y, tau=tau, lambda=lambda.vec[i])
 
-        dof <- sum(abs(coef(egg)) > 1e-4)
+        dof <- sum(abs(coef(egg)[-1]) > 1e-4)
+        stopifnot( dof >= 0 && dof <= p )
         fid <- sum(Rho(residuals(egg), tau))
         minusloglik <- -n * (log(tau * (1 - tau)) - 1 - log(fid/n))
         ebic.penalty <- 2.0 * ebic.r * lchoose(p, dof)
@@ -33,8 +34,8 @@ lasso_rq <- function(x, y, tau, lambda.vec=2.0^seq(-5, 5, by=0.01)) {
 
     idx <- which.min(ebic)
     lambda.opt <- lambda.vec[idx]
-    egg <- rq(y ~ 0 + ., tau=tau, data=data.frame(y, x), method="lasso", lambda=lambda.opt)
-    egg[["beta"]] <- coef(egg)[abs(coef(egg)) >= 1e-4]
+    egg <- rq.fit.lasso(cbind(intercept=1, x), y, tau=tau, lambda=lambda.opt)
+    egg[["beta"]] <- coef(egg)[-1][abs(coef(egg)[-1]) >= 1e-4]
     class(egg) <- c("lassorq", class(egg))
     return(egg)
 }

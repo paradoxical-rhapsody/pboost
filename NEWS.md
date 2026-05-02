@@ -1,3 +1,9 @@
+# pboost 0.4.1
+
+* update `lasso_rq()`.
+
+
+
 # pboost 0.4.0
 
 * add `lasso_sar()`, `lasso_rq()`, `lasso_glm()`.
