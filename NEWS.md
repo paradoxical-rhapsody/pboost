@@ -1,3 +1,8 @@
+# pboost 0.4.0
+
+* add `lasso_sar()`, `lasso_rq()`, `lasso_glm()`.
+
+
 # pboost 0.3.8
 
 * add `coef.sarpboost()`, `set_rook_matrix()`

@@ -6,13 +6,15 @@
 #' @import Formula
 #' @import Matrix
 #' @importFrom betareg betareg betareg.control
+#' @importFrom glmnet glmnet
 #' @importFrom MASS ginv
 #' @importFrom quantreg rq
+#' @importFrom quantreg rq.fit.lasso
 #' @importFrom stats AIC as.formula gaussian model.frame model.matrix
 #' @importFrom stats coef
 #' @importFrom stats contrasts
 #' @importFrom stats delete.response
-#' @importFrom stats fitted glm.fit logLik na.fail na.omit residuals BIC
+#' @importFrom stats fitted logLik na.fail na.omit residuals BIC
 #' @importFrom stats formula
 #' @importFrom stats glm
 #' @importFrom stats glm.fit
