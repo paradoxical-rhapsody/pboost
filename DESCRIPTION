@@ -1,13 +1,12 @@
 Package: pboost
 Title: Profile Boosting Framework for Parametric Models
-Version: 0.3.7
+Version: 0.3.8
 Maintainer: Zengchao Xu <zengc.xu@aliyun.com>
 Authors@R:
     person("Zengchao", "Xu", , "zengc.xu@aliyun.com", role = c("aut", "cre"))
 Description:
     A profile boosting framework for feature selection in parametric models.
-    It offers a unified interface pboost() and several wrapped models, including linear model, generalized linear models, quantile regression, Cox proportional hazards model, beta regression.
-    An S3 interface EBIC() is provided as the stopping rule for the profile boosting by default.
+    It offers a unified interface pboost() and several wrapped models, including linear model, generalized linear models, quantile regression, Cox proportional hazards model, beta regression, spatial auto-regressive models.
 Imports:
     stats,
     Matrix,

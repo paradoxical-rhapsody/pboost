@@ -4,11 +4,14 @@
 #' @description
 #' - `get_rho()`: MLE of \eqn{\rho} in SAR model. See [pboost::psar].
 #' - `sar.fit()`: Fit SAR model with given \eqn{\rho}.
-#' - `logLik()`, `BIC()`, `residuals()`.
+#' - `set_rook_matrix()`: Construct Rook weight adjacency matrix.
+#' - `logLik()`, `BIC()`, `residuals()`, `coef()`.
 #' 
 #' @param x Numeric feature matrix.
 #' @param y Response vector.
 #' @param w Weight matrix (row-sum scaled).
+#' @param rNum Number of row units in Rook structure.
+#' @param cNum Number of column units in Rook structure.
 #' @param object Object.
 #' @param ... Arguments.
 #' 
@@ -86,3 +89,24 @@ logLik.sarpboost <- function(object, ...)
 #' @export
 BIC.sarpboost <- function(object, ...)
     return(attr(object, "bic"))
+
+
+#' @name sar.model
+#' @export
+coef.sarpboost <- function(object, ...)
+    return(object[["beta"]])
+
+
+
+#' @name sar.model
+#' @export
+set_rook_matrix <- function(rNum, cNum) {
+    idxR <- as.vector( row(matrix(NA, rNum, cNum)) )
+    idxC <- as.vector( col(matrix(NA, rNum, cNum)) )
+
+    flag.row <- ( outer(idxR, idxR, \(i, j) i == j) & outer(idxC, idxC, \(i, j) abs(i - j) == 1) )
+    flag.col <- ( outer(idxC, idxC, \(i, j) i == j) & outer(idxR, idxR, \(i, j) abs(i - j) == 1) )
+    w <- (flag.row | flag.col) * 1.0
+
+    return(w / rowSums(w))
+}

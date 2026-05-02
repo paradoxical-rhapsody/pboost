@@ -23,14 +23,6 @@
 #' @examples
 #' set.seed(2026)
 #' 
-#' set_rook_matrix <- function(rNum, cNum) {
-#'     idxR <- as.vector( row(matrix(NA, rNum, cNum)) )
-#'     idxC <- as.vector( col(matrix(NA, rNum, cNum)) )
-#'     flag.row <- ( outer(idxR, idxR, \(i, j) i == j) & outer(idxC, idxC, \(i, j) abs(i - j) == 1) )
-#'     flag.col <- ( outer(idxC, idxC, \(i, j) i == j) & outer(idxR, idxR, \(i, j) abs(i - j) == 1) )
-#'     w <- (flag.row | flag.col) * 1.0
-#'     return(w / rowSums(w))
-#' }
 #' w <- set_rook_matrix(9, 9)
 #' 
 #' n <- NROW(w)

@@ -7,6 +7,8 @@
 \alias{residuals.sarpboost}
 \alias{logLik.sarpboost}
 \alias{BIC.sarpboost}
+\alias{coef.sarpboost}
+\alias{set_rook_matrix}
 \title{Functions for Spatial Auto-regressive Model}
 \usage{
 get_rho(x, y, w)
@@ -18,6 +20,10 @@ sar.fit(x, y, w)
 \method{logLik}{sarpboost}(object, ...)
 
 \method{BIC}{sarpboost}(object, ...)
+
+\method{coef}{sarpboost}(object, ...)
+
+set_rook_matrix(rNum, cNum)
 }
 \arguments{
 \item{x}{Numeric feature matrix.}
@@ -29,6 +35,10 @@ sar.fit(x, y, w)
 \item{object}{Object.}
 
 \item{...}{Arguments.}
+
+\item{rNum}{Number of row units in Rook structure.}
+
+\item{cNum}{Number of column units in Rook structure.}
 }
 \value{
 Value or list.
@@ -37,6 +47,7 @@ Value or list.
 \itemize{
 \item \code{get_rho()}: MLE of \eqn{\rho} in SAR model. See \link{psar}.
 \item \code{sar.fit()}: Fit SAR model with given \eqn{\rho}.
-\item \code{logLik()}, \code{BIC()}, \code{residuals()}.
+\item \code{set_rook_matrix()}: Construct Rook weight adjacency matrix.
+\item \code{logLik()}, \code{BIC()}, \code{residuals()}, \code{coef()}.
 }
 }

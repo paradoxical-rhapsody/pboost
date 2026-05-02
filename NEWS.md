@@ -1,3 +1,8 @@
+# pboost 0.3.8
+
+* add `coef.sarpboost()`, `set_rook_matrix()`
+
+
 # pboost 0.3.7
 
 * polish
