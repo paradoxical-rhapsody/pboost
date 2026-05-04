@@ -148,8 +148,9 @@ pboost <- function(yvec, xmat, fitFun, scoreFun, stopFun = "EBIC", ...,
         if (is.null(maxK) && (tmp.level >= level) )
             break
 
-        level <- tmp.level
         fml <- tmp.fml
+        egg <- tmp.egg
+        level <- tmp.level
 
         if ( !is.null(maxK) && (length(all.vars(fml[[3]])) >= maxK) )
             break

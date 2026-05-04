@@ -97,18 +97,22 @@ frs <- function(yvec, xmat, fitFun, ...,
                 message(sprintf("Adding %s: level=%.3f", x.star, level))
     }
 
+    fit_formula <- function(fml) {
+        if (use.formula) {
+            return(fitFun(
+                formula = fml,
+                data = data.frame(yvec, xmat[, all.vars(fml[[3]]), drop=FALSE]),
+                ...
+            ))
+        } else {
+            return(fitFun(x = xmat[, all.vars(fml[[3]]), drop=FALSE], y = yvec, ...))
+        }
+    }
+
     lhs <- "yvec"
     rhs <- paste(c(as.integer(use.intercept), keep), collapse=" + ")
     fml <- as.formula(paste(c(lhs, rhs), collapse=" ~ "))
-    if (use.formula) {
-        egg <- fitFun(
-            formula = fml,
-            data = data.frame(yvec, xmat[, all.vars(fml[[3]]), drop=FALSE]),
-            ...
-        )
-    } else {
-        egg <- fitFun(x = xmat[, all.vars(fml[[3]]), drop=FALSE], y = yvec, ...)
-    }
+    egg <- fit_formula(fml)
     level <- stopFun(egg)
     showiter(verbose, level=level)
 
@@ -126,43 +130,31 @@ frs <- function(yvec, xmat, fitFun, ...,
         levelCand <- rep(NA_real_, length(candidates))
         for (iC in seq_along(candidates)) {
             tmp.fml <- update(fml, sprintf(". ~ . + %s", candidates[iC]))
-            if (use.formula) {
-                tmp.egg <- fitFun(
-                    formula = tmp.fml,
-                    data = data.frame(yvec, xmat[, all.vars(tmp.fml[[3]]), drop=FALSE]),
-                    ...
-                )
-            } else {
-                tmp.egg <- fitFun(x = xmat[, all.vars(tmp.fml[[3]]), drop=FALSE], y = yvec, ...)
-            }
+            tmp.egg <- fit_formula(tmp.fml)
             importantanceCand[iC] <- selectFun(tmp.egg)
             levelCand[iC] <- stopFun(tmp.egg)
         }
 
         j.star <- which.max(importantanceCand)
-        stopifnot( length(j.star) == 1 )
-        stopifnot( !(candidates[j.star] %in% all.vars(fml[[3]])) )
-        showiter(verbose, candidates[j.star], levelCand[j.star])
+        x.star <- candidates[j.star]
+        stopifnot( length(x.star) == 1 )
+        stopifnot( !(x.star %in% all.vars(fml[[3]])) )
 
-        if (is.null(maxK) && (levelCand[j.star] >= level) )
+        tmp.fml <- update(fml, sprintf(". ~ . + %s", x.star))
+        tmp.level <- levelCand[j.star]
+        showiter(verbose, x.star, tmp.level)
+
+        if (is.null(maxK) && (tmp.level >= level) )
             break
 
-        level <- levelCand[j.star]
-        fml <- update(fml, sprintf(". ~ . + %s", candidates[j.star]))
+        fml <- tmp.fml
+        level <- tmp.level
 
         if ( !is.null(maxK) && (length(all.vars(fml[[3]])) >= maxK) )
             break
     }
 
-    if (use.formula) {
-        egg <- fitFun(
-            formula = fml,
-            data = data.frame(yvec, xmat[, all.vars(fml[[3]]), drop=FALSE]),
-            ...
-        )
-    } else {
-        egg <- fitFun(x = xmat[, all.vars(fml[[3]]), drop=FALSE], y = yvec, ...)
-    }
+    egg <- fit_formula(fml)
     class(egg) <- c("frs", class(egg))
     return(egg)
 }

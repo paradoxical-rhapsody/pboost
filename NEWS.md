@@ -1,3 +1,10 @@
+# pboost 0.4.2
+
+* fix the bug of the new design version of `pboost()` (fortunately, it has not been officially released yet).
+
+* polish `frs()`
+
+
 # pboost 0.4.1
 
 * update `lasso_rq()`.
