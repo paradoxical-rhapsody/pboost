@@ -1,6 +1,6 @@
 Package: pboost
 Title: Profile Boosting Framework for Parametric Models
-Version: 0.4.2
+Version: 0.4.3
 Maintainer: Zengchao Xu <zengc.xu@aliyun.com>
 Authors@R:
     person("Zengchao", "Xu", , "zengc.xu@aliyun.com", role = c("aut", "cre"))
@@ -15,7 +15,9 @@ Imports:
     quantreg,
     survival,
     Formula,
-    glmnet
+    glmnet,
+    ncvreg,
+    rqPen
 License: GPL (>= 3)
 Encoding: UTF-8
 URL: https://github.com/paradoxical-rhapsody/pboost

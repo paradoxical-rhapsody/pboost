@@ -1,3 +1,13 @@
+# pboost 0.4.3
+
+* remove `lasso-glm`, `lasso-rq`, `lasso-sar`.
+
+* add `penalty-glm`, `penalty-ncvreg`, `penalty-rq`, `penalty-sar`.
+
+* add `pcoxph()`, `fcoxph()`
+
+
+
 # pboost 0.4.2
 
 * fix the bug of the new design version of `pboost()` (fortunately, it has not been officially released yet).

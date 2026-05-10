@@ -6,10 +6,15 @@
 #' @import Formula
 #' @import Matrix
 #' @importFrom betareg betareg betareg.control
+#' @importFrom glmnet cv.glmnet
 #' @importFrom glmnet glmnet
 #' @importFrom MASS ginv
+#' @importFrom ncvreg cv.ncvreg
+#' @importFrom ncvreg cv.ncvsurv
 #' @importFrom quantreg rq
 #' @importFrom quantreg rq.fit.lasso
+#' @importFrom rqPen qic.select
+#' @importFrom rqPen rq.pen
 #' @importFrom stats AIC as.formula gaussian model.frame model.matrix
 #' @importFrom stats coef
 #' @importFrom stats contrasts
