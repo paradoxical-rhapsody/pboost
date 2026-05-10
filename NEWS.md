@@ -1,8 +1,13 @@
+# pboost 0.4.5
+
+* add `fcoxph()`
+
+
 # pboost 0.4.4
 
 * add `penalty-glm`, `penalty-ncvreg`, `penalty-rq`, `penalty-sar`.
 
-* add `pcoxph()`, `fcoxph()`
+* add `pcoxph()`
 
 
 # pboost 0.4.3

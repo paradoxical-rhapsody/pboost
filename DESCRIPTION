@@ -1,6 +1,6 @@
 Package: pboost
 Title: Profile Boosting Framework for Parametric Models
-Version: 0.4.4
+Version: 0.4.5
 Maintainer: Zengchao Xu <zengc.xu@aliyun.com>
 Authors@R:
     person("Zengchao", "Xu", , "zengc.xu@aliyun.com", role = c("aut", "cre"))
