@@ -29,23 +29,6 @@
 #' 
 #' @return A `betareg` model object fitted on the selected features.
 #' 
-#' @examples
-#' \dontrun{
-#' set.seed(2026)
-#' n <- 300
-#' p <- 20
-#' x <- matrix(runif(n*p), n)
-#' mu <- runif(n)
-#' phi <- 1.0
-#' 
-#' shape1 <- mu * phi
-#' shape2 <- (1-mu) * phi
-#' y <- rbeta(n, shape1, shape2)
-#' DF <- data.frame(y, x)
-#' 
-#' fbetareg(y ~ ., DF, verbose=TRUE)
-#' }
-#' 
 #' @export
 fbetareg <- function(formula, data, subset, na.action, weights, offset,
                     link = c("logit", "probit", "cloglog", "cauchit", "log","loglog"),

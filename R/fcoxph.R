@@ -33,20 +33,6 @@
 #' 
 #' @return A `coxph` model object fitted on the selected features.
 #' 
-#' @examples
-#' library(survival)
-#' set.seed(2026)
-#' n <- 300
-#' p <- 200
-#' 
-#' DF <- data.frame(
-#'     time = rpois(n, 5),
-#'     status = rbinom(n, 1, 0.3),
-#'     matrix(rnorm(n*p), n)
-#' )
-#' 
-#' fcoxph(Surv(time, status) ~ ., DF, verbose=TRUE)
-#' 
 NULL
 #> NULL
 

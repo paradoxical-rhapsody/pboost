@@ -56,24 +56,6 @@ Model object fitted on the selected features.
 \code{pboost()} is the generic workhorse function of profile boosting
 framework for parametric regression.
 }
-\examples{
-set.seed(2026)
-n <- 200
-p <- 300
-x <- matrix(rnorm(n*p), n)
-eta <- drop(x[, 1:3] \%*\% runif(3, 1.0, 1.5))
-y <- rbinom(n, 1, 1/(1+exp(-eta)))
-
-scoreLogistic <- function(object) {
-    eta.hat <- object[["linear.predictors"]]
-    return(object[["y"]] - 1/(1+exp(-eta.hat)))
-}
-
-( result <- pboost(y, x, glm, scoreLogistic, family="binomial") )
-
-all.vars(formula(result)[[3]])
-
-}
 \seealso{
-\link{pbetareg}, \link{pglm}, \link{plm}, \link{prq}, \link{psar}.
+\link{pbetareg}, \link{pcoxph}, \link{pglm}, \link{plm}, \link{prq}, \link{psar}.
 }

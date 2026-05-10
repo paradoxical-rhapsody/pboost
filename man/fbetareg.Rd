@@ -77,21 +77,3 @@ A \code{betareg} model object fitted on the selected features.
 \description{
 \code{fbetareg()} inherits the usage of the function \link[betareg:betareg]{betareg::betareg}, and performs forward regression selection for beta regression models.
 }
-\examples{
-\dontrun{
-set.seed(2026)
-n <- 300
-p <- 20
-x <- matrix(runif(n*p), n)
-mu <- runif(n)
-phi <- 1.0
-
-shape1 <- mu * phi
-shape2 <- (1-mu) * phi
-y <- rbeta(n, shape1, shape2)
-DF <- data.frame(y, x)
-
-fbetareg(y ~ ., DF, verbose=TRUE)
-}
-
-}

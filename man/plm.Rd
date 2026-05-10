@@ -103,6 +103,10 @@ plm(y ~ ., DF, verbose=TRUE)
 plm(y ~ ., DF, stopFun=BIC, verbose=TRUE)
 pboost(y, x, lm, residuals, verbose=TRUE)
 
+flm(y ~ ., DF, verbose=TRUE)
+flm(y ~ ., DF, stopFun=BIC, verbose=TRUE)
+frs(y, x, lm, verbose=TRUE)
+
 }
 \references{
 \itemize{

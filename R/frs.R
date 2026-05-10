@@ -19,22 +19,7 @@
 #' 
 #' @return Model object fitted on the selected features.
 #' 
-#' @seealso [pboost::fbetareg], [pboost::fglm], [pboost::flm], [pboost::frq], [pboost::fsar].
-#' 
-#' @examples
-#' set.seed(2026)
-#' n <- 200
-#' p <- 50
-#' x <- matrix(rnorm(n*p), n)
-#' eta <- drop( x[, 1:3] %*% runif(3, 1.0, 1.5) )
-#' 
-#' ## ---------- linear model ----------
-#' y <- rnorm(n, eta)
-#' frs(y, x, lm, verbose=TRUE)
-#' 
-#' ## ---------- logistic model ----------
-#' y <- rbinom(n, 1, 1/(1+exp(-eta)))
-#' frs(y, x, glm, family="binomial", verbose=TRUE)
+#' @seealso [pboost::fbetareg], [pboost::fcoxph], [pboost::fglm], [pboost::flm], [pboost::frq], [pboost::fsar].
 #' 
 NULL
 #> NULL

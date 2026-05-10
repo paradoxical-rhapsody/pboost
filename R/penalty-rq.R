@@ -10,14 +10,14 @@ pen_rq <- function(x, y, tau, penalty) {
 
     # `rq.pen.cv`, `rq.pen`
     egg <- rq.pen(
-        X = x,
+        x = x,
         y = y,
         tau = tau,
         penalty = penalty,
         scalex = FALSE
     )
 
-    class(egg) <- c("pen.rq", class(egg))
+    class(egg) <- c("penaltyrq", class(egg))
     return(egg)
 }
 
@@ -31,7 +31,8 @@ pen_rq <- function(x, y, tau, penalty) {
 #' @return A named vector of coefficients.
 #' 
 #' @export
-coef.penrq <- function(object, ...) {
+coef.penaltyrq <- function(object, ...) {
+    class(object) <- setdiff(class(object), "penaltyrq")
     b0 <- qic.select(object, method="PBIC") |> coef() |> drop()
     b0 <- b0[grep("intercept", names(b0), value=TRUE, fixed=TRUE, invert=TRUE)]
     return(b0[abs(b0) >= 1e-4])

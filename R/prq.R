@@ -38,6 +38,7 @@
 #' 
 #' BIC <- function(obj) AIC(obj, k=-1)
 #' prq(y ~ ., tau, DF, stopFun=BIC, verbose=TRUE)
+#' frq(y ~ ., tau, DF, stopFun=BIC, verbose=TRUE)
 #' 
 #' scoreFun <- function(object)
 #'    return(ifelse(object[["y"]] < fitted(object), tau - 1, tau))

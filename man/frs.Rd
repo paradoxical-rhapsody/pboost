@@ -49,22 +49,6 @@ Model object fitted on the selected features.
 \description{
 \code{frs()} is a generic workhorse function of forward regression selection for parametric regression.
 }
-\examples{
-set.seed(2026)
-n <- 200
-p <- 50
-x <- matrix(rnorm(n*p), n)
-eta <- drop( x[, 1:3] \%*\% runif(3, 1.0, 1.5) )
-
-## ---------- linear model ----------
-y <- rnorm(n, eta)
-frs(y, x, lm, verbose=TRUE)
-
-## ---------- logistic model ----------
-y <- rbinom(n, 1, 1/(1+exp(-eta)))
-frs(y, x, glm, family="binomial", verbose=TRUE)
-
-}
 \seealso{
-\link{fbetareg}, \link{fglm}, \link{flm}, \link{frq}, \link{fsar}.
+\link{fbetareg}, \link{fcoxph}, \link{fglm}, \link{flm}, \link{frq}, \link{fsar}.
 }

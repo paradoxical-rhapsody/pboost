@@ -43,6 +43,7 @@
 #' DF <- data.frame(y, x)
 #' 
 #' pbetareg(y ~ ., DF, verbose=TRUE)
+#' fbetareg(y ~ ., DF, verbose=TRUE)
 #' }
 #' 
 NULL

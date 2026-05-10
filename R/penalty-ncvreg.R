@@ -12,20 +12,20 @@ pen_ncvreg <- function(x, y, family, penalty) {
         egg <- cv.ncvsurv(
             X = x,
             y = y,
-            family = family,
             penalty = penalty,
-            nfolds = 10,
+            nfolds = 10
         )
     } else {
         egg <- cv.ncvreg(
             X = x,
             y = y,
+            family = family,
             penalty = penalty,
-            nfolds = 10,
+            nfolds = 10
         )
     }
 
-    class(egg) <- c("pen.ncvreg", class(egg))
+    class(egg) <- c("penaltyncvreg", class(egg))
     return(egg)
 }
 
@@ -39,7 +39,7 @@ pen_ncvreg <- function(x, y, family, penalty) {
 #' @return Named vector of non-zero coefficients of under cross-validation error.
 #' 
 #' @export
-coef.pen.ncvreg <- function(object, ...) {
+coef.penaltyncvreg <- function(object, ...) {
     idx <- object[["min"]]
     b0 <- object[["fit"]][["beta"]][, idx, drop=TRUE]
     b0 <- b0[grep("(Intercept)", names(b0), value=TRUE, fixed=TRUE, invert=TRUE)]

@@ -89,6 +89,7 @@ y <- rbeta(n, shape1, shape2)
 DF <- data.frame(y, x)
 
 pbetareg(y ~ ., DF, verbose=TRUE)
+fbetareg(y ~ ., DF, verbose=TRUE)
 }
 
 }

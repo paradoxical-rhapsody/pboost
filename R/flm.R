@@ -28,21 +28,6 @@
 #'
 #' @return A `lm` model object fitted on the selected features.
 #' 
-#' @examples
-#' set.seed(2026)
-#' n <- 300
-#' p <- 50
-#' x <- matrix(rnorm(n*p), n)
-#' 
-#' eta <- drop( x[, 1:3] %*% runif(3, 1.0, 1.5) )
-#' y <- rnorm(n, eta)
-#' DF <- data.frame(y, x)
-#' 
-#' flm(y ~ ., DF, verbose=TRUE)
-#' flm(y ~ ., DF, stopFun=BIC, verbose=TRUE)
-#' 
-#' frs(y, x, lm, verbose=TRUE)
-#' 
 NULL
 #> NULL
 

@@ -27,24 +27,7 @@
 #' 
 #' @return Model object fitted on the selected features.
 #' 
-#' @seealso [pboost::pbetareg], [pboost::pglm], [pboost::plm], [pboost::prq], [pboost::psar].
-#' 
-#' @examples
-#' set.seed(2026)
-#' n <- 200
-#' p <- 300
-#' x <- matrix(rnorm(n*p), n)
-#' eta <- drop(x[, 1:3] %*% runif(3, 1.0, 1.5))
-#' y <- rbinom(n, 1, 1/(1+exp(-eta)))
-#' 
-#' scoreLogistic <- function(object) {
-#'     eta.hat <- object[["linear.predictors"]]
-#'     return(object[["y"]] - 1/(1+exp(-eta.hat)))
-#' }
-#' 
-#' ( result <- pboost(y, x, glm, scoreLogistic, family="binomial") )
-#' 
-#' all.vars(formula(result)[[3]])
+#' @seealso [pboost::pbetareg], [pboost::pcoxph], [pboost::pglm], [pboost::plm], [pboost::prq], [pboost::psar].
 #' 
 NULL
 

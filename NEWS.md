@@ -1,3 +1,10 @@
+# pboost 0.4.7
+
+* add check examples in `penalization.R`
+
+* combine examples in wrapped `frs-models` into `pbooost-models`
+
+
 # pboost 0.4.6
 
 * polish the wrapped models, including formula parse and arguments parse.

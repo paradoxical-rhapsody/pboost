@@ -34,6 +34,7 @@
 #' sig0 <- 1.0
 #' y <- solve(diag(n) - rho0 * w, rnorm(n, eta, sd=sig0)) |> drop()
 #' 
+#' ## ---------- pboost ----------
 #' system.time( egg <- psar(x, y, w, verbose=TRUE) )
 #' y.tilde <- (diag(NROW(x)) - egg[["rho"]] * w) %*% y
 #' 
@@ -41,6 +42,9 @@
 #' idx <- as.integer(sub("[[:alpha:]]", "", names(beta.hat)))
 #' sig2.hat <- mean( (y.tilde - drop(x[, idx, drop=FALSE] %*% beta.hat))^2 )
 #' print( egg[["sig2"]] - sig2.hat )
+#' 
+#' ## ---------- frs ----------
+#' fsar(x, y, w, verbose=TRUE)
 #' 
 NULL
 #> NULL

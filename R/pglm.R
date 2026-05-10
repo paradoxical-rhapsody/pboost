@@ -46,6 +46,7 @@
 #' y <- rbinom(n, 1, 1/(1+exp(-eta)))
 #' DF <- data.frame(y, x)
 #' 
+#' ## ---------- pboost ----------
 #' pglm(y ~ ., "binomial", DF, verbose=TRUE)
 #' pglm(y ~ ., "binomial", DF, stopFun=BIC, verbose=TRUE)
 #' 
@@ -53,7 +54,14 @@
 #'    eta.hat <- object[["linear.predictors"]]
 #'    return(object[["y"]] - 1/(1+exp(-eta.hat)))
 #' }
-#' pboost(y, x, glm, scoreLogistic, family="binomial", verbose=TRUE)
+#' (result <- pboost(y, x, glm, scoreLogistic, family="binomial", verbose=TRUE))
+#' all.vars(formula(result)[[3]])
+#' 
+#' ## ---------- frs ----------
+#' fglm(y ~ ., "binomial", DF, verbose=TRUE)
+#' fglm(y ~ ., "binomial", DF, stopFun=BIC, verbose=TRUE)
+#' 
+#' frs(y, x, glm, family="binomial", verbose=TRUE)
 #' 
 NULL
 #> NULL

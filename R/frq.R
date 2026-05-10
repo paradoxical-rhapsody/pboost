@@ -21,23 +21,6 @@
 #' @param maxK Parameter passed to [pboost::frs].
 #' @param verbose Parameter passed to [pboost::frs].
 #' 
-#' @examples
-#' library(quantreg)
-#' set.seed(2026)
-#' n <- 300
-#' p <- 20
-#' x <- matrix(rnorm(n*p), n)
-#' 
-#' eta <- drop( x[, 1:3] %*% runif(3, 1.0, 1.5) )
-#' y <- eta + (1.0 + x[, 3]) * rnorm(n)
-#' DF <- data.frame(y, x)
-#' 
-#' tau <- 0.5
-#' frq(y ~ ., tau, DF, verbose=TRUE)
-#' 
-#' BIC <- function(obj) AIC(obj, k=-1)
-#' frq(y ~ ., tau, DF, stopFun=BIC, verbose=TRUE)
-#' 
 #' @export 
 frq <- function(formula, tau = 0.5, data, subset, weights, na.action,
                 method = "br", model = TRUE, contrasts = NULL, ...,

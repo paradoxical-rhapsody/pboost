@@ -45,6 +45,7 @@
 #' )
 #' 
 #' pcoxph(Surv(time, status) ~ ., DF, verbose=TRUE)
+#' fcoxph(Surv(time, status) ~ ., DF, verbose=TRUE)
 #' 
 NULL
 #> NULL
