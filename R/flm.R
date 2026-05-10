@@ -56,39 +56,28 @@ flm <- function(formula, data, subset, weights, na.action,
                 selectFun = logLik, stopFun = "EBIC",
                 keep = NULL, maxK = NULL, verbose = FALSE) {
 
-    mf_args <- list(formula = formula, data = data)
-    mf <- do.call(model.frame, mf_args)
+    fml <- Formula(formula)
+    mf <- model.frame(fml, data=data)
 
-    yvec <- model.response(mf)
+    yvec <- model.part(fml, data=mf, lhs=1, drop=TRUE)
+    xmat <- model.part(fml, data=mf, rhs=1) |> as.matrix()
+    use.intercept <- attr(terms(mf), "intercept") == 1L
 
-    terms <- terms(formula, data = mf)
-    use.intercept <- attr(terms, "intercept") == 1L
 
-    attr(terms, "intercept") <- 0L
-    xmat <- model.matrix(terms, mf)
+    mc <- match.call(expand.dots = TRUE)
+    provided_args <- as.list(mc)[-1]
+    provided_args$formula <- NULL
+    provided_args$data <- NULL
 
-    return(
-        frs(yvec = yvec, xmat = xmat, fitFun = lm,
-            subset = if (!missing(subset)) subset else NULL,
-            weights = if (!missing(weights)) weights else NULL,
-            na.action = if (!missing(na.action)) na.action else NULL,
-            method = method,
-            model = model,
-            x = x,
-            y = y,
-            qr = qr,
-            singular.ok = singular.ok,
-            contrasts = contrasts,
-            offset = if (!missing(offset)) offset else NULL,
-            ...,
-            use.intercept = use.intercept,
-            selectFun = selectFun,
-            stopFun = stopFun,
-            keep = keep,
-            maxK = maxK,
-            verbose = verbose
-        )
+    args <- list(
+        fitFun = lm,
+        yvec = yvec,
+        xmat = xmat,
+        use.intercept = use.intercept
     )
+    args <- c(args, provided_args)
+
+    return(do.call(frs, args))
 }
 
 
@@ -125,19 +114,21 @@ flm.fit <- function(x, y, offset = NULL, method = "qr",
         }
 
 
-    return(
-        frs(yvec = y, xmat = x, fitFun = lm.fit,
-            offset = if (!missing(offset)) offset else NULL,
-            method = method,
-            singular.ok = singular.ok,
-            contrasts = contrasts,
-            ...,
-            use.formula = FALSE,
-            selectFun = selectFun,
-            stopFun = stopFun,
-            keep = keep,
-            maxK = maxK,
-            verbose = verbose
-        )
+    mc <- match.call(expand.dots = TRUE)
+    provided_args <- as.list(mc)[-1]
+    provided_args <- provided_args[!(names(provided_args) %in% c("selectFun", "stopFun"))]
+    provided_args$x <- NULL
+    provided_args$y <- NULL
+
+    args <- list(
+        fitFun = lm.fit,
+        yvec = y,
+        xmat = x,
+        selectFun = selectFun,
+        stopFun = stopFun,
+        use.formula = FALSE
     )
+    args <- c(args, provided_args)
+
+    return(do.call(frs, args))
 }

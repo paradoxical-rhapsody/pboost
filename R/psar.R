@@ -75,7 +75,9 @@ psar <- function(x, y, w,
             return(BIC(object) + ebic.penalty)
         }
 
-    egg <- pboost(yvec = y, xmat = x,
+    egg <- pboost(
+        yvec = y,
+        xmat = x,
         fitFun = sar.fit,
         scoreFun = residuals,
         stopFun = stopFun,

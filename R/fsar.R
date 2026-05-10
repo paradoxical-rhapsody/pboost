@@ -41,15 +41,18 @@ fsar <- function(x, y, w,
         return(BIC(object) + ebic.penalty)
     }
 
-    return(
-        frs(yvec = y, xmat = x, fitFun = sar.fit,
-            w = w,
-            use.formula = FALSE,
-            selectFun = selectFun,
-            stopFun = stopFun,
-            keep = keep,
-            maxK = maxK,
-            verbose = verbose
-        )
+    egg <- frs(
+        yvec = y,
+        xmat = x,
+        fitFun = sar.fit,
+        w = w,
+        use.formula = FALSE,
+        selectFun = selectFun,
+        stopFun = stopFun,
+        keep = keep,
+        maxK = maxK,
+        verbose = verbose
     )
+    class(egg) <- c("psar", class(egg))
+    return(egg)
 }

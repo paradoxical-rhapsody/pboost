@@ -1,3 +1,8 @@
+# pboost 0.4.6
+
+* polish the wrapped models, including formula parse and arguments parse.
+
+
 # pboost 0.4.5
 
 * add `fcoxph()`

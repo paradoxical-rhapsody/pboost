@@ -61,43 +61,28 @@ fglm <- function(formula, family = gaussian, data, weights, subset,
                 selectFun = logLik, stopFun = "EBIC",
                 keep = NULL, maxK = NULL, verbose = FALSE) {
 
-    mf_args <- list(formula = formula, data = data)
-    mf <- do.call(model.frame, mf_args)
+    fml <- Formula(formula)
+    mf <- model.frame(fml, data=data)
 
-    yvec <- model.response(mf)
+    yvec <- model.part(fml, data=mf, lhs=1, drop=TRUE)
+    xmat <- model.part(fml, data=mf, rhs=1) |> as.matrix()
+    use.intercept <- attr(terms(mf), "intercept") == 1L
 
-    terms <- terms(formula, data = mf)
-    use.intercept <- attr(terms, "intercept") == 1L
 
-    attr(terms, "intercept") <- 0L
-    xmat <- model.matrix(terms, mf)
+    mc <- match.call(expand.dots = TRUE)
+    provided_args <- as.list(mc)[-1]
+    provided_args$formula <- NULL
+    provided_args$data <- NULL
 
-    return(
-        frs(yvec = yvec, xmat = xmat, fitFun = glm,
-            family = family,
-            weights = if (!missing(weights)) weights else NULL,
-            subset = if (!missing(subset)) subset else NULL,
-            na.action = if (!missing(na.action)) na.action else NULL,
-            start = start,
-            etastart = if (!missing(etastart)) etastart else NULL,
-            mustart = if (!missing(mustart)) mustart else NULL,
-            offset = if (!missing(offset)) offset else NULL,
-            control = control,
-            model = model,
-            method = method,
-            x = x,
-            y = y,
-            singular.ok = singular.ok,
-            contrasts = contrasts,
-            ...,
-            use.intercept = use.intercept,
-            selectFun = selectFun,
-            stopFun = stopFun,
-            keep = keep,
-            maxK = maxK,
-            verbose = verbose
-        )
+    args <- list(
+        fitFun = glm,
+        yvec = yvec,
+        xmat = xmat,
+        use.intercept = use.intercept
     )
+    args <- c(args, provided_args)
+
+    return(do.call(frs, args))
 }
 
 
@@ -134,23 +119,22 @@ fglm.fit <- function(x, y, weights = rep.int(1, NROW(y)), start = NULL, etastart
             return(BIC(object) + ebic.penalty)
         }
 
-    return(
-        frs(yvec = y, xmat = x, fitFun = glm.fit,
-            weights = weights,
-            start = start,
-            etastart = etastart,
-            mustart = mustart,
-            offset = offset,
-            family = family,
-            control = control,
-            intercept = intercept,
-            singular.ok = singular.ok,
-            use.formula = FALSE,
-            selectFun = selectFun,
-            stopFun = stopFun,
-            keep = keep,
-            maxK = maxK,
-            verbose = verbose
-        )
+    
+    mc <- match.call(expand.dots = TRUE)
+    provided_args <- as.list(mc)[-1]
+    provided_args <- provided_args[!(names(provided_args) %in% c("selectFun", "stopFun"))]
+    provided_args$x <- NULL
+    provided_args$y <- NULL
+
+    args <- list(
+        fitFun = glm.fit,
+        yvec = y,
+        xmat = x,
+        selectFun = selectFun,
+        stopFun = stopFun,
+        use.formula = FALSE
     )
+    args <- c(args, provided_args)
+
+    return(do.call(frs, args))
 }

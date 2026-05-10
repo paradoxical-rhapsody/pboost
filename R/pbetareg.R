@@ -60,16 +60,13 @@ pbetareg <- function(formula, data, subset, na.action, weights, offset,
                     stopFun = "EBIC",
                     keep = NULL, maxK = NULL, verbose = FALSE) {
 
-    mf_args <- list(formula = formula, data = data)
-    mf <- do.call(model.frame, mf_args)
+    fml <- Formula(formula)
+    mf <- model.frame(fml, data=data)
 
-    yvec <- model.response(mf)
+    yvec <- model.part(fml, data=mf, lhs=1, drop=TRUE)
+    xmat <- model.part(fml, data=mf, rhs=1) |> as.matrix()
+    use.intercept <- attr(terms(mf), "intercept") == 1L
 
-    terms <- terms(formula, data = mf)
-    use.intercept <- attr(terms, "intercept") == 1L
-
-    attr(terms, "intercept") <- 0L
-    xmat <- model.matrix(terms, mf)
 
     scoreFun <- function(object) {
         phi <- predict(object, type='precision')

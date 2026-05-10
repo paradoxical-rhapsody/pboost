@@ -66,8 +66,8 @@ fcoxph <- function(formula, data, weights, subset, na.action, init, control,
 
     yvec <- model.part(fml, data=mf, lhs=1, drop=TRUE)
     xmat <- model.part(fml, data=mf, rhs=1) |> as.matrix()
-
     use.intercept <- FALSE
+
 
     mc <- match.call(expand.dots = TRUE)
     provided_args <- as.list(mc)[-1]

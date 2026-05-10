@@ -70,16 +70,14 @@ pglm <- function(formula, family = gaussian, data, weights, subset,
                 stopFun = "EBIC",
                 keep = NULL, maxK = NULL, verbose = FALSE) {
 
-    mf_args <- list(formula = formula, data = data)
-    mf <- do.call(model.frame, mf_args)
+    fml <- Formula(formula)
+    mf <- model.frame(fml, data=data)
 
-    yvec <- model.response(mf)
+    yvec <- model.part(fml, data=mf, lhs=1, drop=TRUE)
+    xmat <- model.part(fml, data=mf, rhs=1) |> as.matrix()
+    use.intercept <- attr(terms(mf), "intercept") == 1L
+    # use.intercept <- attr(terms(fml, data=data), "intercept") == 1L
 
-    terms <- terms(formula, data = mf)
-    use.intercept <- attr(terms, "intercept") == 1L
-
-    attr(terms, "intercept") <- 0L
-    xmat <- model.matrix(terms, mf)
 
     scoreFun <- function(object) {
         # score <- D0/S0*(y-fitted(obj))
@@ -94,33 +92,22 @@ pglm <- function(formula, family = gaussian, data, weights, subset,
         return( D0 / S0 * residuals(object, type = "response") )
     }
 
-    return(
-        pboost(yvec = yvec, xmat = xmat,
-            fitFun = glm,
-            scoreFun = scoreFun,
-            stopFun = stopFun,
-            family = family,
-            weights = if (!missing(weights)) weights else NULL,
-            subset = if (!missing(subset)) subset else NULL,
-            na.action = if (!missing(na.action)) na.action else NULL,
-            start = start,
-            etastart = if (!missing(etastart)) etastart else NULL,
-            mustart = if (!missing(mustart)) mustart else NULL,
-            offset = if (!missing(offset)) offset else NULL,
-            control = control,
-            model = model,
-            method = method,
-            x = x,
-            y = y,
-            singular.ok = singular.ok,
-            contrasts = contrasts,
-            ...,
-            use.intercept = use.intercept,
-            keep = keep,
-            maxK = maxK,
-            verbose = verbose
-        )
+    mc <- match.call(expand.dots = TRUE)
+    provided_args <- as.list(mc)[-1]
+    provided_args <- provided_args[!(names(provided_args) %in% c("scoreFun"))]
+    provided_args$formula <- NULL
+    provided_args$data <- NULL
+
+    args <- list(
+        fitFun = glm,
+        yvec = yvec,
+        xmat = xmat,
+        use.intercept = use.intercept,
+        scoreFun = scoreFun
     )
+    args <- c(args, provided_args)
+
+    return(do.call(pboost, args))
 }
 
 
@@ -137,12 +124,6 @@ pglm.fit <- function(x, y, weights = rep.int(1, NROW(y)), start = NULL, etastart
     n <- NROW(x)
     p <- NCOL(x)
 
-    if (is.character(selectFun) && selectFun == "logLik")
-        selectFun <- function(object) {
-            class(object) <- "glm"
-            return(logLik(object))
-        }
-    
     scoreFun <- function(object) {
         class(object) <- "glm"
         D0 <- object$family$mu.eta(object$linear.predictors)
@@ -164,24 +145,22 @@ pglm.fit <- function(x, y, weights = rep.int(1, NROW(y)), start = NULL, etastart
             return(BIC(object) + ebic.penalty)
         }
 
-    return(
-        pboost(yvec = y, xmat = x,
-            fitFun = glm.fit,
-            scoreFun = scoreFun,
-            stopFun = stopFun,
-            weights = weights,
-            start = start,
-            etastart = etastart,
-            mustart = mustart,
-            offset = offset,
-            family = family,
-            control = control,
-            intercept = intercept,
-            singular.ok = singular.ok,
-            use.formula = FALSE,
-            keep = keep,
-            maxK = maxK,
-            verbose = verbose
-        )
+
+    mc <- match.call(expand.dots = TRUE)
+    provided_args <- as.list(mc)[-1]
+    provided_args <- provided_args[!(names(provided_args) %in% c("scoreFun", "stopFun"))]
+    provided_args$x <- NULL
+    provided_args$y <- NULL
+
+    args <- list(
+        fitFun = glm.fit,
+        yvec = y,
+        xmat = x,
+        scoreFun = scoreFun,
+        stopFun = stopFun,
+        use.formula = FALSE
     )
+    args <- c(args, provided_args)
+
+    return(do.call(pboost, args))
 }
