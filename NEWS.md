@@ -1,3 +1,8 @@
+# pboost 0.4.8
+
+* unexport penalization methods.
+
+
 # pboost 0.4.7
 
 * add check examples in `penalization.R`

@@ -3,7 +3,7 @@
 #' @description
 #' - `pen_sar(x, y, rho, w, penalty)`: penalized spatial auto-regressive models.
 #' 
-#' @export
+#' @noRd
 pen_sar <- function(x, y, rho, w, penalty) {
     stopifnot( penalty %in% c("MCP", "SCAD", "lasso") )
 

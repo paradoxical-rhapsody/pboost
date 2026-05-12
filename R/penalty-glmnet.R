@@ -3,7 +3,7 @@
 #' @description
 #' - `pen_glmnet(x, y, family)`: LASSO penalized models.
 #' 
-#' @export
+#' @noRd
 pen_glmnet <- function(x, y, family) {
     stopifnot( family %in% c("gaussian", "binomial", "cox") )
 
@@ -32,7 +32,7 @@ pen_glmnet <- function(x, y, family) {
 #' 
 #' @return Named vector of non-zero coefficients of under cross-validation error.
 #' 
-#' @export
+#' @noRd
 coef.penaltyglmnet <- function(object, ...) {
     idx <- object[["index"]]['min', 'Lambda']
     b0 <- object[["glmnet.fit"]][["beta"]][, idx, drop=TRUE]

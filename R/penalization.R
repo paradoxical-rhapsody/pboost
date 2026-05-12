@@ -72,6 +72,7 @@
 #' pen_sar(x=x, y=y, rho=rho0, w=w0, penalty="MCP") |> coef()
 #' pen_sar(x=x, y=y, rho=rho0, w=w0, penalty="SCAD") |> coef()
 #' 
+#' @noRd
 #' 
 NULL
 #> NULL

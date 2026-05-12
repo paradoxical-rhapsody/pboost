@@ -3,7 +3,7 @@
 #' @description
 #' - `pen_ncvreg(x, y, family, penalty)`: Non-Convex penalized models.
 #' 
-#' @export
+#' @noRd
 pen_ncvreg <- function(x, y, family, penalty) {
     stopifnot( family %in% c("gaussian", "binomial", "cox") )
     stopifnot( penalty %in% c("MCP", "SCAD", "lasso") )
@@ -38,7 +38,7 @@ pen_ncvreg <- function(x, y, family, penalty) {
 #' 
 #' @return Named vector of non-zero coefficients of under cross-validation error.
 #' 
-#' @export
+#' @noRd
 coef.penaltyncvreg <- function(object, ...) {
     idx <- object[["min"]]
     b0 <- object[["fit"]][["beta"]][, idx, drop=TRUE]

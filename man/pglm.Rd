@@ -103,8 +103,8 @@ A \code{glm} model object fitted on the selected features.
 }
 \examples{
 set.seed(2026)
-n <- 300
-p <- 200
+n <- 200
+p <- 100
 x <- matrix(rnorm(n*p), n)
 
 eta <- drop( x[, 1:3] \%*\% runif(3, 1.0, 1.5) )

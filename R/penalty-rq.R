@@ -3,7 +3,7 @@
 #' @description
 #' - `pen_rq(x, y, tau, penalty)`: penalized quantile regression models.
 #' 
-#' @export
+#' @noRd
 pen_rq <- function(x, y, tau, penalty) {
     stopifnot( penalty %in% c("MCP", "SCAD", "lasso") )
     penalty <- toupper(penalty)
@@ -30,7 +30,7 @@ pen_rq <- function(x, y, tau, penalty) {
 #' 
 #' @return A named vector of coefficients.
 #' 
-#' @export
+#' @noRd
 coef.penaltyrq <- function(object, ...) {
     class(object) <- setdiff(class(object), "penaltyrq")
     b0 <- qic.select(object, method="PBIC") |> coef() |> drop()

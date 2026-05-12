@@ -1,9 +1,9 @@
 Package: pboost
 Title: Profile Boosting Framework for Parametric Models
-Version: 0.4.7
+Version: 0.4.8
 Maintainer: Zengchao Xu <zengc.xu@aliyun.com>
 Authors@R:
-    person("Zengchao", "Xu", , "zengc.xu@aliyun.com", role = c("aut", "cre"))
+    person("Zengchao", "Xu", , "zengc.xu@aliyun.com", role = c("aut", "cre", "cph"))
 Description:
     A profile boosting framework for feature selection in parametric models.
     It offers a unified interface pboost() and several wrapped models, including linear model, generalized linear models, quantile regression, Cox proportional hazards model, beta regression, spatial auto-regressive models.
@@ -25,5 +25,3 @@ BugReports: https://github.com/paradoxical-rhapsody/pboost/issues
 Roxygen: list(load="source", markdown = TRUE)
 RoxygenNote: 7.3.3
 Depends: R (>= 4.1.0)
-Suggests: R.rsp
-VignetteBuilder: R.rsp
