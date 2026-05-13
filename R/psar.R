@@ -7,8 +7,6 @@
 #' where \eqn{\bm{y}, \bm{\varepsilon} \in \mathbb{R}^n}, \eqn{X \in \mathbb{R}^{n \times p}},
 #' \eqn{\rho \in (-1, 1)}.
 #' 
-#' `psar()` implements the PVS procedure for data matrix.
-#' 
 #' @param x Numeric feature matrix.
 #' @param y Response vector.
 #' @param w Weight matrix (row-sum scaled being one).
@@ -57,7 +55,7 @@ psar <- function(x, y, w,
                 stopFun = "EBIC",
                 keep = NULL, maxK = NULL, verbose = FALSE) {
     stopifnot( is.matrix(x) )
-    stopifnot( all( abs(rowSums(w) - 1.0) <= 1e-12 ) )
+    stopifnot( all( abs(rowSums(w) - 1.0) <= 1e-6 ) )
     stopifnot( all(w >= 0.0) )
     stopifnot( !anyNA(x) )
     stopifnot( !anyNA(y) )

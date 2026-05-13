@@ -16,7 +16,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Zengchao Xu \email{zengc.xu@aliyun.com}
+\strong{Maintainer}: Zengchao Xu \email{zengc.xu@aliyun.com} [copyright holder]
 
 }
 \keyword{internal}

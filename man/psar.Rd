@@ -29,8 +29,6 @@ Profile boosting variable selection for spatial auto-regressive (SAR) model
 \deqn{\bm{y} = \rho W \bm{y} + X \beta + \bm{\varepsilon},}
 where \eqn{\bm{y}, \bm{\varepsilon} \in \mathbb{R}^n}, \eqn{X \in \mathbb{R}^{n \times p}},
 \eqn{\rho \in (-1, 1)}.
-
-\code{psar()} implements the PVS procedure for data matrix.
 }
 \examples{
 set.seed(2026)
