@@ -2,6 +2,7 @@
 % Please edit documentation in R/prq.R
 \name{prq}
 \alias{prq}
+\alias{prq.fit}
 \title{Profile Boosting for Quantile Regression Models}
 \usage{
 prq(
@@ -20,6 +21,18 @@ prq(
   maxK = NULL,
   verbose = FALSE
 )
+
+prq.fit(
+  x,
+  y,
+  tau = 0.5,
+  method = "br",
+  ...,
+  stopFun = "EBIC",
+  keep = NULL,
+  maxK = NULL,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{formula}{Parameter passed to \link[quantreg:rq]{quantreg::rq}.}
@@ -34,13 +47,13 @@ prq(
 
 \item{na.action}{Parameter passed to \link[quantreg:rq]{quantreg::rq}.}
 
-\item{method}{Parameter passed to \link[quantreg:rq]{quantreg::rq}.}
+\item{method}{Parameter passed to \link[quantreg:rq]{quantreg::rq} or \link[quantreg:rq.fit]{quantreg::rq.fit}.}
 
 \item{model}{Parameter passed to \link[quantreg:rq]{quantreg::rq}.}
 
 \item{contrasts}{Parameter passed to \link[quantreg:rq]{quantreg::rq}.}
 
-\item{...}{Parameters passed to \link[quantreg:rq]{quantreg::rq}.}
+\item{...}{Parameters passed to \link[quantreg:rq]{quantreg::rq} or \link[quantreg:rq.fit]{quantreg::rq.fit}.}
 
 \item{stopFun}{Parameter passed to \link{pboost}.}
 
@@ -49,6 +62,10 @@ prq(
 \item{maxK}{Parameter passed to \link{pboost}.}
 
 \item{verbose}{Parameter passed to \link{pboost}.}
+
+\item{x}{Parameter passed to \link[quantreg:rq.fit]{quantreg::rq.fit}.}
+
+\item{y}{Parameter passed to \link[quantreg:rq.fit]{quantreg::rq.fit}.}
 }
 \value{
 A \code{rq} model object fitted on the selected features.
@@ -77,6 +94,9 @@ frq(y ~ ., tau, DF, stopFun=BIC, verbose=TRUE)
 scoreFun <- function(object)
    return(ifelse(object[["y"]] < fitted(object), tau - 1, tau))
 
-pboost(y, x, rq, scoreFun, BIC, tau=tau, verbose=TRUE)
+pboost(x, y, rq, scoreFun, BIC, tau=tau, verbose=TRUE)
+
+prq.fit(x, y, verbose=TRUE)
+frq.fit(x, y, verbose=TRUE)
 
 }

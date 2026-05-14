@@ -54,14 +54,14 @@
 #'    eta.hat <- object[["linear.predictors"]]
 #'    return(object[["y"]] - 1/(1+exp(-eta.hat)))
 #' }
-#' (result <- pboost(y, x, glm, scoreLogistic, family="binomial", verbose=TRUE))
+#' (result <- pboost(x, y, glm, scoreLogistic, family="binomial", verbose=TRUE))
 #' all.vars(formula(result)[[3]])
 #' 
 #' ## ---------- frs ----------
 #' fglm(y ~ ., "binomial", DF, verbose=TRUE)
 #' fglm(y ~ ., "binomial", DF, stopFun=BIC, verbose=TRUE)
 #' 
-#' frs(y, x, glm, family="binomial", verbose=TRUE)
+#' frs(x, y, glm, family="binomial", verbose=TRUE)
 #' 
 NULL
 #> NULL
@@ -102,9 +102,7 @@ pglm <- function(formula, family = gaussian, data, weights, subset,
 
     mc <- match.call(expand.dots = TRUE)
     provided_args <- as.list(mc)[-1]
-    provided_args <- provided_args[!(names(provided_args) %in% c("scoreFun"))]
-    provided_args$formula <- NULL
-    provided_args$data <- NULL
+    provided_args <- provided_args[!(names(provided_args) %in% c("formula", "data", "scoreFun"))]
 
     args <- list(
         fitFun = glm,
@@ -126,11 +124,15 @@ pglm <- function(formula, family = gaussian, data, weights, subset,
 pglm.fit <- function(x, y, weights = rep.int(1, NROW(y)), start = NULL, etastart = NULL,
                       mustart = NULL, offset = rep.int(0, NROW(y)), family = gaussian(),
                       control = list(), intercept = TRUE, singular.ok = TRUE,
+                      method = glm.fit,
                       stopFun = "EBIC",
                       keep = NULL, maxK = NULL, verbose = FALSE) {
 
     n <- NROW(x)
     p <- NCOL(x)
+
+    stopifnot( is.function(method) || is.character(method) )
+    fitFun <- ifelse(is.character(method), get(method, mode = "function"), method)
 
     scoreFun <- function(object) {
         class(object) <- "glm"
@@ -156,12 +158,10 @@ pglm.fit <- function(x, y, weights = rep.int(1, NROW(y)), start = NULL, etastart
 
     mc <- match.call(expand.dots = TRUE)
     provided_args <- as.list(mc)[-1]
-    provided_args <- provided_args[!(names(provided_args) %in% c("scoreFun", "stopFun"))]
-    provided_args$x <- NULL
-    provided_args$y <- NULL
+    provided_args <- provided_args[!(names(provided_args) %in% c("x", "y", "scoreFun", "stopFun"))]
 
     args <- list(
-        fitFun = glm.fit,
+        fitFun = fitFun,
         yvec = y,
         xmat = x,
         scoreFun = scoreFun,

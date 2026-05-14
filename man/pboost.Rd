@@ -5,8 +5,8 @@
 \title{Profile Boosting Framework}
 \usage{
 pboost(
-  yvec,
   xmat,
+  yvec,
   fitFun,
   scoreFun,
   stopFun = "EBIC",
@@ -19,9 +19,9 @@ pboost(
 )
 }
 \arguments{
-\item{yvec}{Response vector.}
-
 \item{xmat}{Numeric feature matrix.}
+
+\item{yvec}{Response vector.}
 
 \item{fitFun}{Function to fit the empirical risk function in
 the form \code{fitFun(formula, data, ...)}.}

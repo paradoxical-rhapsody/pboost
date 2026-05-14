@@ -42,6 +42,7 @@ pglm.fit(
   control = list(),
   intercept = TRUE,
   singular.ok = TRUE,
+  method = glm.fit,
   stopFun = "EBIC",
   keep = NULL,
   maxK = NULL,
@@ -119,14 +120,14 @@ scoreLogistic <- function(object) {
    eta.hat <- object[["linear.predictors"]]
    return(object[["y"]] - 1/(1+exp(-eta.hat)))
 }
-(result <- pboost(y, x, glm, scoreLogistic, family="binomial", verbose=TRUE))
+(result <- pboost(x, y, glm, scoreLogistic, family="binomial", verbose=TRUE))
 all.vars(formula(result)[[3]])
 
 ## ---------- frs ----------
 fglm(y ~ ., "binomial", DF, verbose=TRUE)
 fglm(y ~ ., "binomial", DF, stopFun=BIC, verbose=TRUE)
 
-frs(y, x, glm, family="binomial", verbose=TRUE)
+frs(x, y, glm, family="binomial", verbose=TRUE)
 
 }
 \references{

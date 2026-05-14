@@ -57,8 +57,7 @@ fcoxph <- function(formula, data, weights, subset, na.action, init, control,
 
     mc <- match.call(expand.dots = TRUE)
     provided_args <- as.list(mc)[-1]
-    provided_args$formula <- NULL
-    provided_args$data <- NULL
+    provided_args <- provided_args[!(names(provided_args) %in% c("formula", "data"))]
 
     args <- list(
         fitFun = coxph,

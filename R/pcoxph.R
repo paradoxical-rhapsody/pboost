@@ -71,9 +71,7 @@ pcoxph <- function(formula, data, weights, subset, na.action, init, control,
 
     mc <- match.call(expand.dots = TRUE)
     provided_args <- as.list(mc)[-1]
-    provided_args <- provided_args[!(names(provided_args) %in% c("scoreFun"))]
-    provided_args$formula <- NULL
-    provided_args$data <- NULL
+    provided_args <- provided_args[!(names(provided_args) %in% c("formula", "data", "scoreFun"))]
 
     args <- list(
         fitFun = coxph,

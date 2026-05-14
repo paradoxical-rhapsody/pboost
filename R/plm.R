@@ -11,8 +11,8 @@
 #' @param na.action Parameter passed to [lm].
 #' @param method Parameter passed to [lm].
 #' @param model Parameter passed to [lm].
-#' @param x Parameter passed to [lm].
-#' @param y Parameter passed to [lm].
+#' @param x Parameter passed to [lm.fit].
+#' @param y Parameter passed to [lm.fit].
 #' @param qr Parameter passed to [lm].
 #' @param singular.ok Parameter passed to [lm].
 #' @param contrasts Parameter passed to [lm].
@@ -51,11 +51,11 @@
 #' 
 #' plm(y ~ ., DF, verbose=TRUE)
 #' plm(y ~ ., DF, stopFun=BIC, verbose=TRUE)
-#' pboost(y, x, lm, residuals, verbose=TRUE)
+#' pboost(x, y, lm, residuals, verbose=TRUE)
 #' 
 #' flm(y ~ ., DF, verbose=TRUE)
 #' flm(y ~ ., DF, stopFun=BIC, verbose=TRUE)
-#' frs(y, x, lm, verbose=TRUE)
+#' frs(x, y, lm, verbose=TRUE)
 #' 
 NULL
 #> NULL
@@ -80,9 +80,7 @@ plm <- function(formula, data, subset, weights, na.action,
 
     mc <- match.call(expand.dots = TRUE)
     provided_args <- as.list(mc)[-1]
-    provided_args <- provided_args[!(names(provided_args) %in% c("scoreFun"))]
-    provided_args$formula <- NULL
-    provided_args$data <- NULL
+    provided_args <- provided_args[!(names(provided_args) %in% c("formula", "data", "scoreFun"))]
 
     args <- list(
         fitFun = lm,
@@ -125,9 +123,7 @@ plm.fit <- function(x, y, offset = NULL, method = "qr",
     
     mc <- match.call(expand.dots = TRUE)
     provided_args <- as.list(mc)[-1]
-    provided_args <- provided_args[!(names(provided_args) %in% c("scoreFun", "stopFun"))]
-    provided_args$x <- NULL
-    provided_args$y <- NULL
+    provided_args <- provided_args[!(names(provided_args) %in% c("x", "y", "scoreFun", "stopFun"))]
 
     args <- list(
         fitFun = lm.fit,

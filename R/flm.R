@@ -51,8 +51,7 @@ flm <- function(formula, data, subset, weights, na.action,
 
     mc <- match.call(expand.dots = TRUE)
     provided_args <- as.list(mc)[-1]
-    provided_args$formula <- NULL
-    provided_args$data <- NULL
+    provided_args <- provided_args[!(names(provided_args) %in% c("formula", "data"))]
 
     args <- list(
         fitFun = lm,
@@ -101,9 +100,7 @@ flm.fit <- function(x, y, offset = NULL, method = "qr",
 
     mc <- match.call(expand.dots = TRUE)
     provided_args <- as.list(mc)[-1]
-    provided_args <- provided_args[!(names(provided_args) %in% c("selectFun", "stopFun"))]
-    provided_args$x <- NULL
-    provided_args$y <- NULL
+    provided_args <- provided_args[!(names(provided_args) %in% c("x", "y", "selectFun", "stopFun"))]
 
     args <- list(
         fitFun = lm.fit,

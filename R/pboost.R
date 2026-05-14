@@ -5,8 +5,8 @@
 #' `pboost()` is the generic workhorse function of profile boosting
 #' framework for parametric regression.
 #' 
-#' @param yvec Response vector.
 #' @param xmat Numeric feature matrix.
+#' @param yvec Response vector.
 #' @param fitFun Function to fit the empirical risk function in
 #'    the form `fitFun(formula, data, ...)`.
 #' @param scoreFun Function to compute the derivative, denoted by \eqn{\frac{\partial \ell(y, \eta)}{\partial \eta}}, of empirical risk function in the form `scoreFun(object)`, where `object` is returned by `fitFun`.
@@ -37,7 +37,7 @@ NULL
 #' @rdname pboost
 #' @order 1
 #' @export
-pboost <- function(yvec, xmat, fitFun, scoreFun, stopFun = "EBIC", ...,
+pboost <- function(xmat, yvec, fitFun, scoreFun, stopFun = "EBIC", ...,
                     use.formula = TRUE,
                     use.intercept = TRUE,
                     keep = NULL, maxK = NULL, verbose = FALSE) {
@@ -140,6 +140,6 @@ pboost <- function(yvec, xmat, fitFun, scoreFun, stopFun = "EBIC", ...,
     }
 
     egg <- fit_formula(fml)
-    class(egg) <- c("frs", class(egg))
+    class(egg) <- c("pboost", class(egg))
     return(egg)
 }

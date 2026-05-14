@@ -56,8 +56,7 @@ fglm <- function(formula, family = gaussian, data, weights, subset,
 
     mc <- match.call(expand.dots = TRUE)
     provided_args <- as.list(mc)[-1]
-    provided_args$formula <- NULL
-    provided_args$data <- NULL
+    provided_args <- provided_args[!(names(provided_args) %in% c("formula", "data"))]
 
     args <- list(
         fitFun = glm,
@@ -107,9 +106,7 @@ fglm.fit <- function(x, y, weights = rep.int(1, NROW(y)), start = NULL, etastart
     
     mc <- match.call(expand.dots = TRUE)
     provided_args <- as.list(mc)[-1]
-    provided_args <- provided_args[!(names(provided_args) %in% c("selectFun", "stopFun"))]
-    provided_args$x <- NULL
-    provided_args$y <- NULL
+    provided_args <- provided_args[!(names(provided_args) %in% c("x", "y", "selectFun", "stopFun"))]
 
     args <- list(
         fitFun = glm.fit,

@@ -2,6 +2,7 @@
 % Please edit documentation in R/frq.R
 \name{frq}
 \alias{frq}
+\alias{frq.fit}
 \title{Forward Regression Selection for Quantile Regression Models}
 \usage{
 frq(
@@ -16,6 +17,19 @@ frq(
   contrasts = NULL,
   ...,
   selectFun = logLik,
+  stopFun = "EBIC",
+  keep = NULL,
+  maxK = NULL,
+  verbose = FALSE
+)
+
+frq.fit(
+  x,
+  y,
+  tau = 0.5,
+  method = "br",
+  ...,
+  selectFun = "logLik",
   stopFun = "EBIC",
   keep = NULL,
   maxK = NULL,
@@ -52,6 +66,15 @@ frq(
 \item{maxK}{Parameter passed to \link{frs}.}
 
 \item{verbose}{Parameter passed to \link{frs}.}
+
+\item{x}{Parameter passed to \link[quantreg:rq.fit]{quantreg::rq.fit}.}
+
+\item{y}{Parameter passed to \link[quantreg:rq.fit]{quantreg::rq.fit}.}
+}
+\value{
+A \code{rq} model object fitted on the selected features.
+
+NULL
 }
 \description{
 \code{frq()} inherits the usage of the function \link[quantreg:rq]{quantreg::rq}, and performs forward regression selection for quantile regression models.

@@ -5,8 +5,8 @@
 \title{Forward Regression Selection Framework}
 \usage{
 frs(
-  yvec,
   xmat,
+  yvec,
   fitFun,
   ...,
   use.formula = TRUE,
@@ -19,9 +19,9 @@ frs(
 )
 }
 \arguments{
-\item{yvec}{See \link{pboost}.}
-
 \item{xmat}{See \link{pboost}.}
+
+\item{yvec}{See \link{pboost}.}
 
 \item{fitFun}{See \link{pboost}.}
 

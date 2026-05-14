@@ -3,8 +3,8 @@
 #' 
 #' @description `frs()` is a generic workhorse function of forward regression selection for parametric regression.
 #' 
-#' @param yvec See [pboost].
 #' @param xmat See [pboost].
+#' @param yvec See [pboost].
 #' @param fitFun See [pboost].
 #' @param ... See [pboost].
 #' @param use.formula See [pboost].
@@ -28,7 +28,7 @@ NULL
 #' @rdname frs
 #' @order 1
 #' @export
-frs <- function(yvec, xmat, fitFun, ...,
+frs <- function(xmat, yvec, fitFun, ...,
                 use.formula = TRUE,
                 use.intercept = TRUE,
                 selectFun = logLik,

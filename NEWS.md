@@ -1,3 +1,14 @@
+# pboost 0.4.9
+
+* reorder the augments `pboost(xmat, yvec)`, `frs(xmat, yvec)`.
+
+* add `prq.fit()`, `pcoxph.fit()`
+
+* update excluding set in `provide_args` for `*.fit`.
+
+* polish doc.
+
+
 # pboost 0.4.8
 
 * unexport penalization methods.

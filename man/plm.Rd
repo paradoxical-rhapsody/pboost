@@ -55,9 +55,9 @@ plm.fit(
 
 \item{model}{Parameter passed to \link{lm}.}
 
-\item{x}{Parameter passed to \link{lm}.}
+\item{x}{Parameter passed to \link{lm.fit}.}
 
-\item{y}{Parameter passed to \link{lm}.}
+\item{y}{Parameter passed to \link{lm.fit}.}
 
 \item{qr}{Parameter passed to \link{lm}.}
 
@@ -101,11 +101,11 @@ DF <- data.frame(y, x)
 
 plm(y ~ ., DF, verbose=TRUE)
 plm(y ~ ., DF, stopFun=BIC, verbose=TRUE)
-pboost(y, x, lm, residuals, verbose=TRUE)
+pboost(x, y, lm, residuals, verbose=TRUE)
 
 flm(y ~ ., DF, verbose=TRUE)
 flm(y ~ ., DF, stopFun=BIC, verbose=TRUE)
-frs(y, x, lm, verbose=TRUE)
+frs(x, y, lm, verbose=TRUE)
 
 }
 \references{
