@@ -1,8 +1,14 @@
+# pboost 0.4.10
+
+* update dependencies based on `roxygen2` (v8.0.0).
+
+
+
 # pboost 0.4.9
 
 * reorder the augments `pboost(xmat, yvec)`, `frs(xmat, yvec)`.
 
-* add `prq.fit()`, `pcoxph.fit()`
+* add `prq.fit()`, `frq.fit()`
 
 * update excluding set in `provide_args` for `*.fit`.
 

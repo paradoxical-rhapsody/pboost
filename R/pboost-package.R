@@ -39,6 +39,7 @@
 #' @importFrom stats residuals
 #' @importFrom stats terms
 #' @importFrom survival coxph
+#' @importFrom survival coxph.fit
 #> [1] "_PACKAGE"
 ## usethis namespace: end
 NULL

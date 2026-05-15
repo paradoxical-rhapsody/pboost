@@ -18,5 +18,10 @@ Useful links:
 \author{
 \strong{Maintainer}: Zengchao Xu \email{zengc.xu@aliyun.com} [copyright holder]
 
+Authors:
+\itemize{
+  \item Zengchao Xu \email{zengc.xu@aliyun.com} [copyright holder]
+}
+
 }
 \keyword{internal}

@@ -3,6 +3,7 @@
 #' @title Penalized Methods for Feature Selection
 #' 
 #' @description Penalized methods for feature selection.
+#' These functions are only designed for comparison of numerical simulations.
 #' 
 #' @param x Feature matrix
 #' @param y Response vector.
@@ -71,8 +72,6 @@
 #' pen_sar(x=x, y=y, rho=rho0, w=w0, penalty="lasso") |> coef()
 #' pen_sar(x=x, y=y, rho=rho0, w=w0, penalty="MCP") |> coef()
 #' pen_sar(x=x, y=y, rho=rho0, w=w0, penalty="SCAD") |> coef()
-#' 
-#' @noRd
 #' 
 NULL
 #> NULL

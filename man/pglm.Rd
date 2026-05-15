@@ -42,7 +42,6 @@ pglm.fit(
   control = list(),
   intercept = TRUE,
   singular.ok = TRUE,
-  method = glm.fit,
   stopFun = "EBIC",
   keep = NULL,
   maxK = NULL,

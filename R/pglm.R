@@ -124,15 +124,11 @@ pglm <- function(formula, family = gaussian, data, weights, subset,
 pglm.fit <- function(x, y, weights = rep.int(1, NROW(y)), start = NULL, etastart = NULL,
                       mustart = NULL, offset = rep.int(0, NROW(y)), family = gaussian(),
                       control = list(), intercept = TRUE, singular.ok = TRUE,
-                      method = glm.fit,
                       stopFun = "EBIC",
                       keep = NULL, maxK = NULL, verbose = FALSE) {
 
     n <- NROW(x)
     p <- NCOL(x)
-
-    stopifnot( is.function(method) || is.character(method) )
-    fitFun <- ifelse(is.character(method), get(method, mode = "function"), method)
 
     scoreFun <- function(object) {
         class(object) <- "glm"
@@ -161,7 +157,7 @@ pglm.fit <- function(x, y, weights = rep.int(1, NROW(y)), start = NULL, etastart
     provided_args <- provided_args[!(names(provided_args) %in% c("x", "y", "scoreFun", "stopFun"))]
 
     args <- list(
-        fitFun = fitFun,
+        fitFun = glm.fit,
         yvec = y,
         xmat = x,
         scoreFun = scoreFun,
