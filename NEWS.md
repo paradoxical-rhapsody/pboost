@@ -1,3 +1,9 @@
+# pboost 0.4.11
+
+* add `plagsarlm()` and `flagsarlm()`.
+
+
+
 # pboost 0.4.10
 
 * update dependencies based on `roxygen2` (v8.0.0).

@@ -17,6 +17,7 @@
 #' @importFrom quantreg rq.wfit
 #' @importFrom rqPen qic.select
 #' @importFrom rqPen rq.pen
+#' @importFrom spatialreg lagsarlm
 #' @importFrom stats AIC
 #' @importFrom stats as.formula
 #' @importFrom stats BIC
